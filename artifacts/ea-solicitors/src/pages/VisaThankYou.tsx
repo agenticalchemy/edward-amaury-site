@@ -38,7 +38,7 @@ function getContent(state: ThankYouState) {
 export default function VisaThankYou() {
   const state = (window.history.state?.state ?? {}) as ThankYouState;
   const adHeadline = useAdHeadline("");
-  const firstName = state.firstName ?? "there";
+  const firstName = state.firstName || sessionStorage.getItem("ea_lead_firstname") || "there";
 
   useEffect(() => {
     fireVisaEvent();
@@ -93,10 +93,12 @@ export default function VisaThankYou() {
             </div>
 
             {/* Heading */}
-            <p className="text-sm font-medium text-gray-500 text-center mb-1">Thank you, {firstName}</p>
-            <h1 className="text-xl sm:text-2xl font-bold text-[#1a3a4a] text-center mb-3 leading-tight">
-              {content.heading}
+            <h1 className="text-xl sm:text-2xl font-bold text-[#1a3a4a] text-center mb-2 leading-tight">
+              Thank you, {firstName}
             </h1>
+            <p className="text-base sm:text-lg font-semibold text-[#0e7490] text-center mb-3">
+              {content.heading}
+            </p>
             <p className="text-gray-600 text-sm sm:text-base text-center leading-relaxed mb-4">
               {content.body}
             </p>

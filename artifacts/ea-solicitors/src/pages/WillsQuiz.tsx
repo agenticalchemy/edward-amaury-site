@@ -226,6 +226,7 @@ export default function WillsQuiz() {
               window.gtag("event", "wills_lead_submit", { event_category: "lead" });
             }
           } catch { /* ignore */ }
+          sessionStorage.setItem("ea_lead_firstname", name.split(" ")[0]);
           setLocation("/wills-and-probate/thank-you", {
             state: {
               firstName: name.split(" ")[0],

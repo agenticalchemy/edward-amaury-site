@@ -196,6 +196,7 @@ export default function VisaQuiz() {
               window.gtag("event", "visa_lead_submit", { event_category: "lead" });
             }
           } catch { /* ignore */ }
+          sessionStorage.setItem("ea_lead_firstname", fullName.split(" ")[0]);
           setLocation("/uk-spouse-visa/thank-you", {
             state: {
               firstName: fullName.split(" ")[0],
