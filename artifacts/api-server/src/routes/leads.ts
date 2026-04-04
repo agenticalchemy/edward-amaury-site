@@ -27,7 +27,7 @@ router.post("/leads/wills", async (req, res) => {
     .map(([k, v]) => `${k}: ${v}`)
     .join(" | ");
 
-  await appendToSheet("wills-probates", [
+  await appendToSheet("Wills-probates", [
     timestamp,
     data.name,
     data.email,

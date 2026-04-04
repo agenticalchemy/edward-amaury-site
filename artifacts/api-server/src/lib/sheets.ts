@@ -33,7 +33,7 @@ export async function appendToSheet(tabName: string, values: (string | number | 
     const sheets = google.sheets({ version: "v4", auth });
     await sheets.spreadsheets.values.append({
       spreadsheetId: sheetId,
-      range: `${tabName}!A1`,
+      range: `'${tabName.trim()}'!A1`,
       valueInputOption: "USER_ENTERED",
       requestBody: {
         values: [values],
