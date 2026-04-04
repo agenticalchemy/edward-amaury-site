@@ -1,45 +1,35 @@
-import nodemailer from "nodemailer";
+import { Resend } from "resend";
 import { logger } from "./logger";
 
-function getTransporter() {
-  const host = process.env["SMTP_HOST"];
-  const port = parseInt(process.env["SMTP_PORT"] ?? "587", 10);
-  const user = process.env["SMTP_USER"];
-  const pass = process.env["SMTP_PASS"];
-
-  if (!host || !user || !pass) {
-    return null;
-  }
-
-  return nodemailer.createTransport({
-    host,
-    port,
-    secure: port === 465,
-    auth: { user, pass },
-  });
+function getResend() {
+  const apiKey = process.env["RESEND_API_KEY"];
+  if (!apiKey) return null;
+  return new Resend(apiKey);
 }
+
+const FROM = "Edward & Amaury Solicitors <onboarding@resend.dev>";
 
 export async function sendEmail(options: {
   to: string;
   subject: string;
   html: string;
 }): Promise<void> {
-  const transporter = getTransporter();
-  const fromEmail = process.env["FROM_EMAIL"] ?? "noreply@edwardamaury.co.uk";
-
-  if (!transporter) {
-    logger.info({ to: options.to }, "SMTP not configured, skipping email");
+  const resend = getResend();
+  if (!resend) {
+    logger.info({ to: options.to }, "RESEND_API_KEY not set, skipping email");
     return;
   }
 
   try {
-    await transporter.sendMail({
-      from: `Edward & Amaury Solicitors <${fromEmail}>`,
-      ...options,
-    });
-    logger.info({ to: options.to }, "Email sent");
+    const fromEmail = process.env["FROM_EMAIL"];
+    const from = fromEmail
+      ? `Edward & Amaury Solicitors <${fromEmail}>`
+      : FROM;
+
+    await resend.emails.send({ from, to: options.to, ...options });
+    logger.info({ to: options.to }, "Email sent via Resend");
   } catch (err) {
-    logger.error({ err }, "Failed to send email");
+    logger.error({ err }, "Failed to send email via Resend");
   }
 }
 
