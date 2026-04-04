@@ -2,7 +2,6 @@ import { useEffect } from "react";
 import SiteHeader from "@/components/SiteHeader";
 import SiteFooter from "@/components/SiteFooter";
 import { fireVisaEvent } from "@/lib/tracking";
-import { useAdHeadline } from "@/hooks/useAdHeadline";
 
 type ResultBand = "strong" | "challenges" | "expert";
 

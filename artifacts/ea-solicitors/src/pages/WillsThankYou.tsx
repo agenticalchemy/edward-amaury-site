@@ -3,7 +3,6 @@ import { useLocation } from "wouter";
 import SiteHeader from "@/components/SiteHeader";
 import SiteFooter from "@/components/SiteFooter";
 import { fireWillsEvent } from "@/lib/tracking";
-import { useAdHeadline } from "@/hooks/useAdHeadline";
 
 type Route = "probate" | "wills" | "both" | "not-sure";
 
