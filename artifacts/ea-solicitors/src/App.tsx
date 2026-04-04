@@ -9,6 +9,7 @@ import WillsThankYou from "@/pages/WillsThankYou";
 import VisaLanding from "@/pages/VisaLanding";
 import VisaQuiz from "@/pages/VisaQuiz";
 import VisaThankYou from "@/pages/VisaThankYou";
+import PrivacyPolicy from "@/pages/PrivacyPolicy";
 
 const queryClient = new QueryClient();
 
@@ -24,6 +25,7 @@ function Router() {
       <Route path="/uk-spouse-visa" component={VisaLanding} />
       <Route path="/uk-spouse-visa/quiz" component={VisaQuiz} />
       <Route path="/uk-spouse-visa/thank-you" component={VisaThankYou} />
+      <Route path="/privacy-policy" component={PrivacyPolicy} />
       <Route component={NotFound} />
     </Switch>
   );

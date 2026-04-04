@@ -10,6 +10,9 @@ export default function SiteFooter() {
         <p className="text-xs text-gray-400 mt-4">
           Edward & Amaury Solicitors is authorised and regulated by the Solicitors Regulation Authority (SRA No: 800525).
         </p>
+        <p className="text-xs text-gray-500 mt-3">
+          <a href="/privacy-policy" className="hover:text-white underline transition-colors">Privacy Policy</a>
+        </p>
       </div>
     </footer>
   );
