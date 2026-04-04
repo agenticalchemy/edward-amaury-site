@@ -3,6 +3,7 @@ import { useLocation } from "wouter";
 import SiteHeader from "@/components/SiteHeader";
 import SiteFooter from "@/components/SiteFooter";
 import { fireWillsEvent } from "@/lib/tracking";
+import { useAdHeadline } from "@/hooks/useAdHeadline";
 
 type Route = "probate" | "wills" | "both" | "not-sure";
 
@@ -66,6 +67,7 @@ function getPersonalisedContent(state: ThankYouState) {
 export default function WillsThankYou() {
   const [location] = useLocation();
   const state = (window.history.state?.state ?? {}) as ThankYouState;
+  const adHeadline = useAdHeadline("");
 
   useEffect(() => {
     fireWillsEvent();
@@ -87,6 +89,11 @@ export default function WillsThankYou() {
       <div className="flex-1 bg-gray-50 py-12 px-4">
         <div className="max-w-2xl mx-auto">
           <div className="bg-white rounded-2xl shadow-lg p-8 mb-8">
+            {adHeadline && (
+              <p className="text-sm font-medium text-[#0e7490] mb-2 uppercase tracking-wide">
+                {adHeadline}
+              </p>
+            )}
             <h1 className="text-2xl sm:text-3xl font-bold text-[#1a3a4a] mb-4">{content.heading}</h1>
             <p className="text-gray-600 text-lg leading-relaxed mb-6">{content.personalLine}</p>
 

@@ -2,6 +2,7 @@ import { useEffect } from "react";
 import SiteHeader from "@/components/SiteHeader";
 import SiteFooter from "@/components/SiteFooter";
 import { fireVisaEvent } from "@/lib/tracking";
+import { useAdHeadline } from "@/hooks/useAdHeadline";
 
 type ResultBand = "strong" | "challenges" | "expert";
 
@@ -36,6 +37,7 @@ function getContent(state: ThankYouState) {
 
 export default function VisaThankYou() {
   const state = (window.history.state?.state ?? {}) as ThankYouState;
+  const adHeadline = useAdHeadline("");
 
   useEffect(() => {
     fireVisaEvent();
@@ -57,6 +59,11 @@ export default function VisaThankYou() {
       <div className="flex-1 bg-gray-50 py-12 px-4">
         <div className="max-w-2xl mx-auto">
           <div className="bg-white rounded-2xl shadow-lg p-8 mb-8">
+            {adHeadline && (
+              <p className="text-sm font-medium text-[#0e7490] mb-2 uppercase tracking-wide">
+                {adHeadline}
+              </p>
+            )}
             <h1 className="text-2xl sm:text-3xl font-bold text-[#1a3a4a] mb-4">{content.heading}</h1>
             <p className="text-gray-600 text-lg leading-relaxed mb-6">{content.body}</p>
 
