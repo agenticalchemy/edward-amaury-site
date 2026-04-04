@@ -1,6 +1,7 @@
 import { Router } from "express";
 import { appendToSheet } from "../lib/sheets";
 import { sendEmail, sendNotification } from "../lib/mailer";
+import { verifyRecaptcha } from "../lib/recaptcha";
 import { SubmitWillsLeadBody, SubmitVisaLeadBody } from "@workspace/api-zod";
 
 const router = Router();
@@ -15,6 +16,12 @@ router.post("/leads/wills", async (req, res) => {
   const data = parsed.data;
 
   if (data.honeypot) {
+    res.json({ success: true, message: "Lead submitted successfully" });
+    return;
+  }
+
+  const recaptchaOk = await verifyRecaptcha(data.recaptchaToken);
+  if (!recaptchaOk) {
     res.json({ success: true, message: "Lead submitted successfully" });
     return;
   }
@@ -81,6 +88,12 @@ router.post("/leads/visa", async (req, res) => {
   const data = parsed.data;
 
   if (data.honeypot) {
+    res.json({ success: true, message: "Lead submitted successfully" });
+    return;
+  }
+
+  const recaptchaOk = await verifyRecaptcha(data.recaptchaToken);
+  if (!recaptchaOk) {
     res.json({ success: true, message: "Lead submitted successfully" });
     return;
   }

@@ -6,6 +6,12 @@ import { useSubmitVisaLead } from "@workspace/api-client-react";
 import { getUtmParams } from "@/lib/tracking";
 import { useAdHeadline } from "@/hooks/useAdHeadline";
 
+declare global {
+  interface Window {
+    grecaptcha?: { execute: (siteKey: string, options: { action: string }) => Promise<string> };
+  }
+}
+
 type ResultBand = "strong" | "challenges" | "expert";
 
 interface QuizOption {
@@ -154,6 +160,14 @@ export default function VisaQuiz() {
     const utmParams = getUtmParams();
     const params = new URLSearchParams(window.location.search);
 
+    let recaptchaToken: string | undefined;
+    const siteKey = import.meta.env.VITE_RECAPTCHA_SITE_KEY;
+    if (siteKey && window.grecaptcha) {
+      try {
+        recaptchaToken = await window.grecaptcha.execute(siteKey, { action: "submit" });
+      } catch { /* fail open */ }
+    }
+
     submitMutation.mutate(
       {
         data: {
@@ -162,6 +176,7 @@ export default function VisaQuiz() {
           phone,
           partnerNationality,
           honeypot: honeypot || undefined,
+          recaptchaToken,
           score: totalScore,
           result,
           answers,

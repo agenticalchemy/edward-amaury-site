@@ -6,6 +6,12 @@ import { useSubmitWillsLead } from "@workspace/api-client-react";
 import { getUtmParams } from "@/lib/tracking";
 import { useAdHeadline } from "@/hooks/useAdHeadline";
 
+declare global {
+  interface Window {
+    grecaptcha?: { execute: (siteKey: string, options: { action: string }) => Promise<string> };
+  }
+}
+
 type Route = "probate" | "wills" | "both" | "not-sure";
 
 interface Question {
@@ -186,6 +192,14 @@ export default function WillsQuiz() {
     const utmParams = getUtmParams();
     const params = new URLSearchParams(window.location.search);
 
+    let recaptchaToken: string | undefined;
+    const siteKey = import.meta.env.VITE_RECAPTCHA_SITE_KEY;
+    if (siteKey && window.grecaptcha) {
+      try {
+        recaptchaToken = await window.grecaptcha.execute(siteKey, { action: "submit" });
+      } catch { /* fail open */ }
+    }
+
     submitMutation.mutate(
       {
         data: {
@@ -193,6 +207,7 @@ export default function WillsQuiz() {
           phone,
           email,
           honeypot: honeypot || undefined,
+          recaptchaToken,
           route: route!,
           answers,
           gclid: params.get("gclid") ?? undefined,
