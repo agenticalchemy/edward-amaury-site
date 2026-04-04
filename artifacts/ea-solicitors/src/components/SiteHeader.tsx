@@ -4,8 +4,12 @@ export default function SiteHeader() {
   return (
     <header className="sticky top-0 z-50 bg-white border-b border-gray-200 shadow-sm">
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between h-16">
-        <Link href="/wills-and-probate" className="text-xl font-bold text-[#1a3a4a] tracking-tight hover:opacity-80 transition-opacity">
-          Edward & Amaury
+        <Link href="/wills-and-probate" className="flex items-center hover:opacity-80 transition-opacity">
+          <img
+            src="/ea-logo.png"
+            alt="Edward & Amaury Solicitors"
+            className="h-9 w-auto"
+          />
         </Link>
         <a
           href="tel:01228272395"

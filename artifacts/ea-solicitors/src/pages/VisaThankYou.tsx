@@ -17,27 +17,28 @@ function getContent(state: ThankYouState) {
 
   if (result === "strong") {
     return {
-      heading: `Thank you, ${firstName} — Good News, You're in a Strong Position`,
-      body: "Based on your answers, you appear to meet the key eligibility criteria for the UK Spouse Visa. That's genuinely good news — but a strong position doesn't mean the process is simple. How your application is presented, and the quality of the evidence you provide, can make all the difference. Our immigration team will call you to talk through the next steps.",
+      heading: "Good News — You're in a Strong Position",
+      body: "Based on your answers, you appear to meet the key eligibility criteria for the UK Spouse Visa. That's genuinely good news — but a strong position doesn't mean the process is simple. Our immigration team will call you to talk through the next steps.",
     };
   }
 
   if (result === "challenges") {
     return {
-      heading: `Thank you, ${firstName} — You May Face Some Challenges, But They're Not Insurmountable`,
-      body: "Your assessment has flagged some areas that could present obstacles in your application. The good news is that challenges don't mean rejection — it means these issues need to be addressed carefully with the right strategy. Our immigration specialists handle situations like yours regularly, and we know how to present an application that gives you the best chance of approval.",
+      heading: "You May Face Some Challenges — But They're Not Insurmountable",
+      body: "Your assessment has flagged some areas that could present obstacles. Challenges don't mean rejection — they need to be addressed carefully with the right strategy. Our immigration specialists handle situations like yours regularly.",
     };
   }
 
   return {
-    heading: `Thank you, ${firstName} — Your Application Will Need Expert Support`,
-    body: "Your assessment indicates that your application will face significant challenges under the current rules. Knowing this now — before spending money on applications — is genuinely valuable. With the right expert support, we can identify the strongest path forward for you and your partner. Our immigration team will call you to discuss your options honestly and openly.",
+    heading: "Your Application Will Need Expert Support",
+    body: "Your assessment indicates that your application will face significant challenges under the current rules. Knowing this now — before spending money on applications — is genuinely valuable. Our immigration team will call you to discuss your options honestly.",
   };
 }
 
 export default function VisaThankYou() {
   const state = (window.history.state?.state ?? {}) as ThankYouState;
   const adHeadline = useAdHeadline("");
+  const firstName = state.firstName ?? "there";
 
   useEffect(() => {
     fireVisaEvent();
@@ -45,62 +46,103 @@ export default function VisaThankYou() {
 
   const content = getContent(state);
 
+  const resultColour =
+    state.result === "strong"
+      ? "text-green-600"
+      : state.result === "challenges"
+      ? "text-amber-600"
+      : "text-[#0e7490]";
+
+  const resultBadge =
+    state.result === "strong"
+      ? { label: "Strong Application", bg: "bg-green-50 border-green-200", text: "text-green-700" }
+      : state.result === "challenges"
+      ? { label: "Some Challenges", bg: "bg-amber-50 border-amber-200", text: "text-amber-700" }
+      : { label: "Expert Support Needed", bg: "bg-[#0e7490]/8 border-[#0e7490]/20", text: "text-[#0e7490]" };
+
   return (
-    <div className="min-h-screen flex flex-col">
+    <div className="min-h-screen flex flex-col bg-gray-50">
       <SiteHeader />
 
-      {/* Teal banner */}
-      <div className="bg-[#0e7490] text-white text-center py-4 px-4">
-        <p className="font-semibold">
-          Your details have been received. Our immigration team will call you within 24 hours.
-        </p>
-      </div>
+      <div className="flex-1 py-6 px-4">
+        <div className="max-w-lg mx-auto space-y-4">
 
-      <div className="flex-1 bg-gray-50 py-12 px-4">
-        <div className="max-w-2xl mx-auto">
-          <div className="bg-white rounded-2xl shadow-lg p-8 mb-8">
+          {/* Success card */}
+          <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
+            {/* Checkmark */}
+            <div className="flex justify-center mb-4">
+              <div className="w-14 h-14 rounded-full bg-[#0e7490]/10 flex items-center justify-center">
+                <svg className="w-7 h-7 text-[#0e7490]" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
+                </svg>
+              </div>
+            </div>
+
+            {/* Ad headline context */}
             {adHeadline && (
-              <p className="text-sm font-medium text-[#0e7490] mb-2 uppercase tracking-wide">
+              <p className="text-xs font-semibold text-[#0e7490] text-center uppercase tracking-widest mb-2">
                 {adHeadline}
               </p>
             )}
-            <h1 className="text-2xl sm:text-3xl font-bold text-[#1a3a4a] mb-4">{content.heading}</h1>
-            <p className="text-gray-600 text-lg leading-relaxed mb-6">{content.body}</p>
 
-            <div className="border-t border-gray-100 pt-6">
-              <h2 className="font-bold text-[#1a3a4a] text-lg mb-4">What Happens Next</h2>
-              <div className="space-y-4">
-                {[
-                  { n: "1", t: "We review your assessment", b: "Our immigration team looks at your answers in detail." },
-                  { n: "2", t: "We call you within 24 hours", b: "A specialist solicitor will call you to discuss your results and the best path forward." },
-                  { n: "3", t: "We give you an honest assessment", b: "No jargon, no pressure. A clear picture of your position and what your options are — before you commit to anything." },
-                ].map((item) => (
-                  <div key={item.n} className="flex gap-4">
-                    <div className="w-8 h-8 rounded-full bg-[#0e7490] text-white flex items-center justify-center font-bold flex-shrink-0 text-sm">
-                      {item.n}
-                    </div>
-                    <div>
-                      <p className="font-semibold text-[#1a3a4a]">{item.t}</p>
-                      <p className="text-gray-600 text-sm">{item.b}</p>
-                    </div>
-                  </div>
-                ))}
-              </div>
+            {/* Result badge */}
+            <div className="flex justify-center mb-3">
+              <span className={`inline-block border rounded-full px-3 py-1 text-xs font-semibold ${resultBadge.bg} ${resultBadge.text}`}>
+                Your Assessment: {resultBadge.label}
+              </span>
+            </div>
+
+            {/* Heading */}
+            <p className="text-sm font-medium text-gray-500 text-center mb-1">Thank you, {firstName}</p>
+            <h1 className="text-xl sm:text-2xl font-bold text-[#1a3a4a] text-center mb-3 leading-tight">
+              {content.heading}
+            </h1>
+            <p className="text-gray-600 text-sm sm:text-base text-center leading-relaxed mb-4">
+              {content.body}
+            </p>
+
+            {/* Confirmation pill */}
+            <div className="bg-[#0e7490]/8 rounded-xl px-4 py-3 text-center">
+              <p className="text-[#0e7490] text-sm font-semibold">
+                ✓ Your assessment has been received
+              </p>
+              <p className="text-gray-500 text-xs mt-0.5">Our immigration team will call you within 24 hours</p>
             </div>
           </div>
 
-          {/* Call CTA */}
-          <div className="bg-[#1a3a4a] text-white rounded-2xl p-8 text-center">
-            <p className="text-lg font-semibold mb-2">Need to speak to someone sooner?</p>
-            <a
-              href="tel:01228272395"
-              data-testid="thankyou-phone-visa"
-              className="block text-3xl font-bold text-[#5eead4] hover:text-white transition-colors"
-            >
-              01228 272395
-            </a>
-            <p className="text-sm text-gray-300 mt-2">Lines open Monday–Friday, 9am–5pm</p>
+          {/* Phone CTA — most prominent on mobile */}
+          <a
+            href="tel:01228272395"
+            data-testid="thankyou-phone-visa"
+            className="block w-full bg-[#0e7490] hover:bg-[#0a5a70] active:bg-[#084d60] text-white text-center rounded-2xl py-5 px-4 transition-colors shadow-sm"
+          >
+            <p className="text-xs font-medium text-white/80 mb-1">Need to speak to someone sooner?</p>
+            <p className="text-2xl sm:text-3xl font-bold tracking-tight">01228 272395</p>
+            <p className="text-xs text-white/70 mt-1">Mon–Fri, 9am–5pm</p>
+          </a>
+
+          {/* What happens next */}
+          <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
+            <h2 className="font-bold text-[#1a3a4a] text-base mb-4">What Happens Next</h2>
+            <div className="space-y-4">
+              {[
+                { n: "1", t: "We review your assessment", b: "Our immigration team looks at your answers in detail." },
+                { n: "2", t: "We call you within 24 hours", b: "A specialist solicitor will call to discuss your results and the best path forward." },
+                { n: "3", t: "We give you an honest assessment", b: "No jargon, no pressure — a clear picture of your position and your options before you commit to anything." },
+              ].map((item) => (
+                <div key={item.n} className="flex gap-3">
+                  <div className="w-7 h-7 rounded-full bg-[#0e7490] text-white flex items-center justify-center font-bold flex-shrink-0 text-xs mt-0.5">
+                    {item.n}
+                  </div>
+                  <div>
+                    <p className="font-semibold text-[#1a3a4a] text-sm">{item.t}</p>
+                    <p className="text-gray-500 text-xs mt-0.5">{item.b}</p>
+                  </div>
+                </div>
+              ))}
+            </div>
           </div>
+
         </div>
       </div>
 
