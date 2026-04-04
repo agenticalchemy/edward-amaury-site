@@ -2,6 +2,7 @@ import { useLocation } from "wouter";
 import SiteHeader from "@/components/SiteHeader";
 import SiteFooter from "@/components/SiteFooter";
 import { useState } from "react";
+import { useAdHeadline } from "@/hooks/useAdHeadline";
 
 const faqs = [
   {
@@ -45,6 +46,7 @@ function FaqItem({ q, a }: { q: string; a: string }) {
 
 export default function WillsLanding() {
   const [, setLocation] = useLocation();
+  const adHeadline = useAdHeadline("");
 
   return (
     <div className="min-h-screen flex flex-col">
@@ -53,10 +55,16 @@ export default function WillsLanding() {
       {/* Hero */}
       <section className="bg-[#1a3a4a] text-white py-20 px-4">
         <div className="max-w-4xl mx-auto text-center">
-          <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold leading-tight mb-6">
-            Dealing With Probate in Cumbria?<br className="hidden sm:block" />
-            <span className="text-[#5eead4]"> We'll Handle It So You Don't Have To.</span>
-          </h1>
+          {adHeadline ? (
+            <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold leading-tight mb-6">
+              {adHeadline}
+            </h1>
+          ) : (
+            <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold leading-tight mb-6">
+              Dealing With Probate in Cumbria?<br className="hidden sm:block" />
+              <span className="text-[#5eead4]"> We'll Handle It So You Don't Have To.</span>
+            </h1>
+          )}
           <p className="text-lg sm:text-xl text-gray-200 mb-8 max-w-2xl mx-auto">
             Local, fixed-fee probate solicitors in Carlisle. We take the stress, paperwork, and legal complexity off your hands — so you can focus on your family.
           </p>

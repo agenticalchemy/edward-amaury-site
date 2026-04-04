@@ -1,10 +1,11 @@
-import { useState, useEffect, useCallback } from "react";
+import { useState } from "react";
 import { useLocation } from "wouter";
 import SiteHeader from "@/components/SiteHeader";
 import SiteFooter from "@/components/SiteFooter";
 import TurnstileWidget from "@/components/TurnstileWidget";
 import { useSubmitWillsLead } from "@workspace/api-client-react";
 import { getUtmParams } from "@/lib/tracking";
+import { useAdHeadline } from "@/hooks/useAdHeadline";
 
 type Route = "probate" | "wills" | "both" | "not-sure";
 
@@ -233,6 +234,7 @@ export default function WillsQuiz() {
   };
 
   const currentQuestion = allQuestions[step];
+  const adHeadline = useAdHeadline("");
 
   if (phase === "form") {
     return (
@@ -313,6 +315,12 @@ export default function WillsQuiz() {
       <SiteHeader />
       <div className="flex-1 bg-gray-50 py-8 px-4">
         <div className="max-w-2xl mx-auto">
+          {/* Ad message match banner */}
+          {adHeadline && (
+            <div className="bg-[#0e7490]/10 border border-[#0e7490]/20 rounded-lg px-4 py-2 mb-6 text-sm text-[#0e7490] font-medium text-center">
+              {adHeadline}
+            </div>
+          )}
           {/* Progress bar */}
           <div className="mb-8">
             <div className="flex justify-between text-sm text-gray-500 mb-2">

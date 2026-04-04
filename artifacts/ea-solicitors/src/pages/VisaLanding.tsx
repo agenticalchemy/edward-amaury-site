@@ -2,6 +2,7 @@ import { useLocation } from "wouter";
 import SiteHeader from "@/components/SiteHeader";
 import SiteFooter from "@/components/SiteFooter";
 import { useState } from "react";
+import { useAdHeadline } from "@/hooks/useAdHeadline";
 
 const faqs = [
   {
@@ -45,6 +46,7 @@ function FaqItem({ q, a }: { q: string; a: string }) {
 
 export default function VisaLanding() {
   const [, setLocation] = useLocation();
+  const adHeadline = useAdHeadline("");
 
   return (
     <div className="min-h-screen flex flex-col">
@@ -54,7 +56,7 @@ export default function VisaLanding() {
       <section className="bg-[#1a3a4a] text-white py-20 px-4">
         <div className="max-w-4xl mx-auto text-center">
           <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold leading-tight mb-4">
-            Could You Bring Your Spouse to the UK?
+            {adHeadline || "Could You Bring Your Spouse to the UK?"}
           </h1>
           <p className="text-xl text-[#5eead4] font-semibold mb-6">
             Answer 7 quick questions to find out where you stand — and what your next steps should be.

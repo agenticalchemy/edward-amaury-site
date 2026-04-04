@@ -5,6 +5,7 @@ import SiteFooter from "@/components/SiteFooter";
 import TurnstileWidget from "@/components/TurnstileWidget";
 import { useSubmitVisaLead } from "@workspace/api-client-react";
 import { getUtmParams } from "@/lib/tracking";
+import { useAdHeadline } from "@/hooks/useAdHeadline";
 
 type ResultBand = "strong" | "challenges" | "expert";
 
@@ -144,6 +145,7 @@ export default function VisaQuiz() {
   };
 
   const totalScore = scores.reduce((a, b) => a + b, 0);
+  const adHeadline = useAdHeadline("");
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -292,6 +294,12 @@ export default function VisaQuiz() {
       <SiteHeader />
       <div className="flex-1 bg-gray-50 py-8 px-4">
         <div className="max-w-2xl mx-auto">
+          {/* Ad message match banner */}
+          {adHeadline && (
+            <div className="bg-[#0e7490]/10 border border-[#0e7490]/20 rounded-lg px-4 py-2 mb-6 text-sm text-[#0e7490] font-medium text-center">
+              {adHeadline}
+            </div>
+          )}
           {/* Progress bar */}
           <div className="mb-8">
             <div className="flex justify-between text-sm text-gray-500 mb-2">
