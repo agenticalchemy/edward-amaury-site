@@ -27,7 +27,7 @@ router.post("/leads/wills", async (req, res) => {
     .map(([k, v]) => `${k}: ${v}`)
     .join(" | ");
 
-  await appendToSheet("Wills & Probate Leads", [
+  await appendToSheet("Wills Probate Leads", [
     timestamp,
     data.name,
     data.email,
@@ -95,7 +95,7 @@ router.post("/leads/visa", async (req, res) => {
     .map(([k, v]) => `${k}: ${v}`)
     .join(" | ");
 
-  await appendToSheet("Spouse Visa Leads", [
+  await appendToSheet("Visa Leads", [
     timestamp,
     data.fullName,
     data.email,
