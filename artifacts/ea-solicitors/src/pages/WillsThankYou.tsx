@@ -57,7 +57,6 @@ function getPersonalisedContent(state: ThankYouState) {
 export default function WillsThankYou() {
   const [location] = useLocation();
   const state = (window.history.state?.state ?? {}) as ThankYouState;
-  const adHeadline = useAdHeadline("");
   const firstName = state.firstName || sessionStorage.getItem("ea_lead_firstname") || "there";
 
   useEffect(() => {
@@ -83,13 +82,6 @@ export default function WillsThankYou() {
                 </svg>
               </div>
             </div>
-
-            {/* Ad headline context */}
-            {adHeadline && (
-              <p className="text-xs font-semibold text-[#0e7490] text-center uppercase tracking-widest mb-2">
-                {adHeadline}
-              </p>
-            )}
 
             {/* Heading */}
             <h1 className="text-xl sm:text-2xl font-bold text-[#1a3a4a] text-center mb-2 leading-tight">

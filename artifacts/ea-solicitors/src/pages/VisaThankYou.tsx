@@ -37,7 +37,6 @@ function getContent(state: ThankYouState) {
 
 export default function VisaThankYou() {
   const state = (window.history.state?.state ?? {}) as ThankYouState;
-  const adHeadline = useAdHeadline("");
   const firstName = state.firstName || sessionStorage.getItem("ea_lead_firstname") || "there";
 
   useEffect(() => {
@@ -77,13 +76,6 @@ export default function VisaThankYou() {
                 </svg>
               </div>
             </div>
-
-            {/* Ad headline context */}
-            {adHeadline && (
-              <p className="text-xs font-semibold text-[#0e7490] text-center uppercase tracking-widest mb-2">
-                {adHeadline}
-              </p>
-            )}
 
             {/* Result badge */}
             <div className="flex justify-center mb-3">
