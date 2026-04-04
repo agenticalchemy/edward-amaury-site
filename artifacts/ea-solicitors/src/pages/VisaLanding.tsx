@@ -60,7 +60,7 @@ export default function VisaLanding() {
             Answer 7 quick questions to find out where you stand — and what your next steps should be.
           </p>
           <p className="text-gray-200 text-lg max-w-3xl mx-auto mb-8">
-            The UK spouse visa process is one of the most complex and often most rejected visa applications. That's why we have this free 2-minute assessment to ensure your current situation is eligible.
+            The UK spouse visa process is one of the most complex and often most rejected visa applications. That's why we have this free 2-minute assessment to ensure your current situation is eligible — before you spend a penny.
           </p>
           <button
             data-testid="hero-cta-visa"
