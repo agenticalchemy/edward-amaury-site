@@ -5,12 +5,7 @@ import SiteFooter from "@/components/SiteFooter";
 import { useSubmitWillsLead } from "@workspace/api-client-react";
 import { getUtmParams } from "@/lib/tracking";
 import { useAdHeadline } from "@/hooks/useAdHeadline";
-
-declare global {
-  interface Window {
-    grecaptcha?: { execute: (siteKey: string, options: { action: string }) => Promise<string> };
-  }
-}
+import { useRecaptcha } from "@/hooks/useRecaptcha";
 
 type Route = "probate" | "wills" | "both" | "not-sure";
 
@@ -161,6 +156,7 @@ export default function WillsQuiz() {
   const [formError, setFormError] = useState("");
 
   const submitMutation = useSubmitWillsLead();
+  const { getToken } = useRecaptcha();
 
   const allQuestions = [q1, ...questions];
   const totalSteps = allQuestions.length;
@@ -193,12 +189,7 @@ export default function WillsQuiz() {
     const params = new URLSearchParams(window.location.search);
 
     let recaptchaToken: string | undefined;
-    const siteKey = import.meta.env.VITE_RECAPTCHA_SITE_KEY;
-    if (siteKey && window.grecaptcha) {
-      try {
-        recaptchaToken = await window.grecaptcha.execute(siteKey, { action: "submit" });
-      } catch { /* fail open */ }
-    }
+    try { recaptchaToken = await getToken("submit"); } catch { /* fail open */ }
 
     submitMutation.mutate(
       {

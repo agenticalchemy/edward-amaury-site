@@ -5,12 +5,7 @@ import SiteFooter from "@/components/SiteFooter";
 import { useSubmitVisaLead } from "@workspace/api-client-react";
 import { getUtmParams } from "@/lib/tracking";
 import { useAdHeadline } from "@/hooks/useAdHeadline";
-
-declare global {
-  interface Window {
-    grecaptcha?: { execute: (siteKey: string, options: { action: string }) => Promise<string> };
-  }
-}
+import { useRecaptcha } from "@/hooks/useRecaptcha";
 
 type ResultBand = "strong" | "challenges" | "expert";
 
@@ -128,6 +123,7 @@ export default function VisaQuiz() {
   const [formError, setFormError] = useState("");
 
   const submitMutation = useSubmitVisaLead();
+  const { getToken } = useRecaptcha();
 
   const totalSteps = visaQuestions.length;
   const progress = Math.round((step / totalSteps) * 100);
@@ -161,12 +157,7 @@ export default function VisaQuiz() {
     const params = new URLSearchParams(window.location.search);
 
     let recaptchaToken: string | undefined;
-    const siteKey = import.meta.env.VITE_RECAPTCHA_SITE_KEY;
-    if (siteKey && window.grecaptcha) {
-      try {
-        recaptchaToken = await window.grecaptcha.execute(siteKey, { action: "submit" });
-      } catch { /* fail open */ }
-    }
+    try { recaptchaToken = await getToken("submit"); } catch { /* fail open */ }
 
     submitMutation.mutate(
       {
