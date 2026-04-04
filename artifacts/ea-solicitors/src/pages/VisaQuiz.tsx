@@ -2,7 +2,6 @@ import { useState } from "react";
 import { useLocation } from "wouter";
 import SiteHeader from "@/components/SiteHeader";
 import SiteFooter from "@/components/SiteFooter";
-import TurnstileWidget from "@/components/TurnstileWidget";
 import { useSubmitVisaLead } from "@workspace/api-client-react";
 import { getUtmParams } from "@/lib/tracking";
 import { useAdHeadline } from "@/hooks/useAdHeadline";
@@ -119,7 +118,7 @@ export default function VisaQuiz() {
   const [email, setEmail] = useState("");
   const [phone, setPhone] = useState("");
   const [partnerNationality, setPartnerNationality] = useState("");
-  const [turnstileToken, setTurnstileToken] = useState("");
+  const [honeypot, setHoneypot] = useState("");
   const [formError, setFormError] = useState("");
 
   const submitMutation = useSubmitVisaLead();
@@ -151,12 +150,6 @@ export default function VisaQuiz() {
     e.preventDefault();
     setFormError("");
 
-    const hasTurnstileKey = !!import.meta.env.VITE_TURNSTILE_SITE_KEY;
-    if (hasTurnstileKey && !turnstileToken) {
-      setFormError("Please complete the security check.");
-      return;
-    }
-
     const result = getResultBand(totalScore);
     const utmParams = getUtmParams();
     const params = new URLSearchParams(window.location.search);
@@ -168,7 +161,7 @@ export default function VisaQuiz() {
           email,
           phone,
           partnerNationality,
-          turnstileToken: turnstileToken || "no-turnstile",
+          honeypot: honeypot || undefined,
           score: totalScore,
           result,
           answers,
@@ -261,10 +254,15 @@ export default function VisaQuiz() {
                     className="w-full border border-gray-300 rounded-lg px-4 py-3 text-gray-800 focus:outline-none focus:ring-2 focus:ring-[#0e7490]"
                   />
                 </div>
-                <TurnstileWidget
-                  onVerify={setTurnstileToken}
-                  onExpire={() => setTurnstileToken("")}
-                  onError={() => setTurnstileToken("")}
+                <input
+                  type="text"
+                  name="website"
+                  value={honeypot}
+                  onChange={(e) => setHoneypot(e.target.value)}
+                  tabIndex={-1}
+                  autoComplete="off"
+                  aria-hidden="true"
+                  style={{ position: "absolute", left: "-9999px", width: "1px", height: "1px", overflow: "hidden" }}
                 />
                 {formError && (
                   <p className="text-red-600 text-sm" data-testid="form-error-visa">{formError}</p>

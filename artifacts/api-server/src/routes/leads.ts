@@ -1,5 +1,4 @@
 import { Router } from "express";
-import { verifyTurnstile } from "../lib/turnstile";
 import { appendToSheet } from "../lib/sheets";
 import { sendEmail, sendNotification } from "../lib/mailer";
 import { SubmitWillsLeadBody, SubmitVisaLeadBody } from "@workspace/api-zod";
@@ -14,11 +13,9 @@ router.post("/leads/wills", async (req, res) => {
   }
 
   const data = parsed.data;
-  const ip = (req.headers["cf-connecting-ip"] as string) || req.ip;
 
-  const turnstileOk = await verifyTurnstile(data.turnstileToken, ip);
-  if (!turnstileOk) {
-    res.status(400).json({ error: "Turnstile verification failed" });
+  if (data.honeypot) {
+    res.json({ success: true, message: "Lead submitted successfully" });
     return;
   }
 
@@ -82,11 +79,9 @@ router.post("/leads/visa", async (req, res) => {
   }
 
   const data = parsed.data;
-  const ip = (req.headers["cf-connecting-ip"] as string) || req.ip;
 
-  const turnstileOk = await verifyTurnstile(data.turnstileToken, ip);
-  if (!turnstileOk) {
-    res.status(400).json({ error: "Turnstile verification failed" });
+  if (data.honeypot) {
+    res.json({ success: true, message: "Lead submitted successfully" });
     return;
   }
 
