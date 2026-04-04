@@ -10,6 +10,8 @@ servers:
 tags:
   - name: health
     description: Health operations
+  - name: leads
+    description: Lead submission operations
 paths:
   /healthz:
     get:
@@ -24,6 +26,69 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/HealthStatus"
+
+  /leads/wills:
+    post:
+      operationId: submitWillsLead
+      tags: [leads]
+      summary: Submit a Wills & Probate quiz lead
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/WillsLeadBody"
+      responses:
+        "200":
+          description: Lead submitted successfully
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/LeadSubmitResponse"
+        "400":
+          description: Invalid input or Turnstile failure
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "500":
+          description: Server error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+  /leads/visa:
+    post:
+      operationId: submitVisaLead
+      tags: [leads]
+      summary: Submit a Spouse Visa quiz lead
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/VisaLeadBody"
+      responses:
+        "200":
+          description: Lead submitted successfully
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/LeadSubmitResponse"
+        "400":
+          description: Invalid input or Turnstile failure
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "500":
+          description: Server error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
 components:
   schemas:
     HealthStatus:
@@ -34,3 +99,107 @@ components:
       required:
         - status
 
+    WillsLeadBody:
+      type: object
+      properties:
+        name:
+          type: string
+        phone:
+          type: string
+        email:
+          type: string
+        turnstileToken:
+          type: string
+        route:
+          type: string
+          enum: [probate, wills, both, not-sure]
+        answers:
+          type: object
+          additionalProperties:
+            type: string
+        gclid:
+          type: string
+        utmSource:
+          type: string
+        utmCampaign:
+          type: string
+        utmMedium:
+          type: string
+        utmTerm:
+          type: string
+        utmContent:
+          type: string
+        referrer:
+          type: string
+      required:
+        - name
+        - phone
+        - email
+        - turnstileToken
+        - route
+        - answers
+
+    VisaLeadBody:
+      type: object
+      properties:
+        fullName:
+          type: string
+        email:
+          type: string
+        phone:
+          type: string
+        partnerNationality:
+          type: string
+        turnstileToken:
+          type: string
+        score:
+          type: number
+        result:
+          type: string
+          enum: [strong, challenges, expert]
+        answers:
+          type: object
+          additionalProperties:
+            type: string
+        gclid:
+          type: string
+        utmSource:
+          type: string
+        utmCampaign:
+          type: string
+        utmMedium:
+          type: string
+        utmTerm:
+          type: string
+        utmContent:
+          type: string
+        referrer:
+          type: string
+      required:
+        - fullName
+        - email
+        - phone
+        - partnerNationality
+        - turnstileToken
+        - score
+        - result
+        - answers
+
+    LeadSubmitResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+        message:
+          type: string
+      required:
+        - success
+        - message
+
+    ErrorResponse:
+      type: object
+      properties:
+        error:
+          type: string
+      required:
+        - error

@@ -1,0 +1,231 @@
+Build me a website — NOT an app, NOT an API. A website that I can preview and publish directly from Replit.
+
+This is a lead generation website for Edward & Amaury Solicitors (https://edwardamaury.co.uk). Visit that URL and match their brand colours, fonts, and style exactly.
+
+The website has two separate landing pages, each with its own quiz, contact form, and personalised thank you page. No crossover between them.
+
+PAGE 1: /wills-and-probate — Wills & Probate
+PAGE 2: /uk-spouse-visa — Immigration Spouse Visa
+
+Each landing page includes:
+- Hero section with headline, sub-headline, and CTA button
+- Empathy/trust section
+- How it works (3 steps)
+- Mid-page CTA to start the quiz
+- Trust signals (SRA Regulated, local, fixed fees)
+- FAQ section (accordion)
+- Final CTA with phone number
+- Footer
+
+Each quiz:
+- Shows one question at a time with large clickable answer cards
+- Progress bar at the top
+- Smooth transitions between questions
+- After the quiz, shows a mandatory contact form (name, phone, email)
+- Cloudflare Turnstile bot protection on the form
+- After form submission, shows a personalised thank you page that uses their first name and references their answers
+
+On form submission:
+- Save the lead to a Google Sheet via the Sheets API (separate tabs for each funnel)
+- Send an email notification to the firm
+- Send a confirmation email to the lead
+- Fire a GA4 event (wills_lead_submit or visa_lead_submit)
+- Fire a Google Ads conversion tag
+
+All tracking codes and API keys are loaded from Replit Secrets (environment variables). The site must work without them — just skip tracking if they're empty.
+
+CLIENT: Edward & Amaury Solicitors
+PHONE: 01228 272395 (click-to-call on mobile, visible on every page)
+SRA: 800525
+WEBSITE TO MATCH: https://edwardamaury.co.uk
+
+===
+
+WILLS & PROBATE LANDING PAGE (/wills-and-probate)
+
+Header: "Edward & Amaury" left, "01228 272395" right, sticky on scroll
+
+Hero headline: "Dealing With Probate in Cumbria? We'll Handle It So You Don't Have To."
+Hero sub-headline: "Local, fixed-fee probate solicitors in Carlisle. We take the stress, paperwork, and legal complexity off your hands — so you can focus on your family."
+Hero button: "Find Out What You Need →"
+Trust bar: "Rated on Google | SRA Regulated | Fixed Fees, No Surprises | Carlisle-Based"
+
+Empathy heading: "We Understand This Is a Difficult Time"
+Empathy body: "Losing someone is hard enough. The last thing you need is confusing legal paperwork, unexpected costs, and a process that drags on for months. Whether your loved one left a will or not, we can help. We've guided hundreds of families across Cumbria through the probate process — and we'll guide you too."
+Three columns:
+1. "With or without a will — We handle both testate and intestate estates"
+2. "Fixed fees from the start — No hourly billing, no hidden charges, no surprises"
+3. "A real person, locally — Speak to a Carlisle-based solicitor, not a call centre"
+
+How it works:
+Step 1: "Book a Free Call" — "Tell us about your situation. We'll listen, answer your questions, and explain exactly what needs to happen next."
+Step 2: "We Handle the Paperwork" — "From applying for the Grant of Probate to managing HMRC forms, creditors, and asset distribution — we take care of everything."
+Step 3: "You Get Peace of Mind" — "We keep you updated at every stage. No surprises on fees or timelines."
+
+Mid-page CTA: "Not Sure What You Need? Take Our Free 2-Minute Assessment" / "Start My Free Assessment →"
+
+Trust: SRA Regulated, Local to Carlisle, Fixed-Fee
+
+FAQ:
+- "How much does probate cost?" — Fixed-fee, assessed during free call
+- "What if there's no will?" — Intestacy rules, we handle it
+- "How long does probate take?" — 3-6 months typical
+- "Do I need to come to your office?" — Phone/email or face-to-face
+- "What do I need to bring to the first call?" — General situation, we'll guide you
+
+Final CTA: "You Don't Have To Deal With This Alone" / 01228 272395 / "Start My Free Assessment →"
+
+===
+
+WILLS & PROBATE QUIZ
+
+Routing quiz — Question 1 determines the path. Everyone answers exactly 4 questions.
+
+Q1 (everyone): "What best describes your situation right now?"
+A) "Someone has died and I'm dealing with their estate" → PATH A
+B) "I'm alive and want to put a will in place or update one" → PATH B
+C) "Both — a recent death, and I also need to sort my own will" → PATH C
+D) "I'm not sure, I just need someone to guide me" → PATH D
+
+PATH A → route "probate":
+Q2: "Do you know if the person who died left a will?" — Yes / No / I'm not sure
+Q3: "Have you already started the probate process?" — No, I don't know where to begin / I've started but I'm stuck / I need professional help to take over / Another solicitor was handling it but it's not working out
+Q4: "What would help you most right now?" — Someone to handle the whole process / Understanding what needs to happen and what it costs / Help with a specific part / I just need to talk to someone who understands
+
+PATH B → route "wills":
+Q5: "What's prompted you to look into this now?" — New baby or expecting / Recently married or engaged / Bought a property / I own a business / Just want to get it sorted / Updating an existing will
+Q6: "Do you currently have a will in place?" — No, this would be my first / Yes, but it needs updating / Yes, but I'm not sure it's still valid / My partner and I both need wills
+Q7: "What matters most to you?" — Protecting my children's future / Making sure my partner is provided for / Keeping things simple for my family / Protecting business assets / Reducing inheritance tax
+
+PATH C → route "both":
+Q2 + Q3 (same as Path A), then:
+Q8: "For your own will — what's the main reason?" — I don't want my family going through what I'm going through now / I'm a parent and need to protect my children / I own property or a business / I just want everything in order
+
+PATH D → route "not-sure":
+Q9: "Has someone close to you recently passed away?" — Yes / No
+Q10: "Do you currently have a will in place?" — Yes / No / I don't know
+Q11: "What would be most helpful for you right now?" — A free conversation to understand my options / Clear guidance on what I need and what it costs / Someone to point me in the right direction
+
+===
+
+WILLS CONTACT FORM (after quiz)
+
+"Enter your details to see your personalised recommendation"
+Fields: Name, Phone, Email (all required)
+Cloudflare Turnstile (invisible)
+Button: "See My Recommendation"
+
+===
+
+WILLS THANK YOU PAGES (personalised, dynamic)
+
+Teal banner at top: "Your details have been received. A member of our team will call you within 24 hours."
+
+Route "probate": "Thank you, [First Name] — We Can Help You With This" + personalised line based on Q3 answer + "What Happens Next" 3-step list + "Call us: 01228 272395"
+Route "wills": "Thank you, [First Name] — Here's What We'd Recommend" + personalised line based on Q5 answer + What Happens Next + call CTA
+Route "both": "Thank you, [First Name] — You're Doing the Right Thing" + personalised line based on Q8 answer + What Happens Next + call CTA
+Route "not-sure": "Thank you, [First Name] — We'll Help You Work It Out" + What Happens Next + call CTA
+
+===
+
+SPOUSE VISA LANDING PAGE (/uk-spouse-visa)
+
+Hero headline: "Could You Bring Your Spouse to the UK?"
+Hero sub-headline: "Answer 7 quick questions to find out where you stand — and what your next steps should be."
+Hero body: "The UK spouse visa process is one of the most complex in the world. Income thresholds, evidence requirements, and strict documentation rules mean that even genuine couples get refused. This free 2-minute assessment checks your situation against the key eligibility criteria so you know exactly where you stand — before you spend a penny on applications."
+Hero button: "Check My Eligibility →"
+Trust bar: "SRA Regulated | Specialist Immigration Team | Free Assessment | Confidential | Cumbria's Only Immigration Firm"
+
+Empathy heading: "We Know How Stressful This Process Is"
+Empathy body: "The income threshold alone rules out half the UK workforce. Add in language tests, accommodation requirements, and mountains of evidence — and it's easy to feel overwhelmed. We help couples navigate every step. No jargon. No guesswork."
+Three columns:
+1. "Specialist Immigration Team"
+2. "SRA Regulated"
+3. "Cumbria's Only Immigration Firm"
+
+How it works: Take Assessment → Get Results → Speak to Specialist
+
+Dark section: "Why Getting It Right First Time Matters" — refused = £1,846+ lost, months waiting, refusal on record
+
+FAQ:
+- "What is the minimum income requirement?" — £29,000/year
+- "How long does the process take?" — 8-12 weeks
+- "What if my partner doesn't speak English?" — CEFR A1 test, exemptions exist
+- "What documents do I need?" — Income, accommodation, relationship evidence
+- "How much does it cost to use a solicitor?" — Fixed-fee after free consultation
+
+Final CTA: "Don't Leave Your Application to Chance" / 01228 272395
+
+===
+
+SPOUSE VISA QUIZ
+
+Weighted scoring. Each answer has points (0-3). Max 21. Score determines result.
+16-21 = "strong" / 10-15 = "challenges" / 0-9 = "expert"
+
+Q1: "What's your relationship status with your partner?"
+Legally married=3, Civil partnership=3, Living together 2+ years=2, Less than 2 years=1, Engaged not married=0, Relationship don't live together=0
+
+Q2: "What is your current annual income (before tax)?"
+£29,000+=3, £23,500-£28,999=1, Below £23,500=0, Self-employed=1, Not working=0
+
+Q3: "Do you have savings that could support your application?"
+Over £16,000=3, Less than £16,000=1, No significant savings=0, Not sure what counts=1
+
+Q4: "Does your partner meet the English language requirement?"
+English-speaking country=3, Has test/UK degree=3, Plans to take test=2, English is a barrier=0, Not sure=1
+
+Q5: "Do you have suitable accommodation arranged in the UK?"
+Own/rent with space=3, Living with family=2, Need to arrange=1, Not sure what's adequate=1
+
+Q6: "Has your partner ever been refused a UK visa or had immigration issues?"
+Clean history=3, Previous refusal=1, Overstayed=0, Ban/deportation=0, Not sure=1
+
+Q7: "How much evidence of your relationship do you have?"
+Lots=3, Some=2, Not much=1, Married quickly/short history=0
+
+===
+
+SPOUSE VISA CONTACT FORM (after Q7)
+
+"Enter your details to see your personalised assessment"
+Fields: Full name, Email, Phone, Partner's nationality (all required)
+Cloudflare Turnstile (invisible)
+Button: "See My Results"
+
+===
+
+SPOUSE VISA THANK YOU PAGES (personalised, dynamic)
+
+Teal banner: "Your details have been received. Our immigration team will call you within 24 hours."
+
+Route "strong" (16-21): "Thank you, [First Name] — Good News, You're in a Strong Position" + body about presentation mattering + What Happens Next + call CTA
+Route "challenges" (10-15): "Thank you, [First Name] — You May Face Some Challenges, But They're Not Insurmountable" + body about solutions existing + What Happens Next + call CTA
+Route "expert" (0-9): "Thank you, [First Name] — Your Application Will Need Expert Support" + body about knowing now saves thousands + What Happens Next + call CTA
+
+===
+
+GOOGLE SHEET STRUCTURE
+
+Two tabs in one spreadsheet:
+Tab 1 "Wills & Probate Leads": Timestamp, Name, Email, Phone, Route, Answers (each in own column), GCLID, UTM Source, UTM Campaign, UTM Medium, UTM Term, UTM Content, Referrer
+Tab 2 "Spouse Visa Leads": Same + Score + Partner Nationality
+
+===
+
+ENVIRONMENT VARIABLES (Replit Secrets)
+
+GA4_MEASUREMENT_ID
+GOOGLE_ADS_CONVERSION_ID
+GOOGLE_ADS_CONVERSION_LABEL_WILLS
+GOOGLE_ADS_CONVERSION_LABEL_VISA
+GOOGLE_SHEETS_CREDENTIALS
+GOOGLE_SHEET_ID
+SMTP_HOST
+SMTP_PORT
+SMTP_USER
+SMTP_PASS
+NOTIFICATION_EMAIL
+FROM_EMAIL
+TURNSTILE_SITE_KEY
+TURNSTILE_SECRET_KEY

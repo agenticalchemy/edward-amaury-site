@@ -5,18 +5,27 @@
  * API specification
  * OpenAPI spec version: 0.1.0
  */
-import { useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import type {
+  MutationFunction,
   QueryFunction,
   QueryKey,
+  UseMutationOptions,
+  UseMutationResult,
   UseQueryOptions,
   UseQueryResult,
 } from "@tanstack/react-query";
 
-import type { HealthStatus } from "./api.schemas";
+import type {
+  ErrorResponse,
+  HealthStatus,
+  LeadSubmitResponse,
+  VisaLeadBody,
+  WillsLeadBody,
+} from "./api.schemas";
 
 import { customFetch } from "../custom-fetch";
-import type { ErrorType } from "../custom-fetch";
+import type { ErrorType, BodyType } from "../custom-fetch";
 
 type AwaitedInput<T> = PromiseLike<T> | T;
 
@@ -99,3 +108,175 @@ export function useHealthCheck<
 
   return { ...query, queryKey: queryOptions.queryKey };
 }
+
+/**
+ * @summary Submit a Wills & Probate quiz lead
+ */
+export const getSubmitWillsLeadUrl = () => {
+  return `/api/leads/wills`;
+};
+
+export const submitWillsLead = async (
+  willsLeadBody: WillsLeadBody,
+  options?: RequestInit,
+): Promise<LeadSubmitResponse> => {
+  return customFetch<LeadSubmitResponse>(getSubmitWillsLeadUrl(), {
+    ...options,
+    method: "POST",
+    headers: { "Content-Type": "application/json", ...options?.headers },
+    body: JSON.stringify(willsLeadBody),
+  });
+};
+
+export const getSubmitWillsLeadMutationOptions = <
+  TError = ErrorType<ErrorResponse>,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof submitWillsLead>>,
+    TError,
+    { data: BodyType<WillsLeadBody> },
+    TContext
+  >;
+  request?: SecondParameter<typeof customFetch>;
+}): UseMutationOptions<
+  Awaited<ReturnType<typeof submitWillsLead>>,
+  TError,
+  { data: BodyType<WillsLeadBody> },
+  TContext
+> => {
+  const mutationKey = ["submitWillsLead"];
+  const { mutation: mutationOptions, request: requestOptions } = options
+    ? options.mutation &&
+      "mutationKey" in options.mutation &&
+      options.mutation.mutationKey
+      ? options
+      : { ...options, mutation: { ...options.mutation, mutationKey } }
+    : { mutation: { mutationKey }, request: undefined };
+
+  const mutationFn: MutationFunction<
+    Awaited<ReturnType<typeof submitWillsLead>>,
+    { data: BodyType<WillsLeadBody> }
+  > = (props) => {
+    const { data } = props ?? {};
+
+    return submitWillsLead(data, requestOptions);
+  };
+
+  return { mutationFn, ...mutationOptions };
+};
+
+export type SubmitWillsLeadMutationResult = NonNullable<
+  Awaited<ReturnType<typeof submitWillsLead>>
+>;
+export type SubmitWillsLeadMutationBody = BodyType<WillsLeadBody>;
+export type SubmitWillsLeadMutationError = ErrorType<ErrorResponse>;
+
+/**
+ * @summary Submit a Wills & Probate quiz lead
+ */
+export const useSubmitWillsLead = <
+  TError = ErrorType<ErrorResponse>,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof submitWillsLead>>,
+    TError,
+    { data: BodyType<WillsLeadBody> },
+    TContext
+  >;
+  request?: SecondParameter<typeof customFetch>;
+}): UseMutationResult<
+  Awaited<ReturnType<typeof submitWillsLead>>,
+  TError,
+  { data: BodyType<WillsLeadBody> },
+  TContext
+> => {
+  return useMutation(getSubmitWillsLeadMutationOptions(options));
+};
+
+/**
+ * @summary Submit a Spouse Visa quiz lead
+ */
+export const getSubmitVisaLeadUrl = () => {
+  return `/api/leads/visa`;
+};
+
+export const submitVisaLead = async (
+  visaLeadBody: VisaLeadBody,
+  options?: RequestInit,
+): Promise<LeadSubmitResponse> => {
+  return customFetch<LeadSubmitResponse>(getSubmitVisaLeadUrl(), {
+    ...options,
+    method: "POST",
+    headers: { "Content-Type": "application/json", ...options?.headers },
+    body: JSON.stringify(visaLeadBody),
+  });
+};
+
+export const getSubmitVisaLeadMutationOptions = <
+  TError = ErrorType<ErrorResponse>,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof submitVisaLead>>,
+    TError,
+    { data: BodyType<VisaLeadBody> },
+    TContext
+  >;
+  request?: SecondParameter<typeof customFetch>;
+}): UseMutationOptions<
+  Awaited<ReturnType<typeof submitVisaLead>>,
+  TError,
+  { data: BodyType<VisaLeadBody> },
+  TContext
+> => {
+  const mutationKey = ["submitVisaLead"];
+  const { mutation: mutationOptions, request: requestOptions } = options
+    ? options.mutation &&
+      "mutationKey" in options.mutation &&
+      options.mutation.mutationKey
+      ? options
+      : { ...options, mutation: { ...options.mutation, mutationKey } }
+    : { mutation: { mutationKey }, request: undefined };
+
+  const mutationFn: MutationFunction<
+    Awaited<ReturnType<typeof submitVisaLead>>,
+    { data: BodyType<VisaLeadBody> }
+  > = (props) => {
+    const { data } = props ?? {};
+
+    return submitVisaLead(data, requestOptions);
+  };
+
+  return { mutationFn, ...mutationOptions };
+};
+
+export type SubmitVisaLeadMutationResult = NonNullable<
+  Awaited<ReturnType<typeof submitVisaLead>>
+>;
+export type SubmitVisaLeadMutationBody = BodyType<VisaLeadBody>;
+export type SubmitVisaLeadMutationError = ErrorType<ErrorResponse>;
+
+/**
+ * @summary Submit a Spouse Visa quiz lead
+ */
+export const useSubmitVisaLead = <
+  TError = ErrorType<ErrorResponse>,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof submitVisaLead>>,
+    TError,
+    { data: BodyType<VisaLeadBody> },
+    TContext
+  >;
+  request?: SecondParameter<typeof customFetch>;
+}): UseMutationResult<
+  Awaited<ReturnType<typeof submitVisaLead>>,
+  TError,
+  { data: BodyType<VisaLeadBody> },
+  TContext
+> => {
+  return useMutation(getSubmitVisaLeadMutationOptions(options));
+};

@@ -6,4 +6,12 @@
  * OpenAPI spec version: 0.1.0
  */
 
+export * from "./errorResponse";
 export * from "./healthStatus";
+export * from "./leadSubmitResponse";
+export * from "./visaLeadBody";
+export * from "./visaLeadBodyAnswers";
+export * from "./visaLeadBodyResult";
+export * from "./willsLeadBody";
+export * from "./willsLeadBodyAnswers";
+export * from "./willsLeadBodyRoute";

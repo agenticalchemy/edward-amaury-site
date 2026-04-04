@@ -8,3 +8,69 @@
 export interface HealthStatus {
   status: string;
 }
+
+export type WillsLeadBodyRoute =
+  (typeof WillsLeadBodyRoute)[keyof typeof WillsLeadBodyRoute];
+
+export const WillsLeadBodyRoute = {
+  probate: "probate",
+  wills: "wills",
+  both: "both",
+  "not-sure": "not-sure",
+} as const;
+
+export type WillsLeadBodyAnswers = { [key: string]: string };
+
+export interface WillsLeadBody {
+  name: string;
+  phone: string;
+  email: string;
+  turnstileToken: string;
+  route: WillsLeadBodyRoute;
+  answers: WillsLeadBodyAnswers;
+  gclid?: string;
+  utmSource?: string;
+  utmCampaign?: string;
+  utmMedium?: string;
+  utmTerm?: string;
+  utmContent?: string;
+  referrer?: string;
+}
+
+export type VisaLeadBodyResult =
+  (typeof VisaLeadBodyResult)[keyof typeof VisaLeadBodyResult];
+
+export const VisaLeadBodyResult = {
+  strong: "strong",
+  challenges: "challenges",
+  expert: "expert",
+} as const;
+
+export type VisaLeadBodyAnswers = { [key: string]: string };
+
+export interface VisaLeadBody {
+  fullName: string;
+  email: string;
+  phone: string;
+  partnerNationality: string;
+  turnstileToken: string;
+  score: number;
+  result: VisaLeadBodyResult;
+  answers: VisaLeadBodyAnswers;
+  gclid?: string;
+  utmSource?: string;
+  utmCampaign?: string;
+  utmMedium?: string;
+  utmTerm?: string;
+  utmContent?: string;
+  referrer?: string;
+}
+
+export interface LeadSubmitResponse {
+  success: boolean;
+  message: string;
+}
+
+export interface ErrorResponse {
+  error: string;
+}

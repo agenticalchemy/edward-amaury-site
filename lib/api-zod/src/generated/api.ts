@@ -14,3 +14,53 @@ import * as zod from "zod";
 export const HealthCheckResponse = zod.object({
   status: zod.string(),
 });
+
+/**
+ * @summary Submit a Wills & Probate quiz lead
+ */
+export const SubmitWillsLeadBody = zod.object({
+  name: zod.string(),
+  phone: zod.string(),
+  email: zod.string(),
+  turnstileToken: zod.string(),
+  route: zod.enum(["probate", "wills", "both", "not-sure"]),
+  answers: zod.record(zod.string(), zod.string()),
+  gclid: zod.string().optional(),
+  utmSource: zod.string().optional(),
+  utmCampaign: zod.string().optional(),
+  utmMedium: zod.string().optional(),
+  utmTerm: zod.string().optional(),
+  utmContent: zod.string().optional(),
+  referrer: zod.string().optional(),
+});
+
+export const SubmitWillsLeadResponse = zod.object({
+  success: zod.boolean(),
+  message: zod.string(),
+});
+
+/**
+ * @summary Submit a Spouse Visa quiz lead
+ */
+export const SubmitVisaLeadBody = zod.object({
+  fullName: zod.string(),
+  email: zod.string(),
+  phone: zod.string(),
+  partnerNationality: zod.string(),
+  turnstileToken: zod.string(),
+  score: zod.number(),
+  result: zod.enum(["strong", "challenges", "expert"]),
+  answers: zod.record(zod.string(), zod.string()),
+  gclid: zod.string().optional(),
+  utmSource: zod.string().optional(),
+  utmCampaign: zod.string().optional(),
+  utmMedium: zod.string().optional(),
+  utmTerm: zod.string().optional(),
+  utmContent: zod.string().optional(),
+  referrer: zod.string().optional(),
+});
+
+export const SubmitVisaLeadResponse = zod.object({
+  success: zod.boolean(),
+  message: zod.string(),
+});
