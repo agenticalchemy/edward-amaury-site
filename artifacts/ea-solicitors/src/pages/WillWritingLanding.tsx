@@ -99,21 +99,17 @@ export default function WillWritingLanding() {
               {
                 title: "Your family stays protected",
                 body: "Without a will, the law decides who inherits, who raises your children, and what happens to your home — not you. A will puts your wishes on record.",
-                icon: "🛡️",
               },
               {
                 title: "No guesswork for loved ones",
                 body: "A clear will removes uncertainty for the people you leave behind. They won't be left dealing with legal complications at an already difficult time.",
-                icon: "💙",
               },
               {
                 title: "Simpler than you think",
                 body: "Most wills are straightforward. We handle everything after your first call — drafting, checking, witnessing guidance. Fixed fee, no surprises.",
-                icon: "✅",
               },
             ].map((c) => (
               <div key={c.title} className="text-center p-6 rounded-xl bg-gray-50">
-                <div className="text-3xl mb-3">{c.icon}</div>
                 <h3 className="font-bold text-[#1a3a4a] text-lg mb-3">{c.title}</h3>
                 <p className="text-gray-600">{c.body}</p>
               </div>
