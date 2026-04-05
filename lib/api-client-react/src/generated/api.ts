@@ -22,6 +22,7 @@ import type {
   LeadSubmitResponse,
   VisaLeadBody,
   WillsLeadBody,
+  WillWritingLeadBody,
 } from "./api.schemas";
 
 import { customFetch } from "../custom-fetch";
@@ -279,4 +280,86 @@ export const useSubmitVisaLead = <
   TContext
 > => {
   return useMutation(getSubmitVisaLeadMutationOptions(options));
+};
+
+/**
+ * @summary Submit a Will Writing quiz lead
+ */
+export const getSubmitWillWritingLeadUrl = () => {
+  return `/api/leads/will-writing`;
+};
+
+export const submitWillWritingLead = async (
+  willWritingLeadBody: WillWritingLeadBody,
+  options?: RequestInit,
+): Promise<LeadSubmitResponse> => {
+  return customFetch<LeadSubmitResponse>(getSubmitWillWritingLeadUrl(), {
+    ...options,
+    method: "POST",
+    headers: { "Content-Type": "application/json", ...options?.headers },
+    body: JSON.stringify(willWritingLeadBody),
+  });
+};
+
+export const getSubmitWillWritingLeadMutationOptions = <
+  TError = ErrorType<ErrorResponse>,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof submitWillWritingLead>>,
+    TError,
+    { data: BodyType<WillWritingLeadBody> },
+    TContext
+  >;
+  request?: SecondParameter<typeof customFetch>;
+}): UseMutationOptions<
+  Awaited<ReturnType<typeof submitWillWritingLead>>,
+  TError,
+  { data: BodyType<WillWritingLeadBody> },
+  TContext
+> => {
+  const mutationKey = ["submitWillWritingLead"];
+  const { mutation: mutationOptions, request: requestOptions } = options
+    ? options.mutation &&
+      "mutationKey" in options.mutation &&
+      options.mutation.mutationKey
+      ? options
+      : { ...options, mutation: { ...options.mutation, mutationKey } }
+    : { mutation: { mutationKey }, request: undefined };
+
+  const mutationFn: MutationFunction<
+    Awaited<ReturnType<typeof submitWillWritingLead>>,
+    { data: BodyType<WillWritingLeadBody> }
+  > = (props) => {
+    const { data } = props ?? {};
+    return submitWillWritingLead(data, requestOptions);
+  };
+
+  return { mutationFn, ...mutationOptions };
+};
+
+export type SubmitWillWritingLeadMutationResult = NonNullable<
+  Awaited<ReturnType<typeof submitWillWritingLead>>
+>;
+export type SubmitWillWritingLeadMutationBody = BodyType<WillWritingLeadBody>;
+export type SubmitWillWritingLeadMutationError = ErrorType<ErrorResponse>;
+
+export const useSubmitWillWritingLead = <
+  TError = ErrorType<ErrorResponse>,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof submitWillWritingLead>>,
+    TError,
+    { data: BodyType<WillWritingLeadBody> },
+    TContext
+  >;
+  request?: SecondParameter<typeof customFetch>;
+}): UseMutationResult<
+  Awaited<ReturnType<typeof submitWillWritingLead>>,
+  TError,
+  { data: BodyType<WillWritingLeadBody> },
+  TContext
+> => {
+  return useMutation(getSubmitWillWritingLeadMutationOptions(options));
 };

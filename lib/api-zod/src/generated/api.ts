@@ -66,3 +66,28 @@ export const SubmitVisaLeadResponse = zod.object({
   success: zod.boolean(),
   message: zod.string(),
 });
+
+/**
+ * @summary Submit a Will Writing quiz lead
+ */
+export const SubmitWillWritingLeadBody = zod.object({
+  name: zod.string(),
+  phone: zod.string(),
+  email: zod.string(),
+  honeypot: zod.string().optional(),
+  recaptchaToken: zod.string().optional(),
+  route: zod.enum(["no-will", "outdated", "review"]),
+  answers: zod.record(zod.string(), zod.string()),
+  gclid: zod.string().optional(),
+  utmSource: zod.string().optional(),
+  utmCampaign: zod.string().optional(),
+  utmMedium: zod.string().optional(),
+  utmTerm: zod.string().optional(),
+  utmContent: zod.string().optional(),
+  referrer: zod.string().optional(),
+});
+
+export const SubmitWillWritingLeadResponse = zod.object({
+  success: zod.boolean(),
+  message: zod.string(),
+});

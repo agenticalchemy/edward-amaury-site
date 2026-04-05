@@ -1,0 +1,275 @@
+EDWARD & AMAURY — WILL WRITING FUNNEL
+======================================
+Add as FUNNEL 3 to the existing Replit app.
+Follow the same patterns as Funnel 1 and 2 (same tech stack,
+same DB schema, same tracking, same contact form flow).
+
+Route: /will-writing
+Funnel name in DB: "will-writing"
+
+
+LANDING PAGE — /will-writing
+==============================
+
+Hero headline: "What Happens to Your Family If Something Happens to You?"
+Sub-headline: "56% of UK adults don't have a will. Take our free
+2-minute check to find out if your family is protected."
+CTA: "Check If You're Protected →"
+Trust bar: same format as other funnels (SRA, fixed fees, Carlisle, Google reviews)
+
+Keep the same page structure as the probate landing page:
+hero, empathy section, how it works, mid-page CTA, trust, FAQ, final CTA.
+
+Empathy section angle: This isn't about death — it's about making sure
+your family is looked after. Most people put it off because it feels
+morbid or complicated. It's neither. One appointment. Fixed fee. Done.
+
+FAQ topics:
+- How much does a will cost?
+- Do I really need a solicitor or can I do it myself?
+- How long does it take?
+- What if I already have a will but it's old?
+- What about my pension and life insurance?
+
+
+QUIZ — 4 QUESTIONS
+====================
+
+Show one at a time, same card-style UI as other funnels.
+
+Q1: "Do you currently have a will?"
+- No, I've never had one → flags: no_will
+- Yes, but it's been a while since I looked at it → flags: outdated
+- Yes, and it's fairly recent → flags: current
+- I'm not sure → flags: not_sure
+
+Q2: "Have any of these happened in the last few years?" (multi-select)
+- Got married or entered a civil partnership → flag: married
+- Got divorced or separated → flag: divorced
+- Had children or grandchildren → flag: children
+- Bought or sold property → flag: property
+- Started or closed a business → flag: business
+- Moved in with a new partner → flag: cohabiting
+- None of these → flag: no_changes
+
+Q3: "Which of these apply to you right now?" (multi-select)
+- I live with a partner but we're not married → flag: unmarried_partner
+- I have children under 18 → flag: minor_children
+- I own property → flag: owns_property
+- I own or part-own a business → flag: owns_business
+- I have stepchildren or a blended family → flag: blended_family
+- None of these → flag: none
+
+Q4: "What matters most to you?"
+- Making sure my partner is provided for
+- Protecting my children's future
+- Keeping things simple for my family
+- Protecting business assets
+- Reducing inheritance tax
+
+
+ROUTING LOGIC
+==============
+
+Route based on Q1 answer + Q2 flags:
+
+NO_WILL: Q1 = "No" or "Not sure"
+→ Results page: NO WILL
+
+OUTDATED: Q1 = "Yes but it's been a while" AND Q2 has ANY life event ticked
+→ Results page: OUTDATED WILL
+
+AT_RISK: Q1 = "Yes but it's been a while" AND Q2 = "None of these"
+→ Results page: OUTDATED WILL (but softer — time-based risk only)
+
+CURRENT: Q1 = "Yes, fairly recent" AND Q2 = "None of these"
+→ Results page: WILL REVIEW
+
+CURRENT_WITH_CHANGES: Q1 = "Yes, fairly recent" AND Q2 has ANY life event
+→ Results page: OUTDATED WILL (even recent wills need updating after life events)
+
+
+CONTACT FORM
+=============
+Same as other funnels. Name, phone, email. Mandatory before results.
+Heading: "Enter your details to see your results"
+
+
+RESULTS PAGES
+==============
+
+All results pages use the person's first name in the headline.
+All show the confirmation banner and "What Happens Next" section.
+All personalise based on Q2 and Q3 flags.
+
+The key mechanic: each results page has CONDITIONAL BLOCKS that
+only render if the person ticked the matching flag. This makes
+the page feel written for them specifically.
+
+
+--- RESULTS PAGE: NO WILL ---
+
+Headline: "[First Name], right now the law decides what happens
+to your family — not you"
+
+Opening: "You're in the same position as 56% of UK adults. Without
+a will, a fixed set of rules called the intestacy laws decides who
+inherits, who looks after your children, and what happens to your
+home. Your wishes don't come into it."
+
+CONDITIONAL BLOCKS (show only if matching Q3 flag is set):
+
+IF unmarried_partner:
+"Your partner inherits nothing. Under intestacy law, an unmarried
+partner has no automatic right to inherit — no matter how long
+you've been together, no matter how much you've contributed to
+the home. Only marriage or a civil partnership creates that right."
+
+IF minor_children:
+"A judge decides who raises your children. Without a will, there is
+no legal guardian appointment. Under the Children Act 1989, the
+court decides — and it may not be who you'd choose."
+
+IF owns_property:
+"Your home may not go where you think. If you own it solely, it
+falls into your estate and gets distributed under intestacy rules.
+If you're unmarried, your partner could have no claim to it at all."
+
+IF owns_business:
+"Your business could be paralysed. Without a will addressing your
+ownership, nobody may be able to authorise payments, sign contracts,
+or appoint directors. The business exists on paper but can't function."
+
+IF blended_family:
+"Your stepchildren inherit nothing. Unless legally adopted, stepchildren
+have no automatic right to your estate under intestacy — even if
+you've raised them as your own."
+
+UNIVERSAL CLOSING BLOCK:
+"Every year, around 2,000 estates in England and Wales pass to the
+Crown because nobody was legally entitled to inherit. A will is what
+stops the law from making decisions your family has to live with.
+
+The good news: sorting this out is simpler than you think. Most
+people have their will completed within a week of their first call
+with us. One appointment. Fixed fee. Done."
+
+CTA: "We'll call you within 24 hours to talk it through — or call
+us now: 01228 272395"
+
+
+--- RESULTS PAGE: OUTDATED WILL ---
+
+Headline: "[First Name], your will may no longer protect the people
+you love"
+
+Opening: "You've done the right thing by making a will. But based on
+what you've told us, things have changed since it was written — and
+your will may not have kept up."
+
+CONDITIONAL BLOCKS (show only if matching Q2 flag is set):
+
+IF married:
+"Getting married usually cancels any will made before the marriage.
+Under the Wills Act 1837, your previous will may have been
+automatically revoked — meaning you could effectively have no will
+at all right now."
+
+IF divorced:
+"Divorce doesn't cancel your will. It treats your ex-spouse as
+having died for the purpose of gifts and executor appointments,
+but the rest of the will stays in force. That can leave failed
+gifts, gaps, and an executor position nobody is filling."
+
+IF children:
+"Children born after your will was written aren't automatically
+included. The Law Commission has confirmed that existing law
+provides limited or no protection to beneficiaries under pre-existing
+wills. Your newer children may have to make a court claim rather
+than receive a clear gift."
+
+IF property:
+"Property bought after your will was written may not be covered.
+If your will doesn't have a strong residuary clause, or the property
+is held differently than the will assumes, it could fall into
+partial intestacy."
+
+IF business:
+"Business interests need specialist drafting. Company shares,
+articles of association, director succession — the Law Society
+specifically flags business ownership as a reason to use a
+solicitor for your will."
+
+IF cohabiting:
+"Your new partner has no automatic right to inherit. If your will
+still names a previous partner — or doesn't mention your current
+one — they could be left with nothing."
+
+UNIVERSAL CLOSING BLOCK:
+"GOV.UK and the Law Society both recommend reviewing your will every
+5 years minimum, and immediately after any major life event. Based
+on what you've told us, a review is worth doing now.
+
+A will review with us is straightforward — one conversation, a
+clear quote, and we handle the update. Fixed fee, no surprises."
+
+CTA: "We'll call you within 24 hours — or call us now: 01228 272395"
+
+
+--- RESULTS PAGE: WILL REVIEW ---
+
+Headline: "[First Name], your will looks current — but here's what
+most people miss"
+
+Opening: "Based on your answers, your will is recent and your
+circumstances haven't changed dramatically. That's a strong position.
+But there are a few things that even a well-drafted will can miss."
+
+STANDARD BLOCKS (show for everyone on this route):
+
+"Pension and life insurance. Most pension schemes pay death benefits
+based on a nomination form, not your will. If your nominations don't
+match your will, the money could go somewhere you don't intend."
+
+"Digital assets. Since the Property (Digital Assets etc.) Act 2025,
+crypto, online accounts, and digital holdings are legally recognised
+as property. But they're only covered if your will identifies them."
+
+"Trust protection. If your property is held as joint tenants, it
+passes automatically to the survivor — which could put it at risk
+if the survivor later needs residential care."
+
+"Tax efficiency. The inheritance tax nil-rate band is frozen at
+£325,000 until 2030-31. As property values rise, more estates are
+getting caught. A review can check you're using your full allowances."
+
+CLOSING:
+"A periodic will review is a small cost for significant peace of mind.
+We can check everything's watertight in one short conversation."
+
+CTA: "We'll call you within 24 hours — or call us now: 01228 272395"
+
+
+TRACKING
+=========
+
+Same pattern as other funnels:
+
+GA4 events:
+- will_writing_landing_view
+- will_writing_quiz_start
+- will_writing_quiz_complete (with route)
+- will_writing_lead_submit (with route)
+
+Google Ads conversion:
+- New env var: GOOGLE_ADS_CONVERSION_LABEL_WILLS_WRITING
+- Fires on form submission only
+
+DB: funnel = "will-writing", route = "no-will" / "outdated" / "review"
+
+
+ADMIN DASHBOARD
+================
+
+Add "will-writing" to the funnel filter dropdown. Everything else
+works the same as existing funnels.

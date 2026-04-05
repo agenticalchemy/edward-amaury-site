@@ -74,3 +74,31 @@ export interface LeadSubmitResponse {
 export interface ErrorResponse {
   error: string;
 }
+
+export type WillWritingLeadBodyRoute =
+  (typeof WillWritingLeadBodyRoute)[keyof typeof WillWritingLeadBodyRoute];
+
+export const WillWritingLeadBodyRoute = {
+  "no-will": "no-will",
+  outdated: "outdated",
+  review: "review",
+} as const;
+
+export type WillWritingLeadBodyAnswers = { [key: string]: string };
+
+export interface WillWritingLeadBody {
+  name: string;
+  phone: string;
+  email: string;
+  honeypot?: string;
+  recaptchaToken?: string;
+  route: WillWritingLeadBodyRoute;
+  answers: WillWritingLeadBodyAnswers;
+  gclid?: string;
+  utmSource?: string;
+  utmCampaign?: string;
+  utmMedium?: string;
+  utmTerm?: string;
+  utmContent?: string;
+  referrer?: string;
+}
