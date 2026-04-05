@@ -132,15 +132,34 @@ export default function WillsLanding() {
       {/* Reviews */}
       <section className="py-16 px-4 bg-gray-50">
         <div className="max-w-4xl mx-auto">
-          <div className="flex items-center justify-center gap-3 mb-2">
-            <span className="text-[#00b67a] text-2xl font-bold tracking-tight">Trustpilot</span>
-            <span className="text-[#00b67a] text-xl">{"★★★★★"}</span>
+          <div className="flex flex-col items-center mb-10">
+            <img src="/review-solicitors-logo.png" alt="Review Solicitors" className="h-10 mb-5" />
+            <div className="flex items-center gap-4 mb-4">
+              <span className="text-5xl font-bold text-[#1a3a4a]">4.9</span>
+              <div>
+                <p className="font-bold text-[#1a3a4a] text-lg leading-tight">Excellent</p>
+                <div className="flex text-[#3a9e4f] text-2xl leading-none">{"★★★★★"}</div>
+                <p className="text-sm text-[#3a9e4f] font-medium underline">60 Reviews</p>
+              </div>
+            </div>
+            <div className="flex flex-wrap justify-center gap-4 mt-2">
+              {[
+                { pct: "92%", label: "Value for Money", sub: "9% above national average" },
+                { pct: "95%+", label: "Success Rate", sub: "16% above national average" },
+                { pct: "95%+", label: "Would Recommend", sub: "17% above national average" },
+              ].map((s) => (
+                <div key={s.label} className="bg-white border border-gray-100 rounded-xl px-5 py-4 text-center shadow-sm min-w-[140px]">
+                  <p className="text-xl font-bold text-[#1a3a4a]">{s.pct}</p>
+                  <p className="text-sm font-semibold text-gray-700 mt-1">{s.label}</p>
+                  <p className="text-xs text-[#3a9e4f] mt-1">↑ {s.sub}</p>
+                </div>
+              ))}
+            </div>
           </div>
-          <p className="text-center text-gray-500 text-sm mb-10">Verified client reviews</p>
           <div className="max-w-2xl mx-auto">
             {willsReviews.map((r) => (
               <div key={r.name} className="bg-white rounded-xl p-8 border border-gray-100 shadow-sm">
-                <div className="flex text-[#00b67a] text-xl mb-3">{"★★★★★"}</div>
+                <div className="flex text-[#3a9e4f] text-xl mb-3">{"★★★★★"}</div>
                 <p className="font-semibold text-[#1a3a4a] text-lg mb-3">"{r.title}"</p>
                 <p className="text-gray-600 leading-relaxed mb-4">"{r.body}"</p>
                 <div className="flex items-center gap-3">
@@ -149,7 +168,7 @@ export default function WillsLanding() {
                   </div>
                   <div>
                     <p className="font-semibold text-[#1a3a4a] text-sm">{r.name}</p>
-                    <p className="text-xs text-[#00b67a] font-medium">✓ Verified · {r.date}</p>
+                    <p className="text-xs text-[#3a9e4f] font-medium">✓ Verified · {r.date}</p>
                   </div>
                 </div>
               </div>
