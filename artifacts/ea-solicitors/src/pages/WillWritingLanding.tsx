@@ -89,7 +89,7 @@ export default function WillWritingLanding() {
       <section className="py-16 px-4 bg-white">
         <div className="max-w-4xl mx-auto">
           <h2 className="text-2xl sm:text-3xl font-bold text-[#1a3a4a] text-center mb-6">
-            This Isn't About Death. It's About Your Family.
+            This Isn't About Now. It's About Protecting Your Family.
           </h2>
           <p className="text-gray-600 text-lg leading-relaxed text-center mb-12 max-w-3xl mx-auto">
             Most people put off writing a will because it feels morbid or complicated. It's neither. A will is simply the clearest way to say: if something happens to me, here's how I want my family looked after. One appointment. Fixed fee. Done.
