@@ -53,7 +53,7 @@ export default function WillWritingLanding() {
       <SiteHeader />
 
       {/* Hero */}
-      <section className="bg-[#1a3a4a] text-white py-20 px-4">
+      <section className="bg-[#1a3a4a] text-white py-14 sm:py-20 px-4">
         <div className="max-w-4xl mx-auto text-center">
           {adHeadline ? (
             <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold leading-tight mb-6">
@@ -65,17 +65,17 @@ export default function WillWritingLanding() {
               <span className="text-[#5eead4]"> If Something Happens to You?</span>
             </h1>
           )}
-          <p className="text-lg sm:text-xl text-gray-200 mb-8 max-w-2xl mx-auto">
+          <p className="text-base sm:text-xl text-gray-200 mb-8 max-w-2xl mx-auto">
             56% of UK adults don't have a will. Take our free 2-minute check to find out if your family is protected.
           </p>
           <button
             data-testid="hero-cta-will-writing"
             onClick={() => setLocation("/will-writing/quiz")}
-            className="bg-[#0e7490] hover:bg-[#0a5a70] text-white font-bold py-4 px-8 rounded-lg text-lg transition-colors shadow-lg"
+            className="w-full sm:w-auto bg-[#0e7490] hover:bg-[#0a5a70] text-white font-bold py-4 px-8 rounded-lg text-lg transition-colors shadow-lg"
           >
-            Check If You're Protected →
+            Check Your Will Status →
           </button>
-          <div className="mt-8 flex flex-wrap justify-center gap-4 text-sm text-gray-300">
+          <div className="mt-8 flex flex-wrap justify-center gap-3 text-sm text-gray-300">
             {["SRA Regulated", "Fixed Fees, No Surprises", "Carlisle-Based", "Free Assessment"].map((t) => (
               <span key={t} className="flex items-center gap-1">
                 <span className="text-[#5eead4]">✓</span> {t}
@@ -97,20 +97,20 @@ export default function WillWritingLanding() {
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {[
               {
-                title: "Your family stays protected",
+                title: "Your family\nstays protected",
                 body: "Without a will, the law decides who inherits, who raises your children, and what happens to your home — not you. A will puts your wishes on record.",
               },
               {
-                title: "No guesswork for loved ones",
+                title: "No guesswork\nfor loved ones",
                 body: "A clear will removes uncertainty for the people you leave behind. They won't be left dealing with legal complications at an already difficult time.",
               },
               {
-                title: "Simpler than you think",
+                title: "Simpler than\nyou think",
                 body: "Most wills are straightforward. We handle everything after your first call — drafting, checking, witnessing guidance. Fixed fee, no surprises.",
               },
             ].map((c) => (
-              <div key={c.title} className="text-center p-6 rounded-xl bg-gray-50">
-                <h3 className="font-bold text-[#1a3a4a] text-lg mb-3">{c.title}</h3>
+              <div key={c.title} className="flex flex-col text-center p-6 rounded-xl bg-gray-50">
+                <h3 className="font-bold text-[#1a3a4a] text-lg mb-3 whitespace-pre-line">{c.title}</h3>
                 <p className="text-gray-600">{c.body}</p>
               </div>
             ))}
@@ -130,9 +130,9 @@ export default function WillWritingLanding() {
           <button
             data-testid="mid-cta-will-writing"
             onClick={() => setLocation("/will-writing/quiz")}
-            className="bg-white text-[#0e7490] font-bold py-4 px-8 rounded-lg text-lg hover:bg-gray-100 transition-colors"
+            className="w-full sm:w-auto bg-white text-[#0e7490] font-bold py-4 px-8 rounded-lg text-lg hover:bg-gray-100 transition-colors"
           >
-            Check If You're Protected →
+            Check Your Will Status →
           </button>
         </div>
       </section>
@@ -212,9 +212,9 @@ export default function WillWritingLanding() {
           <button
             data-testid="footer-cta-will-writing"
             onClick={() => setLocation("/will-writing/quiz")}
-            className="bg-[#0e7490] hover:bg-[#0a5a70] text-white font-bold py-4 px-8 rounded-lg text-lg transition-colors"
+            className="w-full sm:w-auto bg-[#0e7490] hover:bg-[#0a5a70] text-white font-bold py-4 px-8 rounded-lg text-lg transition-colors"
           >
-            Check If You're Protected →
+            Check Your Will Status →
           </button>
           <p className="mt-4 text-gray-400 text-sm">
             Or call us now:{" "}
