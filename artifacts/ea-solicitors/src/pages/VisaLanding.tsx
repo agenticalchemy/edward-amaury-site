@@ -4,6 +4,58 @@ import SiteFooter from "@/components/SiteFooter";
 import { useState } from "react";
 import { useAdHeadline } from "@/hooks/useAdHeadline";
 
+const visaReviews = [
+  {
+    name: "Marleen M.",
+    verified: true,
+    date: "24 Feb 2026",
+    title: "Great advice and support for visa application",
+    body: "When applying for my spousal visa on my own I was overwhelmed and received a refusal. My husband and I asked for advice at Edward and Amaury Solicitors and were helped professionally, leading to a successful and fast application. Wishing we had gone there from the start — it would have saved us a lot of stress.",
+  },
+  {
+    name: "LS & SM",
+    verified: true,
+    date: "29 May 2025",
+    title: "An Outstanding Service!",
+    body: "Nadeem and his team managed my partner's visa application. From the first meeting it was clear they are very knowledgeable about UK immigration law. From a human perspective, they treated my partner and I with such grace, kindness and understanding that we would never use any other law firm. If you need peace of mind and a cost-effective service, please use Edward and Amaury.",
+  },
+  {
+    name: "Chris Buchanan",
+    verified: true,
+    date: "12 Sept 2024",
+    title: "Outstanding Service",
+    body: "I am an American national who recently relocated to the UK with my British wife. We went to Nadeem Pervaz to seek advice on how to obtain a spousal visa. He walked us through all the steps required and total cost. Within 2 months we had my Visa. Thanks Nadeem.",
+  },
+  {
+    name: "Piotr",
+    verified: false,
+    date: "1 Aug 2025",
+    title: "Our Hero!",
+    body: "Matthew is absolutely unbelievable. From the first day we met he was so professional and supportive. He helped us so much with our case — without his help my Dad couldn't be with us in the UK. Matthew, we will never forget what you have done for us. You are the best, my friend.",
+  },
+  {
+    name: "Charity",
+    verified: false,
+    date: "7 Aug 2025",
+    title: "Visa Application",
+    body: "I am truly grateful to Matthew for the seamless process of my visa application. His expertise and dedication were evident throughout. Thanks to his efforts I am now happily reunited with my family here in the UK. I highly recommend Matthew for his excellent service.",
+  },
+  {
+    name: "Nikola",
+    verified: false,
+    date: "21 Aug 2024",
+    title: "Amazing Experience",
+    body: "I had an amazing experience with Mr Matthew, in very difficult circumstances about my immigration status. Matthew did such a great job — he was so professional and helpful, taking care of all details and documents, and finding the best solution in my case. I would highly recommend Mr Matthew and Edward and Amaury Solicitors.",
+  },
+  {
+    name: "Em",
+    verified: false,
+    date: "31 Jul 2024",
+    title: "Excellent",
+    body: "Perfect service from the initial consultation throughout. Knowledgeable, attentive, involved, easy to communicate with — Matthew dealt with my case in a timely and professional manner. I would highly recommend his services to anyone who needs legal advice on immigration matters. Humane and professional approach up until the very end.",
+  },
+];
+
 const faqs = [
   {
     q: "What is the minimum income requirement?",
@@ -106,8 +158,38 @@ export default function VisaLanding() {
         </div>
       </section>
 
-      {/* How it works */}
+      {/* Reviews */}
       <section className="py-16 px-4 bg-gray-50">
+        <div className="max-w-5xl mx-auto">
+          <div className="flex items-center justify-center gap-3 mb-2">
+            <span className="text-[#00b67a] text-2xl font-bold tracking-tight">Trustpilot</span>
+            <span className="flex text-[#00b67a] text-xl">{"★★★★★"}</span>
+          </div>
+          <p className="text-center text-gray-500 text-sm mb-10">Verified client reviews</p>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {visaReviews.map((r) => (
+              <div key={r.name + r.date} className="bg-white rounded-xl p-6 border border-gray-100 shadow-sm flex flex-col">
+                <div className="flex items-center gap-2 mb-1">
+                  <div className="w-8 h-8 rounded-full bg-[#0e7490] flex items-center justify-center text-white text-sm font-bold flex-shrink-0">
+                    {r.name.charAt(0).toUpperCase()}
+                  </div>
+                  <div>
+                    <p className="font-semibold text-[#1a3a4a] text-sm leading-tight">{r.name}</p>
+                    {r.verified && <p className="text-xs text-[#00b67a] font-medium">✓ Verified</p>}
+                  </div>
+                </div>
+                <div className="flex text-[#00b67a] text-base my-2">{"★★★★★"}</div>
+                <p className="font-semibold text-[#1a3a4a] text-sm mb-2">{r.title}</p>
+                <p className="text-gray-600 text-sm leading-relaxed flex-1">{r.body}</p>
+                <p className="text-xs text-gray-400 mt-3">{r.date}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* How it works */}
+      <section className="py-16 px-4 bg-white">
         <div className="max-w-4xl mx-auto">
           <h2 className="text-2xl sm:text-3xl font-bold text-[#1a3a4a] text-center mb-12">How It Works</h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">

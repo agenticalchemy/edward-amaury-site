@@ -4,6 +4,16 @@ import SiteFooter from "@/components/SiteFooter";
 import { useState } from "react";
 import { useAdHeadline } from "@/hooks/useAdHeadline";
 
+const willsReviews = [
+  {
+    name: "Sally Grisedale",
+    verified: true,
+    date: "8 Jun 2025",
+    title: "Highly Recommend Edward & Amaury Solicitors for UK Wills",
+    body: "I cannot recommend Edward & Amaury Solicitors highly enough, particularly for anyone navigating the complexities of setting up a UK will — especially as a dual US and UK citizen. My experience was exceptional, largely thanks to solicitor Fiona Reid. Her knowledge was truly vast and incredibly impressive. She expertly guided me through the intricate process, making what could have been a daunting task feel manageable and clear. The entire team provided an outstanding service, at a very reasonable price. I am so grateful for their expertise and support.",
+  },
+];
+
 const faqs = [
   {
     q: "How much does probate cost?",
@@ -119,8 +129,37 @@ export default function WillsLanding() {
         </div>
       </section>
 
-      {/* How it works */}
+      {/* Reviews */}
       <section className="py-16 px-4 bg-gray-50">
+        <div className="max-w-4xl mx-auto">
+          <div className="flex items-center justify-center gap-3 mb-2">
+            <span className="text-[#00b67a] text-2xl font-bold tracking-tight">Trustpilot</span>
+            <span className="text-[#00b67a] text-xl">{"★★★★★"}</span>
+          </div>
+          <p className="text-center text-gray-500 text-sm mb-10">Verified client reviews</p>
+          <div className="max-w-2xl mx-auto">
+            {willsReviews.map((r) => (
+              <div key={r.name} className="bg-white rounded-xl p-8 border border-gray-100 shadow-sm">
+                <div className="flex text-[#00b67a] text-xl mb-3">{"★★★★★"}</div>
+                <p className="font-semibold text-[#1a3a4a] text-lg mb-3">"{r.title}"</p>
+                <p className="text-gray-600 leading-relaxed mb-4">"{r.body}"</p>
+                <div className="flex items-center gap-3">
+                  <div className="w-9 h-9 rounded-full bg-[#0e7490] flex items-center justify-center text-white font-bold">
+                    {r.name.charAt(0)}
+                  </div>
+                  <div>
+                    <p className="font-semibold text-[#1a3a4a] text-sm">{r.name}</p>
+                    <p className="text-xs text-[#00b67a] font-medium">✓ Verified · {r.date}</p>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* How it works */}
+      <section className="py-16 px-4 bg-white">
         <div className="max-w-4xl mx-auto">
           <h2 className="text-2xl sm:text-3xl font-bold text-[#1a3a4a] text-center mb-12">How It Works</h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
