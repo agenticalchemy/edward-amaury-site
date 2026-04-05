@@ -149,7 +149,8 @@ export default function WillsQuiz() {
   const [animating, setAnimating] = useState(false);
 
   // Form state
-  const [name, setName] = useState("");
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
   const [phone, setPhone] = useState("");
   const [email, setEmail] = useState("");
   const [honeypot, setHoneypot] = useState("");
@@ -194,7 +195,7 @@ export default function WillsQuiz() {
     submitMutation.mutate(
       {
         data: {
-          name,
+          name: [firstName, lastName].filter(Boolean).join(" "),
           phone,
           email,
           honeypot: honeypot || undefined,
@@ -217,10 +218,10 @@ export default function WillsQuiz() {
               window.gtag("event", "wills_lead_submit", { event_category: "lead" });
             }
           } catch { /* ignore */ }
-          sessionStorage.setItem("ea_lead_firstname", name.split(" ")[0]);
+          sessionStorage.setItem("ea_lead_firstname", firstName);
           setLocation("/wills-and-probate/thank-you", {
             state: {
-              firstName: name.split(" ")[0],
+              firstName,
               route,
               answers,
             },
@@ -246,17 +247,30 @@ export default function WillsQuiz() {
               <h2 className="text-2xl font-bold text-[#1a3a4a] mb-2">Almost there</h2>
               <p className="text-gray-600 mb-6">Enter your details to see your personalised recommendation</p>
               <form onSubmit={handleSubmit} className="space-y-4">
-                <div>
-                  <label className="block text-sm font-semibold text-gray-700 mb-1">Full Name *</label>
-                  <input
-                    data-testid="input-name"
-                    type="text"
-                    required
-                    value={name}
-                    onChange={(e) => setName(e.target.value)}
-                    placeholder="Your full name"
-                    className="w-full border border-gray-300 rounded-lg px-4 py-3 text-gray-800 focus:outline-none focus:ring-2 focus:ring-[#0e7490]"
-                  />
+                <div className="grid grid-cols-2 gap-3">
+                  <div>
+                    <label className="block text-sm font-semibold text-gray-700 mb-1">First Name *</label>
+                    <input
+                      data-testid="input-firstname-wills"
+                      type="text"
+                      required
+                      value={firstName}
+                      onChange={(e) => setFirstName(e.target.value)}
+                      placeholder="First name"
+                      className="w-full border border-gray-300 rounded-lg px-4 py-3 text-gray-800 focus:outline-none focus:ring-2 focus:ring-[#0e7490]"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-semibold text-gray-700 mb-1">Last Name</label>
+                    <input
+                      data-testid="input-lastname-wills"
+                      type="text"
+                      value={lastName}
+                      onChange={(e) => setLastName(e.target.value)}
+                      placeholder="Last name"
+                      className="w-full border border-gray-300 rounded-lg px-4 py-3 text-gray-800 focus:outline-none focus:ring-2 focus:ring-[#0e7490]"
+                    />
+                  </div>
                 </div>
                 <div>
                   <label className="block text-sm font-semibold text-gray-700 mb-1">Phone Number *</label>
