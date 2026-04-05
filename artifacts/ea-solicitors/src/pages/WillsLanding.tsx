@@ -4,13 +4,42 @@ import SiteFooter from "@/components/SiteFooter";
 import { useState } from "react";
 import { useAdHeadline } from "@/hooks/useAdHeadline";
 
+const featuredReview = {
+  name: "Sally Grisedale",
+  verified: true,
+  date: "8 Jun 2025",
+  title: "Highly Recommend Edward & Amaury Solicitors for UK Wills",
+  body: "I cannot recommend Edward & Amaury Solicitors highly enough, particularly for anyone navigating the complexities of setting up a UK will — especially as a dual US and UK citizen. My experience was exceptional, largely thanks to solicitor Fiona Reid. Her knowledge was truly vast and incredibly impressive. She expertly guided me through the intricate process, making what could have been a daunting task feel manageable and clear. The entire team provided an outstanding service, at a very reasonable price. I am so grateful for their expertise and support.",
+};
+
 const willsReviews = [
   {
-    name: "Sally Grisedale",
+    name: "Fra Markham",
     verified: true,
-    date: "8 Jun 2025",
-    title: "Highly Recommend Edward & Amaury Solicitors for UK Wills",
-    body: "I cannot recommend Edward & Amaury Solicitors highly enough, particularly for anyone navigating the complexities of setting up a UK will — especially as a dual US and UK citizen. My experience was exceptional, largely thanks to solicitor Fiona Reid. Her knowledge was truly vast and incredibly impressive. She expertly guided me through the intricate process, making what could have been a daunting task feel manageable and clear. The entire team provided an outstanding service, at a very reasonable price. I am so grateful for their expertise and support.",
+    date: "18 Dec 2025",
+    title: "Professional and knowledgeable",
+    body: "Overall Edward and Amaury were professional and had the knowledge how to achieve the very specific goal we had which was unique. As our circumstances were out of the normal it was good that they knew how to face the unique challenges.",
+  },
+  {
+    name: "Carl",
+    verified: false,
+    date: "15 Dec 2025",
+    title: "Very professional from start to finish",
+    body: "Very professional from start to finish, took the strain and time away from me trying to sort this issue out.",
+  },
+  {
+    name: "Jason",
+    verified: true,
+    date: "8 May 2025",
+    title: "Will's",
+    body: "Had a mirror will drawn up, and it was pretty straight forward.",
+  },
+  {
+    name: "Joel Maloney",
+    verified: true,
+    date: "6 Nov 2024",
+    title: "Outstanding Service and Professional Support from Edward & Amaury",
+    body: "I recently had the pleasure of working with Edward & Amaury in Carlisle, and I couldn't be more impressed. From the start, they took the time to listen to my concerns and provided clear, sound advice tailored to my situation. Their guidance was invaluable, and they made the entire process smooth and stress-free. They also assisted me with paperwork, ensuring everything was handled efficiently and correctly. I felt fully supported throughout and would highly recommend Edward & Amaury to anyone in need of reliable, professional legal assistance.",
   },
 ];
 
@@ -156,19 +185,39 @@ export default function WillsLanding() {
               ))}
             </div>
           </div>
-          <div className="max-w-2xl mx-auto">
+          {/* Featured review — Sally */}
+          <div className="max-w-2xl mx-auto mb-6">
+            <div className="bg-white rounded-xl p-8 border border-gray-100 shadow-sm">
+              <div className="flex text-[#3a9e4f] text-xl mb-3">{"★★★★★"}</div>
+              <p className="font-semibold text-[#1a3a4a] text-lg mb-3">"{featuredReview.title}"</p>
+              <p className="text-gray-600 leading-relaxed mb-4">"{featuredReview.body}"</p>
+              <div className="flex items-center gap-3">
+                <div className="w-9 h-9 rounded-full bg-[#0e7490] flex items-center justify-center text-white font-bold">
+                  {featuredReview.name.charAt(0)}
+                </div>
+                <div>
+                  <p className="font-semibold text-[#1a3a4a] text-sm">{featuredReview.name}</p>
+                  <p className="text-xs text-[#3a9e4f] font-medium">✓ Verified · {featuredReview.date}</p>
+                </div>
+              </div>
+            </div>
+          </div>
+          {/* Grid of additional reviews */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-5 max-w-4xl mx-auto">
             {willsReviews.map((r) => (
-              <div key={r.name} className="bg-white rounded-xl p-8 border border-gray-100 shadow-sm">
-                <div className="flex text-[#3a9e4f] text-xl mb-3">{"★★★★★"}</div>
-                <p className="font-semibold text-[#1a3a4a] text-lg mb-3">"{r.title}"</p>
-                <p className="text-gray-600 leading-relaxed mb-4">"{r.body}"</p>
-                <div className="flex items-center gap-3">
-                  <div className="w-9 h-9 rounded-full bg-[#0e7490] flex items-center justify-center text-white font-bold">
+              <div key={r.name} className="bg-white rounded-xl p-6 border border-gray-100 shadow-sm flex flex-col">
+                <div className="flex text-[#3a9e4f] text-lg mb-2">{"★★★★★"}</div>
+                <p className="font-semibold text-[#1a3a4a] text-sm mb-2">"{r.title}"</p>
+                <p className="text-gray-600 text-sm leading-relaxed flex-1 mb-4">"{r.body}"</p>
+                <div className="flex items-center gap-3 mt-auto">
+                  <div className="w-8 h-8 rounded-full bg-[#0e7490] flex items-center justify-center text-white font-bold text-sm flex-shrink-0">
                     {r.name.charAt(0)}
                   </div>
                   <div>
                     <p className="font-semibold text-[#1a3a4a] text-sm">{r.name}</p>
-                    <p className="text-xs text-[#3a9e4f] font-medium">✓ Verified · {r.date}</p>
+                    <p className="text-xs text-[#3a9e4f] font-medium">
+                      {r.verified ? "✓ Verified · " : ""}{r.date}
+                    </p>
                   </div>
                 </div>
               </div>
