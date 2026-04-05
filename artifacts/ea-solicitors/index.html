@@ -11,10 +11,14 @@
     <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
     <noscript><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet"></noscript>
-    <!-- gtag stub: queues events before GTM/GA4 finishes loading -->
+    <!-- GA4 direct load: guarantees window.gtag for custom events; GTM handles enhanced measurement -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-R0Z6L6S7YM"></script>
     <script>
       window.dataLayer = window.dataLayer || [];
-      window.gtag = function(){ window.dataLayer.push(arguments); };
+      function gtag(){dataLayer.push(arguments);}
+      window.gtag = gtag;
+      gtag('js', new Date());
+      gtag('config', 'G-R0Z6L6S7YM', {'send_page_view': false});
     </script>
     <!-- Google Tag Manager -->
     <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
