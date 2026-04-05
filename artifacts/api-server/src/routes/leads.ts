@@ -103,7 +103,7 @@ router.post("/leads/visa", async (req, res) => {
     .map(([k, v]) => `${k}: ${v}`)
     .join(" | ");
 
-  await appendToSheet("Visa Leads", [
+  await appendToSheet("Visa-Leads", [
     timestamp,
     data.fullName,
     data.email,
@@ -178,7 +178,7 @@ router.post("/leads/will-writing", async (req, res) => {
     .map(([k, v]) => `${k}: ${v}`)
     .join(" | ");
 
-  await appendToSheet("Will Writing", [
+  await appendToSheet("Will-Writing", [
     timestamp,
     data.name,
     data.email,
