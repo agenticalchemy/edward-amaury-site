@@ -184,7 +184,7 @@ export default function VisaQuiz() {
       {
         onSuccess: () => {
           try {
-            (window.dataLayer as unknown[]).push({ event: "visa_lead_submit" });
+            (window.dataLayer as unknown[]).push({ event: "visa_lead" });
           } catch { /* ignore */ }
           sessionStorage.setItem("ea_lead_firstname", firstName);
           setLocation("/uk-spouse-visa/thank-you", {
