@@ -160,9 +160,7 @@ export default function WillWritingQuiz() {
       {
         onSuccess: () => {
           try {
-            if (typeof window.gtag === "function") {
-              window.gtag("event", "will_writing_lead_submit", { event_category: "lead" });
-            }
+            (window.dataLayer as unknown[]).push({ event: "will_writing_lead_submit" });
           } catch { /* ignore */ }
           sessionStorage.setItem("ea_lead_firstname", firstName);
           setLocation("/will-writing/results", {

@@ -214,9 +214,7 @@ export default function WillsQuiz() {
       {
         onSuccess: () => {
           try {
-            if (typeof window.gtag === "function") {
-              window.gtag("event", "wills_lead_submit", { event_category: "lead" });
-            }
+            (window.dataLayer as unknown[]).push({ event: "wills_lead_submit" });
           } catch { /* ignore */ }
           sessionStorage.setItem("ea_lead_firstname", firstName);
           setLocation("/wills-and-probate/thank-you", {
