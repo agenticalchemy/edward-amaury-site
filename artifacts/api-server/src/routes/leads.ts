@@ -20,11 +20,7 @@ router.post("/leads/wills", async (req, res) => {
     return;
   }
 
-  const recaptchaOk = await verifyRecaptcha(data.recaptchaToken);
-  if (!recaptchaOk) {
-    res.json({ success: true, message: "Lead submitted successfully" });
-    return;
-  }
+  await verifyRecaptcha(data.recaptchaToken);
 
   const timestamp = new Date().toISOString();
   const answersFlat = Object.entries(data.answers)
@@ -92,11 +88,7 @@ router.post("/leads/visa", async (req, res) => {
     return;
   }
 
-  const recaptchaOk = await verifyRecaptcha(data.recaptchaToken);
-  if (!recaptchaOk) {
-    res.json({ success: true, message: "Lead submitted successfully" });
-    return;
-  }
+  await verifyRecaptcha(data.recaptchaToken);
 
   const timestamp = new Date().toISOString();
   const answersFlat = Object.entries(data.answers)
@@ -167,11 +159,7 @@ router.post("/leads/will-writing", async (req, res) => {
     return;
   }
 
-  const recaptchaOk = await verifyRecaptcha(data.recaptchaToken);
-  if (!recaptchaOk) {
-    res.json({ success: true, message: "Lead submitted successfully" });
-    return;
-  }
+  await verifyRecaptcha(data.recaptchaToken);
 
   const timestamp = new Date().toISOString();
   const answersFlat = Object.entries(data.answers)
