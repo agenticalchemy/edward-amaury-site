@@ -313,7 +313,7 @@ export default function WillsLanding() {
         <div className="max-w-2xl mx-auto">
           <h2 className="text-2xl sm:text-3xl font-bold mb-4">You Don't Have To Deal With This Alone</h2>
           <a
-            href="tel:01228272395"
+            href="tel:+441228272395"
             data-testid="final-cta-phone"
             className="block text-3xl font-bold text-[#5eead4] hover:text-white transition-colors mb-6"
           >

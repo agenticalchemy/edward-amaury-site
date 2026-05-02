@@ -370,7 +370,7 @@ export default function VisaQuiz() {
 
           <p className="text-center text-sm text-gray-400 mt-6">
             Or call us directly on{" "}
-            <a href="tel:01228272395" className="text-[#0e7490] font-semibold">01228 272395</a>
+            <a href="tel:+441228272395" className="text-[#0e7490] font-semibold">01228 272395</a>
           </p>
         </div>
       </div>

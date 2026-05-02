@@ -281,7 +281,7 @@ export default function VisaLanding() {
         <div className="max-w-2xl mx-auto">
           <h2 className="text-2xl sm:text-3xl font-bold mb-4">Don't Leave Your Application to Chance</h2>
           <a
-            href="tel:01228272395"
+            href="tel:+441228272395"
             data-testid="final-cta-visa-phone"
             className="block text-3xl font-bold text-white hover:text-[#1a3a4a] transition-colors mb-6"
           >

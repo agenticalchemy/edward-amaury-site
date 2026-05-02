@@ -12,7 +12,7 @@ export default function SiteHeader() {
           />
         </Link>
         <a
-          href="tel:01228272395"
+          href="tel:+441228272395"
           data-testid="header-phone"
           className="flex items-center gap-2 text-[#0e7490] font-semibold text-sm sm:text-base hover:text-[#0a5a70] transition-colors"
         >

@@ -218,7 +218,7 @@ export default function WillWritingLanding() {
           </button>
           <p className="mt-4 text-gray-400 text-sm">
             Or call us now:{" "}
-            <a href="tel:01228272395" className="text-[#5eead4] font-semibold">01228 272395</a>
+            <a href="tel:+441228272395" className="text-[#5eead4] font-semibold">01228 272395</a>
           </p>
         </div>
       </section>

@@ -4,7 +4,7 @@ export default function SiteFooter() {
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
         <p className="text-lg font-semibold mb-1">Edward & Amaury Solicitors</p>
         <p className="text-sm text-gray-300 mb-2">SRA Regulated | SRA No: 800525 | Carlisle, Cumbria</p>
-        <a href="tel:01228272395" className="text-[#5eead4] font-semibold hover:text-white transition-colors">
+        <a href="tel:+441228272395" className="text-[#5eead4] font-semibold hover:text-white transition-colors">
           01228 272395
         </a>
         <p className="text-xs text-gray-400 mt-4">

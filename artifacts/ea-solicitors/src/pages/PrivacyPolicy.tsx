@@ -249,7 +249,7 @@ export default function PrivacyPolicy() {
               <a href="mailto:nadeem@edwardamaury.co.uk" className="text-[#0e7490] hover:underline">
                 nadeem@edwardamaury.co.uk
               </a>{" "}
-              or call <a href="tel:01228272395" className="text-[#0e7490] hover:underline">01228 272395</a>.
+              or call <a href="tel:+441228272395" className="text-[#0e7490] hover:underline">01228 272395</a>.
             </p>
             <p className="mt-3">
               You also have the right to make a complaint at any time to the Information Commissioner's Office (ICO),
