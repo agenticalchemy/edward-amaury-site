@@ -39,5 +39,6 @@ export async function sendNotification(subject: string, html: string): Promise<v
     logger.info("NOTIFICATION_EMAIL not set, skipping notification");
     return;
   }
-  await sendEmail({ to: notificationEmail, subject, html });
+  const recipients = notificationEmail.split(",").map(e => e.trim()).filter(Boolean);
+  await Promise.all(recipients.map(to => sendEmail({ to, subject, html })));
 }
