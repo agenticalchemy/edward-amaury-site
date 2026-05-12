@@ -6,6 +6,7 @@ import { useSubmitVisaLead } from "@workspace/api-client-react";
 import { getUtmParams } from "@/lib/tracking";
 import { useAdHeadline } from "@/hooks/useAdHeadline";
 import { useRecaptcha } from "@/hooks/useRecaptcha";
+import { useSeoMeta } from "@/hooks/useSeoMeta";
 
 type ResultBand = "strong" | "challenges" | "expert";
 
@@ -107,6 +108,10 @@ function getResultBand(score: number): ResultBand {
 type Phase = "quiz" | "form";
 
 export default function VisaQuiz() {
+  useSeoMeta(
+    "UK Spouse Visa Assessment — Edward & Amaury Solicitors",
+    "Free online UK spouse visa eligibility check. Find out your chances in under 2 minutes. Expert immigration solicitors in Carlisle, Cumbria."
+  );
   const [, setLocation] = useLocation();
   const [phase, setPhase] = useState<Phase>("quiz");
   const [step, setStep] = useState(0);

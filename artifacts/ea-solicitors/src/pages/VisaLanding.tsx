@@ -3,6 +3,7 @@ import SiteHeader from "@/components/SiteHeader";
 import SiteFooter from "@/components/SiteFooter";
 import { useState } from "react";
 import { useAdHeadline } from "@/hooks/useAdHeadline";
+import { useSeoMeta } from "@/hooks/useSeoMeta";
 
 const visaReviews = [
   {
@@ -99,6 +100,10 @@ function FaqItem({ q, a }: { q: string; a: string }) {
 export default function VisaLanding() {
   const [, setLocation] = useLocation();
   const adHeadline = useAdHeadline("");
+  useSeoMeta(
+    "UK Spouse Visa Solicitors in Carlisle — Edward & Amaury",
+    "Expert UK spouse visa and immigration solicitors in Carlisle, Cumbria. Fixed-fee services, free initial assessment. Call 01228 272395."
+  );
 
   return (
     <div className="min-h-screen flex flex-col">

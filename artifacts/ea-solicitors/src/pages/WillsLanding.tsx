@@ -3,6 +3,7 @@ import SiteHeader from "@/components/SiteHeader";
 import SiteFooter from "@/components/SiteFooter";
 import { useState } from "react";
 import { useAdHeadline } from "@/hooks/useAdHeadline";
+import { useSeoMeta } from "@/hooks/useSeoMeta";
 
 const featuredReview = {
   name: "Sally Grisedale",
@@ -86,6 +87,10 @@ function FaqItem({ q, a }: { q: string; a: string }) {
 export default function WillsLanding() {
   const [, setLocation] = useLocation();
   const adHeadline = useAdHeadline("");
+  useSeoMeta(
+    "Wills & Probate Solicitors in Carlisle — Edward & Amaury",
+    "SRA regulated solicitors in Carlisle, Cumbria offering fixed-fee wills and probate services. Get expert advice today. Call 01228 272395."
+  );
 
   return (
     <div className="min-h-screen flex flex-col">

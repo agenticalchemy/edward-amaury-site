@@ -3,6 +3,7 @@ import SiteHeader from "@/components/SiteHeader";
 import SiteFooter from "@/components/SiteFooter";
 import { useState } from "react";
 import { useAdHeadline } from "@/hooks/useAdHeadline";
+import { useSeoMeta } from "@/hooks/useSeoMeta";
 
 const faqs = [
   {
@@ -47,6 +48,10 @@ function FaqItem({ q, a }: { q: string; a: string }) {
 export default function WillWritingLanding() {
   const [, setLocation] = useLocation();
   const adHeadline = useAdHeadline("");
+  useSeoMeta(
+    "Will Writing Solicitors in Carlisle — Edward & Amaury",
+    "Professional will writing solicitors in Carlisle, Cumbria. Fixed-fee, legally watertight wills drafted by SRA regulated solicitors. Call 01228 272395."
+  );
 
   return (
     <div className="min-h-screen flex flex-col">

@@ -6,6 +6,7 @@ import { useSubmitWillsLead } from "@workspace/api-client-react";
 import { getUtmParams } from "@/lib/tracking";
 import { useAdHeadline } from "@/hooks/useAdHeadline";
 import { useRecaptcha } from "@/hooks/useRecaptcha";
+import { useSeoMeta } from "@/hooks/useSeoMeta";
 
 type Route = "probate" | "wills" | "both" | "not-sure";
 
@@ -140,6 +141,10 @@ function buildQuestions(route: Route): Question[] {
 type Phase = "quiz" | "form";
 
 export default function WillsQuiz() {
+  useSeoMeta(
+    "Wills & Probate Assessment — Edward & Amaury Solicitors",
+    "Answer a few quick questions to find out which wills or probate service is right for you. SRA regulated solicitors in Carlisle."
+  );
   const [, setLocation] = useLocation();
   const [phase, setPhase] = useState<Phase>("quiz");
   const [step, setStep] = useState(0);

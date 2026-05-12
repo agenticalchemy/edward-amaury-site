@@ -6,6 +6,7 @@ import { useSubmitWillWritingLead } from "@workspace/api-client-react";
 import { getUtmParams } from "@/lib/tracking";
 import { useAdHeadline } from "@/hooks/useAdHeadline";
 import { useRecaptcha } from "@/hooks/useRecaptcha";
+import { useSeoMeta } from "@/hooks/useSeoMeta";
 
 type WillWritingRoute = "no-will" | "outdated" | "review";
 
@@ -53,6 +54,10 @@ function computeRoute(q1: string, q2Selections: string[]): WillWritingRoute {
 type Phase = "quiz" | "form";
 
 export default function WillWritingQuiz() {
+  useSeoMeta(
+    "Will Writing Check — Edward & Amaury Solicitors",
+    "Find out in 2 minutes whether you need a new will or an update. Free assessment from SRA regulated solicitors in Carlisle, Cumbria."
+  );
   const [, setLocation] = useLocation();
   const [phase, setPhase] = useState<Phase>("quiz");
   const [step, setStep] = useState(0);
