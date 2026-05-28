@@ -91,3 +91,34 @@ export const SubmitWillWritingLeadResponse = zod.object({
   success: zod.boolean(),
   message: zod.string(),
 });
+
+/**
+ * @summary Submit a Personal Injury quiz lead
+ */
+export const SubmitPersonalInjuryLeadBody = zod.object({
+  name: zod.string(),
+  phone: zod.string(),
+  email: zod.string(),
+  honeypot: zod.string().optional(),
+  recaptchaToken: zod.string().optional(),
+  accidentType: zod.enum(["rta", "work", "slip", "med-neg", "other"]),
+  when: zod.enum(["last-6-months", "6-12-months", "1-2-years", "over-2-years"]),
+  fault: zod.enum(["yes-clearly", "i-think-so", "not-sure", "no-or-mine"]),
+  doctor: zod.enum(["yes-treated", "yes-ongoing", "no-planning", "no-not-serious"]),
+  impact: zod.enum(["major", "ongoing", "some", "minor"]),
+  score: zod.number(),
+  result: zod.enum(["strong", "possible", "complex"]),
+  answers: zod.record(zod.string(), zod.string()),
+  gclid: zod.string().optional(),
+  utmSource: zod.string().optional(),
+  utmCampaign: zod.string().optional(),
+  utmMedium: zod.string().optional(),
+  utmTerm: zod.string().optional(),
+  utmContent: zod.string().optional(),
+  referrer: zod.string().optional(),
+});
+
+export const SubmitPersonalInjuryLeadResponse = zod.object({
+  success: zod.boolean(),
+  message: zod.string(),
+});

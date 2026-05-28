@@ -2,7 +2,7 @@ import { Router } from "express";
 import { appendToSheet } from "../lib/sheets";
 import { sendEmail, sendNotification } from "../lib/mailer";
 import { verifyRecaptcha } from "../lib/recaptcha";
-import { SubmitWillsLeadBody, SubmitVisaLeadBody, SubmitWillWritingLeadBody } from "@workspace/api-zod";
+import { SubmitWillsLeadBody, SubmitVisaLeadBody, SubmitWillWritingLeadBody, SubmitPersonalInjuryLeadBody } from "@workspace/api-zod";
 
 const router = Router();
 
@@ -205,6 +205,85 @@ router.post("/leads/will-writing", async (req, res) => {
     html: `
     <p>Dear ${firstName},</p>
     <p>Thank you for completing our will writing check with Edward &amp; Amaury Solicitors. A member of our team will contact you within 24 hours to discuss your results and next steps.</p>
+    <p>If you need to speak to us sooner, please call us on <strong>01228 272395</strong>.</p>
+    <p>Kind regards,<br>Edward &amp; Amaury Solicitors<br>Carlisle, Cumbria</p>
+    `,
+  });
+
+  res.json({ success: true, message: "Lead submitted successfully" });
+});
+
+router.post("/leads/personal-injury", async (req, res) => {
+  const parsed = SubmitPersonalInjuryLeadBody.safeParse(req.body);
+  if (!parsed.success) {
+    res.status(400).json({ error: "Invalid request body" });
+    return;
+  }
+
+  const data = parsed.data;
+
+  if (data.honeypot) {
+    res.json({ success: true, message: "Lead submitted successfully" });
+    return;
+  }
+
+  await verifyRecaptcha(data.recaptchaToken);
+
+  const timestamp = new Date().toISOString();
+  const answersFlat = Object.entries(data.answers)
+    .map(([k, v]) => `${k}: ${v}`)
+    .join(" | ");
+
+  await appendToSheet("Personal-Injury", [
+    timestamp,
+    data.name,
+    data.email,
+    data.phone,
+    data.accidentType,
+    data.when,
+    data.fault,
+    data.doctor,
+    data.impact,
+    String(data.score),
+    data.result,
+    answersFlat,
+    data.gclid ?? "",
+    data.utmSource ?? "",
+    data.utmCampaign ?? "",
+    data.utmMedium ?? "",
+    data.utmTerm ?? "",
+    data.utmContent ?? "",
+    data.referrer ?? "",
+  ]);
+
+  const firstName = data.name.split(" ")[0];
+
+  await sendNotification(
+    `New Personal Injury Lead — ${data.name} (Score: ${data.score}, ${data.result})`,
+    `
+    <h2>New Lead: ${data.name}</h2>
+    <p><strong>Phone:</strong> ${data.phone}</p>
+    <p><strong>Email:</strong> ${data.email}</p>
+    <p><strong>Accident type:</strong> ${data.accidentType}</p>
+    <p><strong>When:</strong> ${data.when}</p>
+    <p><strong>Fault:</strong> ${data.fault}</p>
+    <p><strong>Doctor:</strong> ${data.doctor}</p>
+    <p><strong>Impact:</strong> ${data.impact}</p>
+    <p><strong>Score:</strong> ${data.score} (${data.result})</p>
+    <p><strong>Answers:</strong><br>${answersFlat.replace(/ \| /g, "<br>")}</p>
+    <p><strong>UTM Source:</strong> ${data.utmSource ?? "direct"}</p>
+    <p><strong>UTM Campaign:</strong> ${data.utmCampaign ?? ""}</p>
+    <p><strong>Referrer:</strong> ${data.referrer ?? ""}</p>
+    <p><strong>GCLID:</strong> ${data.gclid ?? ""}</p>
+    `
+  );
+
+  await sendEmail({
+    to: data.email,
+    subject: "Your personal injury enquiry has been received",
+    html: `
+    <p>Dear ${firstName},</p>
+    <p>Thank you for getting in touch with Edward &amp; Amaury Solicitors about your personal injury enquiry. A member of our team will contact you within 24 hours to discuss your situation and the next steps.</p>
     <p>If you need to speak to us sooner, please call us on <strong>01228 272395</strong>.</p>
     <p>Kind regards,<br>Edward &amp; Amaury Solicitors<br>Carlisle, Cumbria</p>
     `,

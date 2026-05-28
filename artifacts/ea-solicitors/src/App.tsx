@@ -12,6 +12,7 @@ import VisaThankYou from "@/pages/VisaThankYou";
 import WillWritingLanding from "@/pages/WillWritingLanding";
 import WillWritingQuiz from "@/pages/WillWritingQuiz";
 import WillWritingThankYou from "@/pages/WillWritingThankYou";
+import CumbriaSolicitorsLanding from "@/pages/CumbriaSolicitorsLanding";
 import PrivacyPolicy from "@/pages/PrivacyPolicy";
 
 const queryClient = new QueryClient();
@@ -31,6 +32,7 @@ function Router() {
       <Route path="/will-writing" component={WillWritingLanding} />
       <Route path="/will-writing/quiz" component={WillWritingQuiz} />
       <Route path="/will-writing/results" component={WillWritingThankYou} />
+      <Route path="/cumbria-solicitors" component={CumbriaSolicitorsLanding} />
       <Route path="/privacy-policy" component={PrivacyPolicy} />
       <Route component={NotFound} />
     </Switch>
