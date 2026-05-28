@@ -117,20 +117,20 @@ function getResultBand(state: QuizState, score: number): ResultBand {
 
 type Phase = "quiz" | "result" | "form";
 
-function accidentTypeLabel(a: AccidentType): string {
+function accidentTypeWithArticle(a: AccidentType): string {
   switch (a) {
-    case "rta": return "road traffic accident";
-    case "work": return "accident at work";
-    case "slip": return "slip, trip or fall";
-    case "med-neg": return "case of medical negligence";
-    case "other": return "injury caused by someone else";
+    case "rta": return "a road traffic accident";
+    case "work": return "an accident at work";
+    case "slip": return "a slip, trip or fall";
+    case "med-neg": return "a case of medical negligence";
+    case "other": return "an injury caused by someone else";
   }
 }
 
 function whenLabel(w: When): string {
   switch (w) {
     case "last-6-months": return "in the last 6 months";
-    case "6-12-months": return "between 6 and 12 months ago";
+    case "6-12-months": return "6 to 12 months ago";
     case "1-2-years": return "1 to 2 years ago";
     case "over-2-years": return "over 2 years ago";
   }
@@ -138,31 +138,36 @@ function whenLabel(w: When): string {
 
 function impactClause(i: Impact): string {
   switch (i) {
-    case "major": return "it has left you off work or facing major disruption to daily life";
-    case "ongoing": return "you are still dealing with pain or ongoing treatment";
-    case "some": return "it had a real impact, even if you have mostly recovered";
-    case "minor": return "the day-to-day impact has been limited";
+    case "major": return "it's left you off work or your daily life seriously disrupted";
+    case "ongoing": return "you're still in pain or in treatment";
+    case "some": return "it knocked you for a while, even if you've mostly recovered";
+    case "minor": return "the day-to-day impact has been minor";
   }
 }
 
+function faultNote(state: QuizState): string {
+  if (state.fault === "i-think-so" || state.fault === "not-sure") {
+    return " Fault is one piece we'd want to look at properly with you.";
+  }
+  if (state.fault === "no-or-mine") {
+    return " You mentioned fault might be shared. Partial fault doesn't kill a claim, it just changes the maths.";
+  }
+  return "";
+}
+
+function doctorNote(state: QuizState): string {
+  if (state.doctor === "no-planning" || state.doctor === "no-not-serious") {
+    return " A quick note on the medical side: if you haven't seen a GP yet, it's worth doing. A medical record makes any claim stronger and is good for you anyway.";
+  }
+  return "";
+}
+
 function buildPersonalContent(state: QuizState, result: ResultBand) {
-  const aType = accidentTypeLabel(state.accidentType!);
+  const aType = accidentTypeWithArticle(state.accidentType!);
   const when = whenLabel(state.when!);
   const impact = impactClause(state.impact!);
 
-  const recap = `You told us about a ${aType} ${when}, and ${impact}.`;
-
-  let faultNote = "";
-  if (state.fault === "i-think-so" || state.fault === "not-sure") {
-    faultNote = " Fault may need investigating, which is something we look at carefully.";
-  } else if (state.fault === "no-or-mine") {
-    faultNote = " You mentioned that fault may be shared or unclear. That does not automatically rule out a claim.";
-  }
-
-  let doctorNote = "";
-  if (state.doctor === "no-planning" || state.doctor === "no-not-serious") {
-    doctorNote = " It is worth getting checked by a GP if you have not already, both for your health and for any future claim.";
-  }
+  const recap = `You told us about ${aType} ${when}, and ${impact}.`;
 
   if (result === "strong") {
     return {
@@ -170,7 +175,7 @@ function buildPersonalContent(state: QuizState, result: ResultBand) {
       badgeBg: "bg-green-50 border-green-200",
       badgeText: "text-green-700",
       heading: "Your Claim Looks Strong",
-      body: `${recap} Based on what you have shared, the key factors needed for a personal injury claim look to be in place.${faultNote} You may be entitled to compensation. There is nothing to pay upfront and no obligation to proceed.`,
+      body: `${recap} That's the profile of a claim that usually has legs. The accident type, the timing, the impact, and clear fault all stack in your favour. You may be entitled to compensation, and there's nothing to pay upfront.`,
     };
   }
 
@@ -179,38 +184,37 @@ function buildPersonalContent(state: QuizState, result: ResultBand) {
       label: "Possible Claim",
       badgeBg: "bg-amber-50 border-amber-200",
       badgeText: "text-amber-700",
-      heading: "You May Have a Claim Worth Pursuing",
-      body: `${recap} Your assessment shows some positive factors but a few areas to discuss.${faultNote}${doctorNote} We can give you an honest read on your case in a free conversation.`,
+      heading: "There's a Claim Here Worth Looking At",
+      body: `${recap} That's the kind of situation that often turns into a claim worth pursuing.${faultNote(state)}${doctorNote(state)} A quick call and we'll tell you straight, no pressure either way.`,
     };
   }
 
-  // complex band — pick the most specific framing
   if (state.when === "over-2-years") {
     return {
       label: "Time Limit Concern",
       badgeBg: "bg-[#0e7490]/8 border-[#0e7490]/20",
       badgeText: "text-[#0e7490]",
       heading: "Time Limits Are Working Against You",
-      body: `${recap} The standard window for personal injury claims has likely passed, but exceptions exist (such as when the injury was discovered later, or where ongoing harm is involved). We would want to discuss your specific case before saying yes or no.`,
+      body: `${recap} The standard 2-year window has likely passed. Exceptions do exist though (injuries discovered later, ongoing harm, claims for children), so it's worth a quick call before assuming it's over.`,
     };
   }
 
   if (state.fault === "no-or-mine") {
     return {
-      label: "Needs a Closer Look",
+      label: "Fault Needs a Closer Look",
       badgeBg: "bg-[#0e7490]/8 border-[#0e7490]/20",
       badgeText: "text-[#0e7490]",
-      heading: "Your Claim Needs a Closer Look at Fault",
-      body: `${recap} You mentioned that fault may be shared or that you may have been responsible. Partial fault can still mean partial compensation, so the claim is not automatically out. We would need to look at the specifics with you before knowing if it is worth pursuing.${doctorNote}`,
+      heading: "Fault Needs a Closer Look",
+      body: `${recap} You mentioned fault might be shared or unclear. Partial fault doesn't kill a claim, it just changes the maths.${doctorNote(state)} Quick call and we'll tell you whether it's worth pursuing.`,
     };
   }
 
   return {
-    label: "Needs a Direct Conversation",
+    label: "Worth a Direct Conversation",
     badgeBg: "bg-[#0e7490]/8 border-[#0e7490]/20",
     badgeText: "text-[#0e7490]",
-    heading: "Your Claim Needs a Direct Conversation",
-    body: `${recap} There are some factors that need careful discussion before deciding whether to proceed.${faultNote}${doctorNote} We will give you a straight answer in a free initial call.`,
+    heading: "Worth a Direct Conversation",
+    body: `${recap} A few things in your situation need a real conversation rather than a checklist.${faultNote(state)}${doctorNote(state)} Free call, straight answer.`,
   };
 }
 
