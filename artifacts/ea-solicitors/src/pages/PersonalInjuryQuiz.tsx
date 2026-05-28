@@ -147,17 +147,14 @@ function impactClause(i: Impact): string {
 
 function faultNote(state: QuizState): string {
   if (state.fault === "i-think-so" || state.fault === "not-sure") {
-    return " Fault is one piece we'd want to look at properly with you.";
-  }
-  if (state.fault === "no-or-mine") {
-    return " You mentioned fault might be shared. Partial fault doesn't kill a claim, it just changes the maths.";
+    return " Fault is one piece our specialists would look at with you.";
   }
   return "";
 }
 
 function doctorNote(state: QuizState): string {
   if (state.doctor === "no-planning" || state.doctor === "no-not-serious") {
-    return " A quick note on the medical side: if you haven't seen a GP yet, it's worth doing. A medical record makes any claim stronger and is good for you anyway.";
+    return " It's worth seeing a GP soon. A medical record makes any claim stronger.";
   }
   return "";
 }
@@ -175,7 +172,7 @@ function buildPersonalContent(state: QuizState, result: ResultBand) {
       badgeBg: "bg-green-50 border-green-200",
       badgeText: "text-green-700",
       heading: "Your Claim Looks Strong",
-      body: `${recap} That's the profile of a claim that usually has legs. The accident type, the timing, the impact, and clear fault all stack in your favour. You may be entitled to compensation, and there's nothing to pay upfront.`,
+      body: `${recap} It looks like you have a potential claim. Find out what you could be owed by speaking to our personal injury specialists today.`,
     };
   }
 
@@ -185,7 +182,7 @@ function buildPersonalContent(state: QuizState, result: ResultBand) {
       badgeBg: "bg-amber-50 border-amber-200",
       badgeText: "text-amber-700",
       heading: "There's a Claim Here Worth Looking At",
-      body: `${recap} That's the kind of situation that often turns into a claim worth pursuing.${faultNote(state)}${doctorNote(state)} A quick call and we'll tell you straight, no pressure either way.`,
+      body: `${recap} That's the kind of situation that often turns into a claim worth pursuing.${faultNote(state)}${doctorNote(state)} Speak to our personal injury specialists today to see what you could be owed.`,
     };
   }
 
@@ -195,7 +192,7 @@ function buildPersonalContent(state: QuizState, result: ResultBand) {
       badgeBg: "bg-[#0e7490]/8 border-[#0e7490]/20",
       badgeText: "text-[#0e7490]",
       heading: "Time Limits Are Working Against You",
-      body: `${recap} The standard 2-year window has likely passed. Exceptions do exist though (injuries discovered later, ongoing harm, claims for children), so it's worth a quick call before assuming it's over.`,
+      body: `${recap} The standard two-year window has likely passed, but there are exceptions. Speak to our personal injury specialist today.`,
     };
   }
 
@@ -205,7 +202,7 @@ function buildPersonalContent(state: QuizState, result: ResultBand) {
       badgeBg: "bg-[#0e7490]/8 border-[#0e7490]/20",
       badgeText: "text-[#0e7490]",
       heading: "Fault Needs a Closer Look",
-      body: `${recap} You mentioned fault might be shared or unclear. Partial fault doesn't kill a claim, it just changes the maths.${doctorNote(state)} Quick call and we'll tell you whether it's worth pursuing.`,
+      body: `${recap} You mentioned fault might be shared. Partial fault doesn't kill a claim, it requires expert help.${doctorNote(state)} Speak to our personal injury specialists today.`,
     };
   }
 
@@ -214,7 +211,7 @@ function buildPersonalContent(state: QuizState, result: ResultBand) {
     badgeBg: "bg-[#0e7490]/8 border-[#0e7490]/20",
     badgeText: "text-[#0e7490]",
     heading: "Worth a Direct Conversation",
-    body: `${recap} A few things in your situation need a real conversation rather than a checklist.${faultNote(state)}${doctorNote(state)} Free call, straight answer.`,
+    body: `${recap} A few things in your situation need a real conversation with a personal injury expert.${faultNote(state)}${doctorNote(state)}`,
   };
 }
 
