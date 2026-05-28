@@ -46,6 +46,20 @@ export function fireWillWritingEvent(): void {
   }
 }
 
+export function firePersonalInjuryEvent(): void {
+  if (typeof window.gtag !== "function") return;
+
+  window.gtag("event", "personal_injury_lead_submit", { event_category: "lead" });
+
+  const conversionId = import.meta.env.VITE_GOOGLE_ADS_CONVERSION_ID;
+  const conversionLabel = import.meta.env.VITE_GOOGLE_ADS_CONVERSION_LABEL_PERSONAL_INJURY;
+  if (conversionId && conversionLabel) {
+    window.gtag("event", "conversion", {
+      send_to: `${conversionId}/${conversionLabel}`,
+    });
+  }
+}
+
 export function getUtmParams(): Record<string, string> {
   const params = new URLSearchParams(window.location.search);
   const result: Record<string, string> = {};

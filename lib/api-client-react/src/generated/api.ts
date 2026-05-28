@@ -20,6 +20,7 @@ import type {
   ErrorResponse,
   HealthStatus,
   LeadSubmitResponse,
+  PersonalInjuryLeadBody,
   VisaLeadBody,
   WillsLeadBody,
   WillWritingLeadBody,
@@ -362,4 +363,86 @@ export const useSubmitWillWritingLead = <
   TContext
 > => {
   return useMutation(getSubmitWillWritingLeadMutationOptions(options));
+};
+
+/**
+ * @summary Submit a Personal Injury quiz lead
+ */
+export const getSubmitPersonalInjuryLeadUrl = () => {
+  return `/api/leads/personal-injury`;
+};
+
+export const submitPersonalInjuryLead = async (
+  personalInjuryLeadBody: PersonalInjuryLeadBody,
+  options?: RequestInit,
+): Promise<LeadSubmitResponse> => {
+  return customFetch<LeadSubmitResponse>(getSubmitPersonalInjuryLeadUrl(), {
+    ...options,
+    method: "POST",
+    headers: { "Content-Type": "application/json", ...options?.headers },
+    body: JSON.stringify(personalInjuryLeadBody),
+  });
+};
+
+export const getSubmitPersonalInjuryLeadMutationOptions = <
+  TError = ErrorType<ErrorResponse>,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof submitPersonalInjuryLead>>,
+    TError,
+    { data: BodyType<PersonalInjuryLeadBody> },
+    TContext
+  >;
+  request?: SecondParameter<typeof customFetch>;
+}): UseMutationOptions<
+  Awaited<ReturnType<typeof submitPersonalInjuryLead>>,
+  TError,
+  { data: BodyType<PersonalInjuryLeadBody> },
+  TContext
+> => {
+  const mutationKey = ["submitPersonalInjuryLead"];
+  const { mutation: mutationOptions, request: requestOptions } = options
+    ? options.mutation &&
+      "mutationKey" in options.mutation &&
+      options.mutation.mutationKey
+      ? options
+      : { ...options, mutation: { ...options.mutation, mutationKey } }
+    : { mutation: { mutationKey }, request: undefined };
+
+  const mutationFn: MutationFunction<
+    Awaited<ReturnType<typeof submitPersonalInjuryLead>>,
+    { data: BodyType<PersonalInjuryLeadBody> }
+  > = (props) => {
+    const { data } = props ?? {};
+    return submitPersonalInjuryLead(data, requestOptions);
+  };
+
+  return { mutationFn, ...mutationOptions };
+};
+
+export type SubmitPersonalInjuryLeadMutationResult = NonNullable<
+  Awaited<ReturnType<typeof submitPersonalInjuryLead>>
+>;
+export type SubmitPersonalInjuryLeadMutationBody = BodyType<PersonalInjuryLeadBody>;
+export type SubmitPersonalInjuryLeadMutationError = ErrorType<ErrorResponse>;
+
+export const useSubmitPersonalInjuryLead = <
+  TError = ErrorType<ErrorResponse>,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof submitPersonalInjuryLead>>,
+    TError,
+    { data: BodyType<PersonalInjuryLeadBody> },
+    TContext
+  >;
+  request?: SecondParameter<typeof customFetch>;
+}): UseMutationResult<
+  Awaited<ReturnType<typeof submitPersonalInjuryLead>>,
+  TError,
+  { data: BodyType<PersonalInjuryLeadBody> },
+  TContext
+> => {
+  return useMutation(getSubmitPersonalInjuryLeadMutationOptions(options));
 };

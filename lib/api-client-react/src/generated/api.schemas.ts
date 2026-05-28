@@ -86,6 +86,37 @@ export const WillWritingLeadBodyRoute = {
 
 export type WillWritingLeadBodyAnswers = { [key: string]: string };
 
+export type PersonalInjuryLeadBodyAccidentType = "rta" | "work" | "slip" | "med-neg" | "other";
+export type PersonalInjuryLeadBodyWhen = "last-6-months" | "6-12-months" | "1-2-years" | "over-2-years";
+export type PersonalInjuryLeadBodyFault = "yes-clearly" | "i-think-so" | "not-sure" | "no-or-mine";
+export type PersonalInjuryLeadBodyDoctor = "yes-treated" | "yes-ongoing" | "no-planning" | "no-not-serious";
+export type PersonalInjuryLeadBodyImpact = "major" | "ongoing" | "some" | "minor";
+export type PersonalInjuryLeadBodyResult = "strong" | "possible" | "complex";
+export type PersonalInjuryLeadBodyAnswers = { [key: string]: string };
+
+export interface PersonalInjuryLeadBody {
+  name: string;
+  phone: string;
+  email: string;
+  honeypot?: string;
+  recaptchaToken?: string;
+  accidentType: PersonalInjuryLeadBodyAccidentType;
+  when: PersonalInjuryLeadBodyWhen;
+  fault: PersonalInjuryLeadBodyFault;
+  doctor: PersonalInjuryLeadBodyDoctor;
+  impact: PersonalInjuryLeadBodyImpact;
+  score: number;
+  result: PersonalInjuryLeadBodyResult;
+  answers: PersonalInjuryLeadBodyAnswers;
+  gclid?: string;
+  utmSource?: string;
+  utmCampaign?: string;
+  utmMedium?: string;
+  utmTerm?: string;
+  utmContent?: string;
+  referrer?: string;
+}
+
 export interface WillWritingLeadBody {
   name: string;
   phone: string;

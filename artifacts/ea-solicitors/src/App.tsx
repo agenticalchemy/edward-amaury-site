@@ -13,6 +13,9 @@ import WillWritingLanding from "@/pages/WillWritingLanding";
 import WillWritingQuiz from "@/pages/WillWritingQuiz";
 import WillWritingThankYou from "@/pages/WillWritingThankYou";
 import CumbriaSolicitorsLanding from "@/pages/CumbriaSolicitorsLanding";
+import PersonalInjuryLanding from "@/pages/PersonalInjuryLanding";
+import PersonalInjuryQuiz from "@/pages/PersonalInjuryQuiz";
+import PersonalInjuryThankYou from "@/pages/PersonalInjuryThankYou";
 import PrivacyPolicy from "@/pages/PrivacyPolicy";
 
 const queryClient = new QueryClient();
@@ -33,6 +36,9 @@ function Router() {
       <Route path="/will-writing/quiz" component={WillWritingQuiz} />
       <Route path="/will-writing/results" component={WillWritingThankYou} />
       <Route path="/cumbria-solicitors" component={CumbriaSolicitorsLanding} />
+      <Route path="/personal-injury" component={PersonalInjuryLanding} />
+      <Route path="/personal-injury/quiz" component={PersonalInjuryQuiz} />
+      <Route path="/personal-injury/thank-you" component={PersonalInjuryThankYou} />
       <Route path="/privacy-policy" component={PrivacyPolicy} />
       <Route component={NotFound} />
     </Switch>
