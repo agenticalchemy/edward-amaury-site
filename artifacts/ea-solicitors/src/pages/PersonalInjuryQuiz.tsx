@@ -115,7 +115,35 @@ function getResultBand(state: QuizState, score: number): ResultBand {
   return "complex";
 }
 
-type Phase = "quiz" | "form";
+type Phase = "quiz" | "result" | "form";
+
+function getResultContent(result: ResultBand) {
+  if (result === "strong") {
+    return {
+      label: "Strong Claim",
+      badgeBg: "bg-green-50 border-green-200",
+      badgeText: "text-green-700",
+      heading: "Good News — You Look Like You Have a Strong Claim",
+      body: "Based on your answers, the key factors needed for a personal injury claim look to be in place. You may be entitled to compensation. There is nothing to pay upfront and no obligation to proceed.",
+    };
+  }
+  if (result === "possible") {
+    return {
+      label: "Possible Claim",
+      badgeBg: "bg-amber-50 border-amber-200",
+      badgeText: "text-amber-700",
+      heading: "You May Have a Claim Worth Pursuing",
+      body: "Your assessment shows some positive factors but a few areas to discuss. Claims like yours often succeed when handled properly. We can give you an honest read on your case in a free conversation.",
+    };
+  }
+  return {
+    label: "Needs a Direct Conversation",
+    badgeBg: "bg-[#0e7490]/8 border-[#0e7490]/20",
+    badgeText: "text-[#0e7490]",
+    heading: "Your Claim Needs a Direct Conversation",
+    body: "Your situation has some factors (time, fault, or impact) that need careful discussion before deciding whether to proceed. We will give you a straight answer in a free initial call.",
+  };
+}
 
 export default function PersonalInjuryQuiz() {
   useSeoMeta(
@@ -163,7 +191,13 @@ export default function PersonalInjuryQuiz() {
     if (step < totalSteps - 1) {
       setTimeout(() => { setStep(step + 1); setAnimating(false); }, 200);
     } else {
-      setTimeout(() => { setPhase("form"); setAnimating(false); }, 200);
+      setTimeout(() => {
+        setPhase("result");
+        setAnimating(false);
+        try {
+          window.gtag?.("event", "personal_injury_quiz_completed", { event_category: "lead" });
+        } catch { /* ignore */ }
+      }, 200);
     }
   };
 
@@ -229,6 +263,69 @@ export default function PersonalInjuryQuiz() {
     );
   };
 
+  if (phase === "result") {
+    if (!quizState.accidentType || !quizState.when || !quizState.fault || !quizState.doctor || !quizState.impact) {
+      setPhase("quiz");
+      return null;
+    }
+    const result = getResultBand(quizState, totalScore);
+    const content = getResultContent(result);
+    return (
+      <div className="min-h-screen flex flex-col bg-gray-50">
+        <SiteHeader />
+        <div className="flex-1 py-6 px-4">
+          <div className="max-w-lg mx-auto space-y-4">
+            <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
+              <div className="flex justify-center mb-4">
+                <div className="w-14 h-14 rounded-full bg-[#0e7490]/10 flex items-center justify-center">
+                  <svg className="w-7 h-7 text-[#0e7490]" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
+                  </svg>
+                </div>
+              </div>
+              <div className="flex justify-center mb-3">
+                <span className={`inline-block border rounded-full px-3 py-1 text-xs font-semibold ${content.badgeBg} ${content.badgeText}`}>
+                  Your Assessment: {content.label}
+                </span>
+              </div>
+              <h1 className="text-xl sm:text-2xl font-bold text-[#1a3a4a] text-center mb-3 leading-tight">
+                {content.heading}
+              </h1>
+              <p className="text-gray-600 text-sm sm:text-base text-center leading-relaxed">
+                {content.body}
+              </p>
+            </div>
+
+            <a
+              href="tel:+441228272395"
+              data-testid="result-phone-pi"
+              className="block w-full bg-[#0e7490] hover:bg-[#0a5a70] active:bg-[#084d60] text-white text-center rounded-2xl py-5 px-4 transition-colors shadow-sm"
+            >
+              <p className="text-xs font-medium text-white/80 mb-1">Want to discuss your claim now?</p>
+              <p className="text-2xl sm:text-3xl font-bold tracking-tight">01228 272395</p>
+              <p className="text-xs text-white/70 mt-1">Mon to Fri, 9am to 5pm</p>
+            </a>
+
+            <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 text-center">
+              <h2 className="font-bold text-[#1a3a4a] text-lg mb-2">Would you like us to handle your case?</h2>
+              <p className="text-gray-600 text-sm mb-5">
+                Enter your details and a Carlisle solicitor will call you within 24 hours. No win no fee. Free consultation. No obligation.
+              </p>
+              <button
+                data-testid="result-cta-pi-form"
+                onClick={() => setPhase("form")}
+                className="w-full bg-[#1a3a4a] hover:bg-[#0f2535] text-white font-bold py-4 rounded-lg text-base transition-colors"
+              >
+                Request a Free Consultation →
+              </button>
+            </div>
+          </div>
+        </div>
+        <SiteFooter />
+      </div>
+    );
+  }
+
   if (phase === "form") {
     return (
       <div className="min-h-screen flex flex-col">
@@ -236,8 +333,8 @@ export default function PersonalInjuryQuiz() {
         <div className="flex-1 bg-gray-50 py-12 px-4">
           <div className="max-w-lg mx-auto">
             <div className="bg-white rounded-2xl shadow-lg p-8">
-              <h2 className="text-2xl font-bold text-[#1a3a4a] mb-2">Almost there</h2>
-              <p className="text-gray-600 mb-6">Enter your details to see your assessment.</p>
+              <h2 className="text-2xl font-bold text-[#1a3a4a] mb-2">Request a Free Consultation</h2>
+              <p className="text-gray-600 mb-6">Enter your details and a Carlisle solicitor will call you within 24 hours.</p>
               <form onSubmit={handleSubmit} className="space-y-4">
                 <div className="grid grid-cols-2 gap-3">
                   <div>
@@ -307,7 +404,7 @@ export default function PersonalInjuryQuiz() {
                   disabled={submitMutation.isPending}
                   className="w-full bg-[#0e7490] hover:bg-[#0a5a70] disabled:opacity-60 text-white font-bold py-4 rounded-lg text-lg transition-colors"
                 >
-                  {submitMutation.isPending ? "Submitting..." : "See My Results"}
+                  {submitMutation.isPending ? "Submitting..." : "Submit Request"}
                 </button>
               </form>
               <p className="text-xs text-gray-500 mt-4 text-center">
