@@ -117,31 +117,100 @@ function getResultBand(state: QuizState, score: number): ResultBand {
 
 type Phase = "quiz" | "result" | "form";
 
-function getResultContent(result: ResultBand) {
+function accidentTypeLabel(a: AccidentType): string {
+  switch (a) {
+    case "rta": return "road traffic accident";
+    case "work": return "accident at work";
+    case "slip": return "slip, trip or fall";
+    case "med-neg": return "case of medical negligence";
+    case "other": return "injury caused by someone else";
+  }
+}
+
+function whenLabel(w: When): string {
+  switch (w) {
+    case "last-6-months": return "in the last 6 months";
+    case "6-12-months": return "between 6 and 12 months ago";
+    case "1-2-years": return "1 to 2 years ago";
+    case "over-2-years": return "over 2 years ago";
+  }
+}
+
+function impactClause(i: Impact): string {
+  switch (i) {
+    case "major": return "it has left you off work or facing major disruption to daily life";
+    case "ongoing": return "you are still dealing with pain or ongoing treatment";
+    case "some": return "it had a real impact, even if you have mostly recovered";
+    case "minor": return "the day-to-day impact has been limited";
+  }
+}
+
+function buildPersonalContent(state: QuizState, result: ResultBand) {
+  const aType = accidentTypeLabel(state.accidentType!);
+  const when = whenLabel(state.when!);
+  const impact = impactClause(state.impact!);
+
+  const recap = `You told us about a ${aType} ${when}, and ${impact}.`;
+
+  let faultNote = "";
+  if (state.fault === "i-think-so" || state.fault === "not-sure") {
+    faultNote = " Fault may need investigating, which is something we look at carefully.";
+  } else if (state.fault === "no-or-mine") {
+    faultNote = " You mentioned that fault may be shared or unclear. That does not automatically rule out a claim.";
+  }
+
+  let doctorNote = "";
+  if (state.doctor === "no-planning" || state.doctor === "no-not-serious") {
+    doctorNote = " It is worth getting checked by a GP if you have not already, both for your health and for any future claim.";
+  }
+
   if (result === "strong") {
     return {
       label: "Strong Claim",
       badgeBg: "bg-green-50 border-green-200",
       badgeText: "text-green-700",
-      heading: "Good News — You Look Like You Have a Strong Claim",
-      body: "Based on your answers, the key factors needed for a personal injury claim look to be in place. You may be entitled to compensation. There is nothing to pay upfront and no obligation to proceed.",
+      heading: "Your Claim Looks Strong",
+      body: `${recap} Based on what you have shared, the key factors needed for a personal injury claim look to be in place.${faultNote} You may be entitled to compensation. There is nothing to pay upfront and no obligation to proceed.`,
     };
   }
+
   if (result === "possible") {
     return {
       label: "Possible Claim",
       badgeBg: "bg-amber-50 border-amber-200",
       badgeText: "text-amber-700",
       heading: "You May Have a Claim Worth Pursuing",
-      body: "Your assessment shows some positive factors but a few areas to discuss. Claims like yours often succeed when handled properly. We can give you an honest read on your case in a free conversation.",
+      body: `${recap} Your assessment shows some positive factors but a few areas to discuss.${faultNote}${doctorNote} We can give you an honest read on your case in a free conversation.`,
     };
   }
+
+  // complex band — pick the most specific framing
+  if (state.when === "over-2-years") {
+    return {
+      label: "Time Limit Concern",
+      badgeBg: "bg-[#0e7490]/8 border-[#0e7490]/20",
+      badgeText: "text-[#0e7490]",
+      heading: "Time Limits Are Working Against You",
+      body: `${recap} The standard window for personal injury claims has likely passed, but exceptions exist (such as when the injury was discovered later, or where ongoing harm is involved). We would want to discuss your specific case before saying yes or no.`,
+    };
+  }
+
+  if (state.fault === "no-or-mine") {
+    return {
+      label: "Needs a Closer Look",
+      badgeBg: "bg-[#0e7490]/8 border-[#0e7490]/20",
+      badgeText: "text-[#0e7490]",
+      heading: "Your Claim Needs a Closer Look at Fault",
+      body: `${recap} You mentioned that fault may be shared or that you may have been responsible. Partial fault can still mean partial compensation, so the claim is not automatically out. We would need to look at the specifics with you before knowing if it is worth pursuing.${doctorNote}`,
+    };
+  }
+
   return {
     label: "Needs a Direct Conversation",
     badgeBg: "bg-[#0e7490]/8 border-[#0e7490]/20",
     badgeText: "text-[#0e7490]",
     heading: "Your Claim Needs a Direct Conversation",
-    body: "Your situation has some factors (time, fault, or impact) that need careful discussion before deciding whether to proceed. We will give you a straight answer in a free initial call.",
+    body: `${recap} There are some factors that need careful discussion before deciding whether to proceed.${faultNote}${doctorNote} We will give you a straight answer in a free initial call.`,
   };
 }
 
@@ -269,7 +338,7 @@ export default function PersonalInjuryQuiz() {
       return null;
     }
     const result = getResultBand(quizState, totalScore);
-    const content = getResultContent(result);
+    const content = buildPersonalContent(quizState, result);
     return (
       <div className="min-h-screen flex flex-col bg-gray-50">
         <SiteHeader />
