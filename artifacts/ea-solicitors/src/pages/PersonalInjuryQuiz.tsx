@@ -314,7 +314,7 @@ export default function PersonalInjuryQuiz() {
               <button
                 data-testid="result-cta-pi-form"
                 onClick={() => setPhase("form")}
-                className="w-full bg-[#1a3a4a] hover:bg-[#0f2535] text-white font-bold py-4 rounded-lg text-base transition-colors"
+                className="w-full bg-orange-500 hover:bg-orange-600 active:bg-orange-700 text-white font-bold py-4 rounded-lg text-base transition-colors shadow-md"
               >
                 Request a Free Consultation →
               </button>
