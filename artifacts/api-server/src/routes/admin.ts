@@ -1,14 +1,23 @@
 import { Router } from "express";
 import { google } from "googleapis";
-import { z } from "zod";
 import { logger } from "../lib/logger";
 
 const router = Router();
 
-const InitSheetTabBody = z.object({
-  tab: z.string().min(1).max(100),
-  headers: z.array(z.string().min(1)).min(1).max(26),
-});
+function validateInitBody(body: unknown): { tab: string; headers: string[] } | string {
+  if (!body || typeof body !== "object") return "Body must be an object";
+  const b = body as Record<string, unknown>;
+  if (typeof b["tab"] !== "string" || b["tab"].trim().length === 0 || b["tab"].length > 100) {
+    return "tab must be a non-empty string under 100 chars";
+  }
+  if (!Array.isArray(b["headers"]) || b["headers"].length < 1 || b["headers"].length > 26) {
+    return "headers must be an array of 1-26 strings";
+  }
+  if (b["headers"].some((h: unknown) => typeof h !== "string" || h.length === 0)) {
+    return "every header must be a non-empty string";
+  }
+  return { tab: b["tab"].trim(), headers: b["headers"] as string[] };
+}
 
 function timingSafeEqual(a: string, b: string): boolean {
   if (a.length !== b.length) return false;
@@ -40,13 +49,13 @@ router.post("/admin/init-sheet-tab", async (req, res) => {
     return;
   }
 
-  const parsed = InitSheetTabBody.safeParse(req.body);
-  if (!parsed.success) {
-    res.status(400).json({ error: "Invalid body", details: parsed.error.issues });
+  const parsed = validateInitBody(req.body);
+  if (typeof parsed === "string") {
+    res.status(400).json({ error: parsed });
     return;
   }
 
-  const { tab, headers } = parsed.data;
+  const { tab, headers } = parsed;
 
   const sheetId = process.env["GOOGLE_SHEET_ID"];
   const credsRaw = process.env["GOOGLE_SHEETS_CREDENTIALS"];
