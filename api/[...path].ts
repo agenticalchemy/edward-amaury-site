@@ -1,4 +1,4 @@
-import app from "../artifacts/api-server/src/handler";
+import app from "../artifacts/api-server/src/handler.js";
 
 export const config = {
   maxDuration: 30,
