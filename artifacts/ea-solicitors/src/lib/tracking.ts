@@ -4,60 +4,39 @@ declare global {
   }
 }
 
-export function fireWillsEvent(): void {
-  if (typeof window.gtag !== "function") return;
-
-  window.gtag("event", "wills_lead_submit", { event_category: "lead" });
-
+function fireGoogleAdsConversion(): void {
   const conversionId = import.meta.env.VITE_GOOGLE_ADS_CONVERSION_ID;
-  const conversionLabel = import.meta.env.VITE_GOOGLE_ADS_CONVERSION_LABEL_WILLS;
-  if (conversionId && conversionLabel) {
-    window.gtag("event", "conversion", {
-      send_to: `${conversionId}/${conversionLabel}`,
-    });
-  }
+  const conversionLabel = import.meta.env.VITE_GOOGLE_ADS_CONVERSION_LABEL;
+  if (typeof window.gtag !== "function") return;
+  if (!conversionId || !conversionLabel) return;
+  window.gtag("event", "conversion", {
+    send_to: `${conversionId}/${conversionLabel}`,
+  });
+}
+
+function fireGa4Event(eventName: string): void {
+  if (typeof window.gtag !== "function") return;
+  window.gtag("event", eventName, { event_category: "lead" });
+}
+
+export function fireWillsEvent(): void {
+  fireGa4Event("wills_lead_submit");
+  fireGoogleAdsConversion();
 }
 
 export function fireVisaEvent(): void {
-  if (typeof window.gtag !== "function") return;
-
-  window.gtag("event", "visa_lead_submit", { event_category: "lead" });
-
-  const conversionId = import.meta.env.VITE_GOOGLE_ADS_CONVERSION_ID;
-  const conversionLabel = import.meta.env.VITE_GOOGLE_ADS_CONVERSION_LABEL_VISA;
-  if (conversionId && conversionLabel) {
-    window.gtag("event", "conversion", {
-      send_to: `${conversionId}/${conversionLabel}`,
-    });
-  }
+  fireGa4Event("visa_lead_submit");
+  fireGoogleAdsConversion();
 }
 
 export function fireWillWritingEvent(): void {
-  if (typeof window.gtag !== "function") return;
-
-  window.gtag("event", "will_writing_lead_submit", { event_category: "lead" });
-
-  const conversionId = import.meta.env.VITE_GOOGLE_ADS_CONVERSION_ID;
-  const conversionLabel = import.meta.env.VITE_GOOGLE_ADS_CONVERSION_LABEL_WILL_WRITING;
-  if (conversionId && conversionLabel) {
-    window.gtag("event", "conversion", {
-      send_to: `${conversionId}/${conversionLabel}`,
-    });
-  }
+  fireGa4Event("will_writing_lead_submit");
+  fireGoogleAdsConversion();
 }
 
 export function firePersonalInjuryEvent(): void {
-  if (typeof window.gtag !== "function") return;
-
-  window.gtag("event", "personal_injury_lead_submit", { event_category: "lead" });
-
-  const conversionId = import.meta.env.VITE_GOOGLE_ADS_CONVERSION_ID;
-  const conversionLabel = import.meta.env.VITE_GOOGLE_ADS_CONVERSION_LABEL_PERSONAL_INJURY;
-  if (conversionId && conversionLabel) {
-    window.gtag("event", "conversion", {
-      send_to: `${conversionId}/${conversionLabel}`,
-    });
-  }
+  fireGa4Event("personal_injury_lead_submit");
+  fireGoogleAdsConversion();
 }
 
 export function getUtmParams(): Record<string, string> {
