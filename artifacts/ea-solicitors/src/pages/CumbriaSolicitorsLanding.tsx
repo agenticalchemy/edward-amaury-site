@@ -4,6 +4,16 @@ import SiteFooter from "@/components/SiteFooter";
 import { useState } from "react";
 import { useAdParam } from "@/hooks/useAdParam";
 import { useSeoMeta } from "@/hooks/useSeoMeta";
+import {
+  Carousel,
+  CarouselContent,
+  CarouselItem,
+  CarouselPrevious,
+  CarouselNext,
+} from "@/components/ui/carousel";
+
+const REVIEW_SOLICITORS_URL =
+  "https://www.reviewsolicitors.co.uk/cumbria/carlisle/edward-and-amaury-limited-17-spencer-street-2";
 
 const reviews = [
   {
@@ -229,6 +239,9 @@ export default function CumbriaSolicitorsLanding() {
       {/* Reviews */}
       <section className="py-16 px-4 bg-white">
         <div className="max-w-5xl mx-auto">
+          <h2 className="text-2xl sm:text-3xl font-bold text-[#1a3a4a] text-center mb-8">
+            Rated 4.9/5 by Clients Across Cumbria
+          </h2>
           <div className="flex flex-col items-center mb-10">
             <img src="/review-solicitors-logo.png" alt="Review Solicitors" className="h-10 mb-5" />
             <div className="flex items-center gap-4 mb-4">
@@ -236,7 +249,15 @@ export default function CumbriaSolicitorsLanding() {
               <div>
                 <p className="font-bold text-[#1a3a4a] text-lg leading-tight">Excellent</p>
                 <div className="flex text-[#3a9e4f] text-2xl leading-none">{"★★★★★"}</div>
-                <p className="text-sm text-[#3a9e4f] font-medium underline">60 Reviews</p>
+                <a
+                  href={REVIEW_SOLICITORS_URL}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  data-testid="reviews-count-link"
+                  className="text-sm text-[#3a9e4f] font-medium underline hover:text-[#2d7a3d]"
+                >
+                  63 Reviews
+                </a>
               </div>
             </div>
             <div className="flex flex-wrap justify-center gap-4 mt-2">
@@ -253,25 +274,49 @@ export default function CumbriaSolicitorsLanding() {
               ))}
             </div>
           </div>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {reviews.map((r) => (
-              <div key={r.name + r.date} className="bg-gray-50 rounded-xl p-6 border border-gray-100 shadow-sm flex flex-col">
-                <div className="flex items-center gap-2 mb-1">
-                  <div className="w-8 h-8 rounded-full bg-[#0e7490] flex items-center justify-center text-white text-sm font-bold flex-shrink-0">
-                    {r.name.charAt(0).toUpperCase()}
+          <Carousel
+            opts={{ align: "start", loop: true }}
+            className="w-full max-w-5xl mx-auto px-2 sm:px-10"
+            data-testid="reviews-carousel"
+          >
+            <CarouselContent className="-ml-4">
+              {reviews.map((r) => (
+                <CarouselItem
+                  key={r.name + r.date}
+                  className="pl-4 basis-full md:basis-1/2 lg:basis-1/3"
+                >
+                  <div className="bg-gray-50 rounded-xl p-6 border border-gray-100 shadow-sm flex flex-col h-full">
+                    <div className="flex items-center gap-2 mb-1">
+                      <div className="w-8 h-8 rounded-full bg-[#0e7490] flex items-center justify-center text-white text-sm font-bold flex-shrink-0">
+                        {r.name.charAt(0).toUpperCase()}
+                      </div>
+                      <div>
+                        <p className="font-semibold text-[#1a3a4a] text-sm leading-tight">{r.name}</p>
+                        {r.verified && <p className="text-xs text-[#3a9e4f] font-medium">✓ Verified</p>}
+                      </div>
+                    </div>
+                    <div className="flex text-[#3a9e4f] text-base my-2">{"★★★★★"}</div>
+                    <p className="font-semibold text-[#1a3a4a] text-sm mb-2">{r.title}</p>
+                    <p className="text-gray-600 text-sm leading-relaxed flex-1">{r.body}</p>
+                    <p className="text-xs text-gray-400 mt-3">{r.date}</p>
                   </div>
-                  <div>
-                    <p className="font-semibold text-[#1a3a4a] text-sm leading-tight">{r.name}</p>
-                    {r.verified && <p className="text-xs text-[#3a9e4f] font-medium">✓ Verified</p>}
-                  </div>
-                </div>
-                <div className="flex text-[#3a9e4f] text-base my-2">{"★★★★★"}</div>
-                <p className="font-semibold text-[#1a3a4a] text-sm mb-2">{r.title}</p>
-                <p className="text-gray-600 text-sm leading-relaxed flex-1">{r.body}</p>
-                <p className="text-xs text-gray-400 mt-3">{r.date}</p>
-              </div>
-            ))}
-          </div>
+                </CarouselItem>
+              ))}
+            </CarouselContent>
+            <CarouselPrevious className="hidden sm:flex" />
+            <CarouselNext className="hidden sm:flex" />
+          </Carousel>
+          <p className="text-center mt-8">
+            <a
+              href={REVIEW_SOLICITORS_URL}
+              target="_blank"
+              rel="noopener noreferrer"
+              data-testid="reviews-see-all"
+              className="text-[#0e7490] hover:text-[#0a5a70] font-semibold underline"
+            >
+              See all 63 reviews on Review Solicitors →
+            </a>
+          </p>
         </div>
       </section>
 
