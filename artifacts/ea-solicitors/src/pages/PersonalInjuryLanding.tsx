@@ -4,6 +4,8 @@ import SiteFooter from "@/components/SiteFooter";
 import { useState } from "react";
 import { useAdHeadline } from "@/hooks/useAdHeadline";
 import { useSeoMeta } from "@/hooks/useSeoMeta";
+import { useOgMeta } from "@/hooks/useOgMeta";
+import { useJsonLd } from "@/hooks/useJsonLd";
 
 const faqs = [
   {
@@ -49,13 +51,50 @@ function FaqItem({ q, a }: { q: string; a: string }) {
   );
 }
 
+const PI_PAGE_TITLE = "Personal Injury Solicitors in Carlisle, Cumbria — Edward & Amaury";
+const PI_PAGE_DESCRIPTION = "No win no fee personal injury solicitors in Carlisle. Free 2-minute claim assessment. Call 01228 272395.";
+
 export default function PersonalInjuryLanding() {
   const [, setLocation] = useLocation();
   const adHeadline = useAdHeadline("");
-  useSeoMeta(
-    "Personal Injury Solicitors in Carlisle, Cumbria — Edward & Amaury",
-    "No win no fee personal injury solicitors in Carlisle. Free 2-minute claim assessment. Call 01228 272395."
-  );
+  useSeoMeta(PI_PAGE_TITLE, PI_PAGE_DESCRIPTION);
+  useOgMeta({ title: PI_PAGE_TITLE, description: PI_PAGE_DESCRIPTION });
+
+  useJsonLd("pi-legal-service", {
+    "@context": "https://schema.org",
+    "@type": "LegalService",
+    name: "Edward & Amaury Solicitors",
+    description: "Personal injury solicitors in Carlisle, Cumbria. No win no fee.",
+    url: "https://edwardamaurysolicitors.co.uk/personal-injury",
+    telephone: "+44-1228-272395",
+    address: {
+      "@type": "PostalAddress",
+      addressLocality: "Carlisle",
+      addressRegion: "Cumbria",
+      addressCountry: "GB",
+    },
+    areaServed: [
+      { "@type": "AdministrativeArea", name: "Cumbria" },
+      { "@type": "City", name: "Carlisle" },
+    ],
+    identifier: {
+      "@type": "PropertyValue",
+      name: "SRA Number",
+      value: "800525",
+    },
+    priceRange: "No win no fee",
+    serviceType: "Personal injury claims",
+  });
+
+  useJsonLd("pi-faq", {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    mainEntity: faqs.map((f) => ({
+      "@type": "Question",
+      name: f.q,
+      acceptedAnswer: { "@type": "Answer", text: f.a },
+    })),
+  });
 
   return (
     <div className="min-h-screen flex flex-col">
@@ -115,8 +154,38 @@ export default function PersonalInjuryLanding() {
         </div>
       </section>
 
+      {/* Trust panel */}
+      <section className="py-12 px-4 bg-gray-50">
+        <div className="max-w-3xl mx-auto">
+          <div className="flex flex-col items-center mb-2">
+            <img src="/review-solicitors-logo.png" alt="Review Solicitors" className="h-10 mb-5" />
+            <div className="flex items-center gap-4 mb-4">
+              <span className="text-5xl font-bold text-[#1a3a4a]">4.9</span>
+              <div>
+                <p className="font-bold text-[#1a3a4a] text-lg leading-tight">Excellent</p>
+                <div className="flex text-[#3a9e4f] text-2xl leading-none">{"★★★★★"}</div>
+                <p className="text-sm text-[#3a9e4f] font-medium underline">60+ Reviews</p>
+              </div>
+            </div>
+            <div className="flex flex-wrap justify-center gap-4 mt-2">
+              {[
+                { pct: "92%", label: "Value for Money", sub: "9% above national average" },
+                { pct: "95%+", label: "Success Rate", sub: "16% above national average" },
+                { pct: "95%+", label: "Would Recommend", sub: "17% above national average" },
+              ].map((s) => (
+                <div key={s.label} className="bg-white border border-gray-100 rounded-xl px-5 py-4 text-center shadow-sm min-w-[140px]">
+                  <p className="text-xl font-bold text-[#1a3a4a]">{s.pct}</p>
+                  <p className="text-sm font-semibold text-gray-700 mt-1">{s.label}</p>
+                  <p className="text-xs text-[#3a9e4f] mt-1">↑ {s.sub}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* Types of claim */}
-      <section className="py-16 px-4 bg-gray-50">
+      <section className="py-16 px-4 bg-white">
         <div className="max-w-4xl mx-auto">
           <h2 className="text-2xl sm:text-3xl font-bold text-[#1a3a4a] text-center mb-10">
             Types of Claim We Handle
@@ -140,7 +209,7 @@ export default function PersonalInjuryLanding() {
       </section>
 
       {/* How it works */}
-      <section className="py-16 px-4 bg-white">
+      <section className="py-16 px-4 bg-gray-50">
         <div className="max-w-4xl mx-auto">
           <h2 className="text-2xl sm:text-3xl font-bold text-[#1a3a4a] text-center mb-12">How It Works</h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
