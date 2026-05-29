@@ -16,7 +16,7 @@ function getContent(state: ThankYouState) {
 
   if (result === "strong") {
     return {
-      heading: "Good News — You Look Like You Have a Strong Claim",
+      heading: "Good News, You Look Like You Have a Strong Claim",
       body: "Based on your answers, the key factors needed for a personal injury claim look to be in place. A solicitor will call you within 24 hours to talk through the next steps. There is nothing to pay upfront and no obligation.",
     };
   }

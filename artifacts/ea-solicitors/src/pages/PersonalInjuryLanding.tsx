@@ -3,6 +3,7 @@ import SiteHeader from "@/components/SiteHeader";
 import SiteFooter from "@/components/SiteFooter";
 import { useState } from "react";
 import { useAdHeadline } from "@/hooks/useAdHeadline";
+import { useAdParam } from "@/hooks/useAdParam";
 import { useSeoMeta } from "@/hooks/useSeoMeta";
 import { useOgMeta } from "@/hooks/useOgMeta";
 import { useJsonLd } from "@/hooks/useJsonLd";
@@ -51,12 +52,17 @@ function FaqItem({ q, a }: { q: string; a: string }) {
   );
 }
 
-const PI_PAGE_TITLE = "Personal Injury Solicitors in Carlisle, Cumbria — Edward & Amaury";
+const PI_PAGE_TITLE = "Personal Injury Solicitors in Carlisle, Cumbria | Edward & Amaury";
 const PI_PAGE_DESCRIPTION = "No win no fee personal injury solicitors in Carlisle. Free 2-minute claim assessment. Call 01228 272395.";
+
+const DEFAULT_SUB = "Find out in 2 minutes whether you have a claim, with no obligation and no upfront cost.";
+const DEFAULT_BODY = "Road accident, accident at work, slip or trip, medical negligence. If it wasn't your fault, you may be entitled to compensation. Our Carlisle-based solicitors handle Cumbria personal injury claims on a no win no fee basis.";
 
 export default function PersonalInjuryLanding() {
   const [, setLocation] = useLocation();
   const adHeadline = useAdHeadline("");
+  const adSub = useAdParam("sub", DEFAULT_SUB);
+  const adBody = useAdParam("body", DEFAULT_BODY);
   useSeoMeta(PI_PAGE_TITLE, PI_PAGE_DESCRIPTION);
   useOgMeta({ title: PI_PAGE_TITLE, description: PI_PAGE_DESCRIPTION });
 
@@ -107,10 +113,10 @@ export default function PersonalInjuryLanding() {
             {adHeadline || "Injured Through Someone Else's Fault?"}
           </h1>
           <p className="text-xl text-[#5eead4] font-semibold mb-6">
-            Find out in 2 minutes whether you have a claim — with no obligation and no upfront cost.
+            {adSub}
           </p>
           <p className="text-gray-200 text-lg max-w-3xl mx-auto mb-8">
-            Road accident, accident at work, slip or trip, medical negligence — if it wasn't your fault, you may be entitled to compensation. Our Carlisle-based solicitors handle Cumbria personal injury claims on a no win no fee basis.
+            {adBody}
           </p>
           <button
             data-testid="hero-cta-pi"
@@ -192,7 +198,7 @@ export default function PersonalInjuryLanding() {
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             {[
-              { title: "Road Traffic Accidents", body: "Car, motorcycle, cycling, or pedestrian accidents on Cumbria's roads — including the A66, A595, A69, and M6." },
+              { title: "Road Traffic Accidents", body: "Car, motorcycle, cycling, or pedestrian accidents on Cumbria's roads, including the A66, A595, A69, and M6." },
               { title: "Accidents at Work", body: "Workplace injuries caused by employer negligence, faulty equipment, or unsafe conditions." },
               { title: "Slips, Trips & Falls", body: "Injuries in shops, public spaces, hospitality venues, or on pavements that weren't properly maintained." },
               { title: "Medical Negligence", body: "Misdiagnosis, surgical errors, or substandard care from NHS or private healthcare providers." },
@@ -215,7 +221,7 @@ export default function PersonalInjuryLanding() {
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {[
               { step: "1", title: "Take the Assessment", body: "Answer 5 quick questions about your accident. Takes under 2 minutes." },
-              { step: "2", title: "Get Your Results", body: "We tell you straight whether you have a claim worth pursuing — and what to expect next." },
+              { step: "2", title: "Get Your Results", body: "We tell you straight whether you have a claim worth pursuing, and what to expect next." },
               { step: "3", title: "Speak to a Solicitor", body: "A Carlisle-based personal injury solicitor will call you within 24 hours to discuss your case." },
             ].map((s) => (
               <div key={s.step} className="text-center">

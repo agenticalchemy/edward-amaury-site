@@ -217,7 +217,7 @@ function buildPersonalContent(state: QuizState, result: ResultBand) {
 
 export default function PersonalInjuryQuiz() {
   useSeoMeta(
-    "Personal Injury Claim Assessment — Edward & Amaury Solicitors",
+    "Personal Injury Claim Assessment | Edward & Amaury Solicitors",
     "Free 2-minute personal injury claim assessment. Find out if you have a claim worth pursuing. Carlisle solicitors."
   );
   const [, setLocation] = useLocation();
