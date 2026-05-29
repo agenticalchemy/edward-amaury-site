@@ -164,7 +164,10 @@ export default function PersonalInjuryLanding() {
       <section className="py-12 px-4 bg-gray-50">
         <div className="max-w-3xl mx-auto">
           <div className="flex flex-col items-center mb-2">
-            <img src="/review-solicitors-logo.png" alt="Review Solicitors" className="h-10 mb-5" />
+            <div className="flex items-center justify-center gap-8 mb-5 flex-wrap">
+              <img src="/review-solicitors-logo.png" alt="Review Solicitors" className="h-10" />
+              <img src="/fsb-member-logo.png" alt="FSB Member" className="h-14" />
+            </div>
             <div className="flex items-center gap-4 mb-4">
               <span className="text-5xl font-bold text-[#1a3a4a]">4.9</span>
               <div>
