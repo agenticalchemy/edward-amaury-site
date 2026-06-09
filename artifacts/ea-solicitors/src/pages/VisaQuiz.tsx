@@ -7,6 +7,7 @@ import { getUtmParams } from "@/lib/tracking";
 import { useAdHeadline } from "@/hooks/useAdHeadline";
 import { useRecaptcha } from "@/hooks/useRecaptcha";
 import { useSeoMeta } from "@/hooks/useSeoMeta";
+import { getVisaResultContent } from "./VisaThankYou";
 
 type ResultBand = "strong" | "challenges" | "expert";
 
@@ -105,7 +106,7 @@ function getResultBand(score: number): ResultBand {
   return "expert";
 }
 
-type Phase = "quiz" | "form";
+type Phase = "quiz" | "result" | "form";
 
 export default function VisaQuiz() {
   useSeoMeta(
@@ -146,7 +147,12 @@ export default function VisaQuiz() {
     if (step < totalSteps - 1) {
       setTimeout(() => { setStep(step + 1); setAnimating(false); }, 200);
     } else {
-      setTimeout(() => { setPhase("form"); setAnimating(false); }, 200);
+      setTimeout(() => {
+        setPhase("result");
+        setAnimating(false);
+        window.scrollTo(0, 0);
+        try { window.gtag?.("event", "visa_quiz_completed", { event_category: "lead" }); } catch { /* ignore */ }
+      }, 200);
     }
   };
 
@@ -197,6 +203,64 @@ export default function VisaQuiz() {
     });
   };
 
+  if (phase === "result") {
+    const result = getResultBand(totalScore);
+    const content = getVisaResultContent({ result });
+    const badge =
+      result === "strong"
+        ? { label: "Strong Application", bg: "bg-green-50 border-green-200", text: "text-green-700" }
+        : result === "challenges"
+        ? { label: "Some Challenges", bg: "bg-amber-50 border-amber-200", text: "text-amber-700" }
+        : { label: "Expert Support Needed", bg: "bg-[#0e7490]/8 border-[#0e7490]/20", text: "text-[#0e7490]" };
+    return (
+      <div className="min-h-screen flex flex-col bg-gray-50">
+        <SiteHeader />
+        <div className="flex-1 py-6 px-4">
+          <div className="max-w-lg mx-auto space-y-4">
+            <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
+              <div className="flex justify-center mb-3">
+                <span className={`inline-block border rounded-full px-3 py-1 text-xs font-semibold ${badge.bg} ${badge.text}`}>
+                  Your Assessment: {badge.label}
+                </span>
+              </div>
+              <h1 className="text-xl sm:text-2xl font-bold text-[#1a3a4a] text-center mb-3 leading-tight">
+                {content.heading}
+              </h1>
+              <p className="text-gray-600 text-sm sm:text-base text-center leading-relaxed">
+                {content.body}
+              </p>
+            </div>
+
+            <a
+              href="tel:+441228272395"
+              data-testid="result-phone-visa"
+              className="block w-full bg-[#0e7490] hover:bg-[#0a5a70] active:bg-[#084d60] text-white text-center rounded-2xl py-5 px-4 transition-colors shadow-sm"
+            >
+              <p className="text-xs font-medium text-white/80 mb-1">Want to discuss your application now?</p>
+              <p className="text-2xl sm:text-3xl font-bold tracking-tight">01228 272395</p>
+              <p className="text-xs text-white/70 mt-1">Mon to Fri, 9am to 5pm</p>
+            </a>
+
+            <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 text-center">
+              <h2 className="font-bold text-[#1a3a4a] text-lg mb-2">Want our immigration team to review your case?</h2>
+              <p className="text-gray-600 text-sm mb-5">
+                Enter your details and a specialist solicitor will call you within 24 hours. Free first call, no obligation.
+              </p>
+              <button
+                data-testid="result-cta-visa-form"
+                onClick={() => { setPhase("form"); window.scrollTo(0, 0); }}
+                className="w-full bg-orange-500 hover:bg-orange-600 active:bg-orange-700 text-white font-bold py-4 rounded-lg text-base transition-colors shadow-md"
+              >
+                Request My Free Call →
+              </button>
+            </div>
+          </div>
+        </div>
+        <SiteFooter />
+      </div>
+    );
+  }
+
   if (phase === "form") {
     return (
       <div className="min-h-screen flex flex-col">
@@ -204,8 +268,8 @@ export default function VisaQuiz() {
         <div className="flex-1 bg-gray-50 py-12 px-4">
           <div className="max-w-lg mx-auto">
             <div className="bg-white rounded-2xl shadow-lg p-8">
-              <h2 className="text-2xl font-bold text-[#1a3a4a] mb-2">Almost there</h2>
-              <p className="text-gray-600 mb-6">Enter your details to see your personalised assessment</p>
+              <h2 className="text-2xl font-bold text-[#1a3a4a] mb-2">Request a Free Consultation</h2>
+              <p className="text-gray-600 mb-6">Enter your details and a specialist immigration solicitor will call you within 24 hours. Free first call, no obligation.</p>
               <form onSubmit={handleSubmit} className="space-y-4">
                 <div className="grid grid-cols-2 gap-3">
                   <div>
@@ -284,7 +348,7 @@ export default function VisaQuiz() {
                   disabled={submitMutation.isPending}
                   className="w-full bg-[#0e7490] hover:bg-[#0a5a70] disabled:opacity-60 text-white font-bold py-4 rounded-lg text-lg transition-colors"
                 >
-                  {submitMutation.isPending ? "Submitting..." : "See My Results"}
+                  {submitMutation.isPending ? "Submitting..." : "Request My Free Call →"}
                 </button>
               </form>
               <p className="text-xs text-gray-500 mt-4 text-center">

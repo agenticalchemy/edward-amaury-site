@@ -16,11 +16,13 @@ function has(list: string[] | undefined, keyword: string): boolean {
   return (list ?? []).some((s) => s.toLowerCase().includes(keyword.toLowerCase()));
 }
 
-function NoWillResults({ firstName, q3 }: { firstName: string; q3: string[] }) {
+export function NoWillResults({ firstName, q3 }: { firstName: string; q3: string[] }) {
   return (
     <>
       <h1 className="text-2xl sm:text-3xl font-bold text-[#1a3a4a] mb-4 leading-tight">
-        {firstName}, right now the law decides what happens to your family — not you
+        {firstName
+          ? `${firstName}, right now the law decides what happens to your family — not you`
+          : "Right now, the law decides what happens to your family — not you"}
       </h1>
       <p className="text-gray-600 leading-relaxed mb-6">
         You're in the same position as 56% of UK adults. Without a will, a fixed set of rules called the intestacy laws decides who inherits, who looks after your children, and what happens to your home. Your wishes don't come into it.
@@ -83,11 +85,13 @@ function NoWillResults({ firstName, q3 }: { firstName: string; q3: string[] }) {
   );
 }
 
-function OutdatedResults({ firstName, q2 }: { firstName: string; q2: string[] }) {
+export function OutdatedResults({ firstName, q2 }: { firstName: string; q2: string[] }) {
   return (
     <>
       <h1 className="text-2xl sm:text-3xl font-bold text-[#1a3a4a] mb-4 leading-tight">
-        {firstName}, your will may no longer protect the people you love
+        {firstName
+          ? `${firstName}, your will may no longer protect the people you love`
+          : "Your will may no longer protect the people you love"}
       </h1>
       <p className="text-gray-600 leading-relaxed mb-6">
         You've done the right thing by making a will. But based on what you've told us, things have changed since it was written — and your will may not have kept up.
@@ -159,11 +163,13 @@ function OutdatedResults({ firstName, q2 }: { firstName: string; q2: string[] })
   );
 }
 
-function ReviewResults({ firstName }: { firstName: string }) {
+export function ReviewResults({ firstName }: { firstName: string }) {
   return (
     <>
       <h1 className="text-2xl sm:text-3xl font-bold text-[#1a3a4a] mb-4 leading-tight">
-        {firstName}, your will looks current — but here's what most people miss
+        {firstName
+          ? `${firstName}, your will looks current — but here's what most people miss`
+          : "Your will looks current — but here's what most people miss"}
       </h1>
       <p className="text-gray-600 leading-relaxed mb-6">
         Based on your answers, your will is recent and your circumstances haven't changed dramatically. That's a strong position. But there are a few things that even a well-drafted will can miss.

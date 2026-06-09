@@ -12,7 +12,7 @@ interface ThankYouState {
   answers?: Record<string, string>;
 }
 
-function getPersonalisedContent(state: ThankYouState) {
+export function getPersonalisedContent(state: ThankYouState) {
   const { firstName = "there", route, answers = {} } = state;
 
   if (route === "probate") {

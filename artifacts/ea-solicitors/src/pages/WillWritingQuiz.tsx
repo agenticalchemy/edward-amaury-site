@@ -8,6 +8,8 @@ import { useAdHeadline } from "@/hooks/useAdHeadline";
 import { useRecaptcha } from "@/hooks/useRecaptcha";
 import { useSeoMeta } from "@/hooks/useSeoMeta";
 
+import { NoWillResults, OutdatedResults, ReviewResults } from "./WillWritingThankYou";
+
 type WillWritingRoute = "no-will" | "outdated" | "review";
 
 const q1Options = [
@@ -51,7 +53,7 @@ function computeRoute(q1: string, q2Selections: string[]): WillWritingRoute {
   return "outdated";
 }
 
-type Phase = "quiz" | "form";
+type Phase = "quiz" | "result" | "form";
 
 export default function WillWritingQuiz() {
   useSeoMeta(
@@ -117,7 +119,12 @@ export default function WillWritingQuiz() {
     if (animating) return;
     setAnimating(true);
     setQ4Answer(answer);
-    setTimeout(() => { setPhase("form"); setAnimating(false); }, 200);
+    setTimeout(() => {
+      setPhase("result");
+      setAnimating(false);
+      window.scrollTo(0, 0);
+      try { window.gtag?.("event", "will_writing_quiz_completed", { event_category: "lead" }); } catch { /* ignore */ }
+    }, 200);
   }
 
   function handleBack() {
@@ -170,6 +177,49 @@ export default function WillWritingQuiz() {
     });
   };
 
+  if (phase === "result") {
+    const route = computeRoute(q1Answer, q2Selections);
+    return (
+      <div className="min-h-screen flex flex-col bg-gray-50">
+        <SiteHeader />
+        <div className="flex-1 py-8 px-4">
+          <div className="max-w-2xl mx-auto space-y-5">
+            <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 sm:p-8">
+              {route === "no-will" && <NoWillResults firstName="" q3={q3Selections} />}
+              {route === "outdated" && <OutdatedResults firstName="" q2={q2Selections} />}
+              {route === "review" && <ReviewResults firstName="" />}
+            </div>
+
+            <a
+              href="tel:+441228272395"
+              data-testid="result-phone-will-writing"
+              className="block w-full bg-[#0e7490] hover:bg-[#0a5a70] active:bg-[#084d60] text-white text-center rounded-2xl py-5 px-4 transition-colors shadow-sm"
+            >
+              <p className="text-xs font-medium text-white/80 mb-1">Want to talk it through now?</p>
+              <p className="text-2xl sm:text-3xl font-bold tracking-tight">01228 272395</p>
+              <p className="text-xs text-white/70 mt-1">Mon–Fri, 9am–5pm</p>
+            </a>
+
+            <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 text-center">
+              <h2 className="font-bold text-[#1a3a4a] text-lg mb-2">Would you like us to sort this for you?</h2>
+              <p className="text-gray-600 text-sm mb-5">
+                Enter your details and a Carlisle solicitor will call you within 24 hours. Fixed fees, no obligation.
+              </p>
+              <button
+                data-testid="result-cta-will-writing-form"
+                onClick={() => { setPhase("form"); window.scrollTo(0, 0); }}
+                className="w-full bg-orange-500 hover:bg-orange-600 active:bg-orange-700 text-white font-bold py-4 rounded-lg text-base transition-colors shadow-md"
+              >
+                Request My Free Call →
+              </button>
+            </div>
+          </div>
+        </div>
+        <SiteFooter />
+      </div>
+    );
+  }
+
   if (phase === "form") {
     return (
       <div className="min-h-screen flex flex-col">
@@ -177,8 +227,8 @@ export default function WillWritingQuiz() {
         <div className="flex-1 bg-gray-50 py-12 px-4">
           <div className="max-w-lg mx-auto">
             <div className="bg-white rounded-2xl shadow-lg p-8">
-              <h2 className="text-2xl font-bold text-[#1a3a4a] mb-2">Almost there</h2>
-              <p className="text-gray-600 mb-6">Enter your details to see your results</p>
+              <h2 className="text-2xl font-bold text-[#1a3a4a] mb-2">Request a Free Call</h2>
+              <p className="text-gray-600 mb-6">Enter your details and a Carlisle solicitor will call you within 24 hours. Fixed fees, no obligation.</p>
               <form onSubmit={handleSubmit} className="space-y-4">
                 <div className="grid grid-cols-2 gap-3">
                   <div>
@@ -245,7 +295,7 @@ export default function WillWritingQuiz() {
                   disabled={submitMutation.isPending}
                   className="w-full bg-[#0e7490] hover:bg-[#0a5a70] disabled:opacity-60 text-white font-bold py-4 rounded-lg text-lg transition-colors"
                 >
-                  {submitMutation.isPending ? "Submitting..." : "See My Results →"}
+                  {submitMutation.isPending ? "Submitting..." : "Request My Free Call →"}
                 </button>
               </form>
               <p className="text-xs text-gray-500 mt-4 text-center">

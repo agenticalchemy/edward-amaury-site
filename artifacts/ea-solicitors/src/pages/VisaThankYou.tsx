@@ -11,7 +11,7 @@ interface ThankYouState {
   score?: number;
 }
 
-function getContent(state: ThankYouState) {
+export function getVisaResultContent(state: ThankYouState) {
   const { firstName = "there", result = "expert" } = state;
 
   if (result === "strong") {
@@ -42,7 +42,7 @@ export default function VisaThankYou() {
     fireVisaEvent();
   }, []);
 
-  const content = getContent(state);
+  const content = getVisaResultContent(state);
 
   const resultColour =
     state.result === "strong"
