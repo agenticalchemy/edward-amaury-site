@@ -126,7 +126,6 @@ export default function VisaQuiz() {
   const [phone, setPhone] = useState("");
   const [partnerNationality, setPartnerNationality] = useState("");
   const [honeypot, setHoneypot] = useState("");
-  const [formError, setFormError] = useState("");
 
   const submitMutation = useSubmitVisaLead();
   const { getToken } = useRecaptcha();
@@ -156,55 +155,45 @@ export default function VisaQuiz() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setFormError("");
 
     const result = getResultBand(totalScore);
     const utmParams = getUtmParams();
     const params = new URLSearchParams(window.location.search);
+    const gclid = params.get("gclid") ?? undefined;
 
+    // Show the result straight away — it's already worked out on the visitor's
+    // own device and needs nothing from the server. No waiting on a spinner.
+    sessionStorage.setItem("ea_lead_firstname", firstName);
+    setLocation("/uk-spouse-visa/thank-you", {
+      state: { firstName, result, score: totalScore },
+    });
+
+    // Save the lead in the background. This is a client-side route change, so
+    // the tab never unloads and this request keeps running — the visitor is
+    // never blocked by a slow save or email.
     let recaptchaToken: string | undefined;
     try { recaptchaToken = await getToken("submit"); } catch { /* fail open */ }
 
-    submitMutation.mutate(
-      {
-        data: {
-          fullName: [firstName, lastName].filter(Boolean).join(" "),
-          email,
-          phone,
-          partnerNationality,
-          honeypot: honeypot || undefined,
-          recaptchaToken,
-          score: totalScore,
-          result,
-          answers,
-          gclid: params.get("gclid") ?? undefined,
-          utmSource: utmParams["utm_source"],
-          utmCampaign: utmParams["utm_campaign"],
-          utmMedium: utmParams["utm_medium"],
-          utmTerm: utmParams["utm_term"],
-          utmContent: utmParams["utm_content"],
-          referrer: document.referrer || undefined,
-        },
+    submitMutation.mutate({
+      data: {
+        fullName: [firstName, lastName].filter(Boolean).join(" "),
+        email,
+        phone,
+        partnerNationality,
+        honeypot: honeypot || undefined,
+        recaptchaToken,
+        score: totalScore,
+        result,
+        answers,
+        gclid,
+        utmSource: utmParams["utm_source"],
+        utmCampaign: utmParams["utm_campaign"],
+        utmMedium: utmParams["utm_medium"],
+        utmTerm: utmParams["utm_term"],
+        utmContent: utmParams["utm_content"],
+        referrer: document.referrer || undefined,
       },
-      {
-        onSuccess: () => {
-          try {
-            (window.dataLayer as unknown[]).push({ event: "visa_lead" });
-          } catch { /* ignore */ }
-          sessionStorage.setItem("ea_lead_firstname", firstName);
-          setLocation("/uk-spouse-visa/thank-you", {
-            state: {
-              firstName,
-              result,
-              score: totalScore,
-            },
-          });
-        },
-        onError: () => {
-          setFormError("Something went wrong. Please try again or call us on 01228 272395.");
-        },
-      }
-    );
+    });
   };
 
   if (phase === "form") {
@@ -288,9 +277,6 @@ export default function VisaQuiz() {
                   aria-hidden="true"
                   style={{ position: "absolute", left: "-9999px", width: "1px", height: "1px", overflow: "hidden" }}
                 />
-                {formError && (
-                  <p className="text-red-600 text-sm" data-testid="form-error-visa">{formError}</p>
-                )}
                 <button
                   data-testid="button-submit-visa"
                   type="submit"
