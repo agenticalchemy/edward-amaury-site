@@ -147,7 +147,7 @@ export default function WillWritingQuiz() {
     const gclid = params.get("gclid") ?? undefined;
 
     // Fire the lead event + show results straight away — nothing waits on the server.
-    try { window.dataLayer?.push({ event: "will_writing_lead_submit" }); } catch { /* ignore */ }
+    try { window.dataLayer?.push({ event: "funnel_leads_all", lead_type: "will_writing" }); } catch { /* ignore */ }
     sessionStorage.setItem("ea_lead_firstname", firstName);
     setLocation("/will-writing/results", {
       state: { firstName, route, q2Selections, q3Selections },

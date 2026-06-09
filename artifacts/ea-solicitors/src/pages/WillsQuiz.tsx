@@ -201,7 +201,7 @@ export default function WillsQuiz() {
 
     // Fire the lead event + show the recommendation straight away. The result is
     // already worked out on the visitor's device — nothing should wait on the server.
-    try { window.dataLayer?.push({ event: "Wills_leads" }); } catch { /* ignore */ }
+    try { window.dataLayer?.push({ event: "funnel_leads_all", lead_type: "wills_probate" }); } catch { /* ignore */ }
     sessionStorage.setItem("ea_lead_firstname", firstName);
     setLocation("/wills-and-probate/thank-you", {
       state: { firstName, route, answers },

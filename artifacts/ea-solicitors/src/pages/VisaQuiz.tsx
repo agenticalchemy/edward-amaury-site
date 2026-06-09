@@ -169,7 +169,7 @@ export default function VisaQuiz() {
 
     // Fire the lead event + show the result straight away — it's already worked
     // out on the visitor's own device and needs nothing from the server.
-    try { window.dataLayer?.push({ event: "visa_lead" }); } catch { /* ignore */ }
+    try { window.dataLayer?.push({ event: "funnel_leads_all", lead_type: "spouse_visa" }); } catch { /* ignore */ }
     sessionStorage.setItem("ea_lead_firstname", firstName);
     setLocation("/uk-spouse-visa/thank-you", {
       state: { firstName, result, score: totalScore },
