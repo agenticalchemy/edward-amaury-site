@@ -15,28 +15,28 @@ function fireGoogleAdsConversion(): void {
   });
 }
 
-function fireGa4Event(eventName: string): void {
+function fireGa4Event(eventName: string, params: Record<string, unknown> = {}): void {
   if (typeof window.gtag !== "function") return;
-  window.gtag("event", eventName, { event_category: "lead" });
+  window.gtag("event", eventName, { event_category: "lead", ...params });
 }
 
 export function fireWillsEvent(): void {
-  fireGa4Event("wills_lead_submit");
+  fireGa4Event("funnel_leads_all", { lead_type: "wills_probate" });
   fireGoogleAdsConversion();
 }
 
 export function fireVisaEvent(): void {
-  fireGa4Event("visa_lead_submit");
+  fireGa4Event("funnel_leads_all", { lead_type: "spouse_visa" });
   fireGoogleAdsConversion();
 }
 
 export function fireWillWritingEvent(): void {
-  fireGa4Event("will_writing_lead_submit");
+  fireGa4Event("funnel_leads_all", { lead_type: "will_writing" });
   fireGoogleAdsConversion();
 }
 
 export function firePersonalInjuryEvent(): void {
-  fireGa4Event("personal_injury_lead_submit");
+  fireGa4Event("funnel_leads_all", { lead_type: "personal_injury" });
   fireGoogleAdsConversion();
 }
 
