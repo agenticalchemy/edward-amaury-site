@@ -1,4 +1,4 @@
-import { useLocation } from "wouter";
+import { Link, useLocation } from "wouter";
 import SiteHeader from "@/components/SiteHeader";
 import SiteFooter from "@/components/SiteFooter";
 import { useState } from "react";
@@ -63,18 +63,22 @@ const reviews = [
 const services = [
   {
     title: "Wills & Probate",
+    href: "/wills-and-probate",
     body: "Helping families through estate administration, probate, and intestacy. Fixed-fee, with full guidance from the first call.",
   },
   {
     title: "Will Writing",
+    href: "/will-writing",
     body: "Single wills, mirror wills, and more complex estate planning. Drafted properly, signed properly, stored safely.",
   },
   {
     title: "UK Spouse & Family Visas",
+    href: "/uk-spouse-visa",
     body: "Cumbria's only dedicated immigration solicitors. Specialists in spouse visas, fiance visas, and family route applications.",
   },
   {
     title: "Personal Injury",
+    href: "/personal-injury",
     body: "Road traffic, accident at work, and other personal injury claims. Straightforward advice on whether you have a claim and what it could be worth.",
   },
 ];
@@ -159,6 +163,10 @@ export default function CumbriaSolicitorsLanding() {
     "Looking for a solicitor in Cumbria? Edward & Amaury Solicitors. Carlisle office. Fixed fees, named solicitor on every case. Call 01228 272395."
   );
 
+  const scrollToServices = () => {
+    document.getElementById("services")?.scrollIntoView({ behavior: "smooth", block: "start" });
+  };
+
   return (
     <div className="min-h-screen flex flex-col">
       <SiteHeader />
@@ -170,7 +178,22 @@ export default function CumbriaSolicitorsLanding() {
             {adHeadline}
           </h1>
           <p className="text-xl text-[#5eead4] font-semibold mb-6">{adSub}</p>
-          <p className="text-gray-200 text-lg max-w-3xl mx-auto mb-8">{adBody}</p>
+          <p className="text-gray-200 text-lg max-w-3xl mx-auto mb-6">{adBody}</p>
+          <div className="mb-8">
+            <p className="text-white font-semibold mb-3">What service are you after today?</p>
+            <div className="flex flex-wrap justify-center gap-3">
+              {services.map((s) => (
+                <button
+                  key={s.title}
+                  onClick={scrollToServices}
+                  data-testid={`hero-service-${s.href.replace(/\//g, "")}`}
+                  className="bg-white/10 hover:bg-white/20 border border-[#5eead4]/50 text-white font-medium py-2 px-4 rounded-full text-sm transition-colors"
+                >
+                  {s.title}
+                </button>
+              ))}
+            </div>
+          </div>
           <a
             href="tel:+441228272395"
             data-testid="hero-cta-cumbria-phone"
@@ -217,20 +240,28 @@ export default function CumbriaSolicitorsLanding() {
       </section>
 
       {/* Services */}
-      <section className="py-16 px-4 bg-gray-50">
+      <section id="services" className="py-16 px-4 bg-gray-50 scroll-mt-20">
         <div className="max-w-5xl mx-auto">
           <h2 className="text-2xl sm:text-3xl font-bold text-[#1a3a4a] text-center mb-3">
             What We Help With
           </h2>
           <p className="text-gray-600 text-center mb-12 max-w-2xl mx-auto">
-            Four core practice areas. If your matter falls outside these, we will tell you on the first call and, where we can, point you to a trusted local firm who can help.
+            Four core practice areas. Tap the one you need to see how we can help. If your matter falls outside these, we will tell you on the first call and, where we can, point you to a trusted local firm who can help.
           </p>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
             {services.map((s) => (
-              <div key={s.title} className="bg-white rounded-xl p-6 border border-gray-100 shadow-sm">
-                <h3 className="font-bold text-[#1a3a4a] text-lg mb-2">{s.title}</h3>
+              <Link
+                key={s.title}
+                href={s.href}
+                data-testid={`service-card-${s.href.replace(/\//g, "")}`}
+                className="group block bg-white rounded-xl p-6 border border-gray-100 shadow-sm hover:shadow-md hover:border-[#0e7490] transition-all"
+              >
+                <h3 className="font-bold text-[#1a3a4a] text-lg mb-2 flex items-center justify-between gap-2">
+                  {s.title}
+                  <span className="text-[#0e7490] group-hover:translate-x-1 transition-transform">→</span>
+                </h3>
                 <p className="text-gray-600 leading-relaxed">{s.body}</p>
-              </div>
+              </Link>
             ))}
           </div>
         </div>

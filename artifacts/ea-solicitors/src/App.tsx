@@ -24,7 +24,7 @@ function Router() {
   return (
     <Switch>
       <Route path="/">
-        <Redirect to="/wills-and-probate" />
+        <Redirect to="/cumbria-solicitors" />
       </Route>
       <Route path="/wills-and-probate" component={WillsLanding} />
       <Route path="/wills-and-probate/quiz" component={WillsQuiz} />
