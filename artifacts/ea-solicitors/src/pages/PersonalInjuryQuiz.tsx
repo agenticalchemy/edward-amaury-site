@@ -286,51 +286,43 @@ export default function PersonalInjuryQuiz() {
     const result = getResultBand(quizState, totalScore);
     const utmParams = getUtmParams();
     const params = new URLSearchParams(window.location.search);
+    const gclid = params.get("gclid") ?? undefined;
 
+    // Show the result straight away — it's already worked out on the visitor's
+    // device. The save runs in the background and never blocks them.
+    sessionStorage.setItem("ea_lead_firstname", firstName);
+    setLocation("/personal-injury/thank-you", {
+      state: { firstName, result, score: totalScore },
+    });
+
+    // Save the lead in the background.
     let recaptchaToken: string | undefined;
     try { recaptchaToken = await getToken("submit"); } catch { /* fail open */ }
 
-    submitMutation.mutate(
-      {
-        data: {
-          name: [firstName, lastName].filter(Boolean).join(" "),
-          email,
-          phone,
-          honeypot: honeypot || undefined,
-          recaptchaToken,
-          accidentType: quizState.accidentType,
-          when: quizState.when,
-          fault: quizState.fault,
-          doctor: quizState.doctor,
-          impact: quizState.impact,
-          score: totalScore,
-          result,
-          answers,
-          gclid: params.get("gclid") ?? undefined,
-          utmSource: utmParams["utm_source"],
-          utmCampaign: utmParams["utm_campaign"],
-          utmMedium: utmParams["utm_medium"],
-          utmTerm: utmParams["utm_term"],
-          utmContent: utmParams["utm_content"],
-          referrer: document.referrer || undefined,
-        },
+    submitMutation.mutate({
+      data: {
+        name: [firstName, lastName].filter(Boolean).join(" "),
+        email,
+        phone,
+        honeypot: honeypot || undefined,
+        recaptchaToken,
+        accidentType: quizState.accidentType,
+        when: quizState.when,
+        fault: quizState.fault,
+        doctor: quizState.doctor,
+        impact: quizState.impact,
+        score: totalScore,
+        result,
+        answers,
+        gclid,
+        utmSource: utmParams["utm_source"],
+        utmCampaign: utmParams["utm_campaign"],
+        utmMedium: utmParams["utm_medium"],
+        utmTerm: utmParams["utm_term"],
+        utmContent: utmParams["utm_content"],
+        referrer: document.referrer || undefined,
       },
-      {
-        onSuccess: () => {
-          sessionStorage.setItem("ea_lead_firstname", firstName);
-          setLocation("/personal-injury/thank-you", {
-            state: {
-              firstName,
-              result,
-              score: totalScore,
-            },
-          });
-        },
-        onError: () => {
-          setFormError("Something went wrong. Please try again or call us on 01228 272395.");
-        },
-      }
-    );
+    });
   };
 
   if (phase === "result") {

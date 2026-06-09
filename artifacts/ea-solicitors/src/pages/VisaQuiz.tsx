@@ -161,8 +161,9 @@ export default function VisaQuiz() {
     const params = new URLSearchParams(window.location.search);
     const gclid = params.get("gclid") ?? undefined;
 
-    // Show the result straight away — it's already worked out on the visitor's
-    // own device and needs nothing from the server. No waiting on a spinner.
+    // Fire the lead event + show the result straight away — it's already worked
+    // out on the visitor's own device and needs nothing from the server.
+    try { window.dataLayer?.push({ event: "visa_lead" }); } catch { /* ignore */ }
     sessionStorage.setItem("ea_lead_firstname", firstName);
     setLocation("/uk-spouse-visa/thank-you", {
       state: { firstName, result, score: totalScore },

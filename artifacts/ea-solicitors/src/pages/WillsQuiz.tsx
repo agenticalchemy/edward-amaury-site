@@ -159,7 +159,6 @@ export default function WillsQuiz() {
   const [phone, setPhone] = useState("");
   const [email, setEmail] = useState("");
   const [honeypot, setHoneypot] = useState("");
-  const [formError, setFormError] = useState("");
 
   const submitMutation = useSubmitWillsLead();
   const { getToken } = useRecaptcha();
@@ -189,52 +188,41 @@ export default function WillsQuiz() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setFormError("");
 
     const utmParams = getUtmParams();
     const params = new URLSearchParams(window.location.search);
+    const gclid = params.get("gclid") ?? undefined;
 
+    // Fire the lead event + show the recommendation straight away. The result is
+    // already worked out on the visitor's device — nothing should wait on the server.
+    try { window.dataLayer?.push({ event: "Wills_leads" }); } catch { /* ignore */ }
+    sessionStorage.setItem("ea_lead_firstname", firstName);
+    setLocation("/wills-and-probate/thank-you", {
+      state: { firstName, route, answers },
+    });
+
+    // Save the lead in the background — never blocks the visitor.
     let recaptchaToken: string | undefined;
     try { recaptchaToken = await getToken("submit"); } catch { /* fail open */ }
 
-    submitMutation.mutate(
-      {
-        data: {
-          name: [firstName, lastName].filter(Boolean).join(" "),
-          phone,
-          email,
-          honeypot: honeypot || undefined,
-          recaptchaToken,
-          route: route!,
-          answers,
-          gclid: params.get("gclid") ?? undefined,
-          utmSource: utmParams["utm_source"],
-          utmCampaign: utmParams["utm_campaign"],
-          utmMedium: utmParams["utm_medium"],
-          utmTerm: utmParams["utm_term"],
-          utmContent: utmParams["utm_content"],
-          referrer: document.referrer || undefined,
-        },
+    submitMutation.mutate({
+      data: {
+        name: [firstName, lastName].filter(Boolean).join(" "),
+        phone,
+        email,
+        honeypot: honeypot || undefined,
+        recaptchaToken,
+        route: route!,
+        answers,
+        gclid,
+        utmSource: utmParams["utm_source"],
+        utmCampaign: utmParams["utm_campaign"],
+        utmMedium: utmParams["utm_medium"],
+        utmTerm: utmParams["utm_term"],
+        utmContent: utmParams["utm_content"],
+        referrer: document.referrer || undefined,
       },
-      {
-        onSuccess: () => {
-          try {
-            (window.dataLayer as unknown[]).push({ event: "Wills_leads" });
-          } catch { /* ignore */ }
-          sessionStorage.setItem("ea_lead_firstname", firstName);
-          setLocation("/wills-and-probate/thank-you", {
-            state: {
-              firstName,
-              route,
-              answers,
-            },
-          });
-        },
-        onError: () => {
-          setFormError("Something went wrong. Please try again or call us on 01228 272395.");
-        },
-      }
-    );
+    });
   };
 
   const currentQuestion = allQuestions[step];
@@ -309,9 +297,6 @@ export default function WillsQuiz() {
                   aria-hidden="true"
                   style={{ position: "absolute", left: "-9999px", width: "1px", height: "1px", overflow: "hidden" }}
                 />
-                {formError && (
-                  <p className="text-red-600 text-sm" data-testid="form-error">{formError}</p>
-                )}
                 <button
                   data-testid="button-submit-wills"
                   type="submit"

@@ -73,7 +73,6 @@ export default function WillWritingQuiz() {
   const [phone, setPhone] = useState("");
   const [email, setEmail] = useState("");
   const [honeypot, setHoneypot] = useState("");
-  const [formError, setFormError] = useState("");
 
   const submitMutation = useSubmitWillWritingLead();
   const { getToken } = useRecaptcha();
@@ -127,7 +126,6 @@ export default function WillWritingQuiz() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setFormError("");
 
     const route = computeRoute(q1Answer, q2Selections);
     const answers: Record<string, string> = {
@@ -139,44 +137,37 @@ export default function WillWritingQuiz() {
 
     const utmParams = getUtmParams();
     const params = new URLSearchParams(window.location.search);
+    const gclid = params.get("gclid") ?? undefined;
 
+    // Fire the lead event + show results straight away — nothing waits on the server.
+    try { window.dataLayer?.push({ event: "will_writing_lead_submit" }); } catch { /* ignore */ }
+    sessionStorage.setItem("ea_lead_firstname", firstName);
+    setLocation("/will-writing/results", {
+      state: { firstName, route, q2Selections, q3Selections },
+    });
+
+    // Save the lead in the background — never blocks the visitor.
     let recaptchaToken: string | undefined;
     try { recaptchaToken = await getToken("submit"); } catch { /* fail open */ }
 
-    submitMutation.mutate(
-      {
-        data: {
-          name: [firstName, lastName].filter(Boolean).join(" "),
-          phone,
-          email,
-          honeypot: honeypot || undefined,
-          recaptchaToken,
-          route,
-          answers,
-          gclid: params.get("gclid") ?? undefined,
-          utmSource: utmParams["utm_source"],
-          utmCampaign: utmParams["utm_campaign"],
-          utmMedium: utmParams["utm_medium"],
-          utmTerm: utmParams["utm_term"],
-          utmContent: utmParams["utm_content"],
-          referrer: document.referrer || undefined,
-        },
+    submitMutation.mutate({
+      data: {
+        name: [firstName, lastName].filter(Boolean).join(" "),
+        phone,
+        email,
+        honeypot: honeypot || undefined,
+        recaptchaToken,
+        route,
+        answers,
+        gclid,
+        utmSource: utmParams["utm_source"],
+        utmCampaign: utmParams["utm_campaign"],
+        utmMedium: utmParams["utm_medium"],
+        utmTerm: utmParams["utm_term"],
+        utmContent: utmParams["utm_content"],
+        referrer: document.referrer || undefined,
       },
-      {
-        onSuccess: () => {
-          try {
-            (window.dataLayer as unknown[]).push({ event: "will_writing_lead_submit" });
-          } catch { /* ignore */ }
-          sessionStorage.setItem("ea_lead_firstname", firstName);
-          setLocation("/will-writing/results", {
-            state: { firstName, route, q2Selections, q3Selections },
-          });
-        },
-        onError: () => {
-          setFormError("Something went wrong. Please try again or call us on 01228 272395.");
-        },
-      }
-    );
+    });
   };
 
   if (phase === "form") {
@@ -248,9 +239,6 @@ export default function WillWritingQuiz() {
                   aria-hidden="true"
                   style={{ position: "absolute", left: "-9999px", width: "1px", height: "1px", overflow: "hidden" }}
                 />
-                {formError && (
-                  <p className="text-red-600 text-sm" data-testid="form-error">{formError}</p>
-                )}
                 <button
                   data-testid="button-submit-will-writing"
                   type="submit"
