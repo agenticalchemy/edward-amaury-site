@@ -40,6 +40,17 @@ export function firePersonalInjuryEvent(): void {
   fireGoogleAdsConversion();
 }
 
+export function firePhoneClickEvent(pagePath: string): void {
+  fireGa4Event("phone_click", { page_path: pagePath });
+  const conversionId = import.meta.env.VITE_GOOGLE_ADS_CONVERSION_ID;
+  const phoneLabel = import.meta.env.VITE_GOOGLE_ADS_PHONE_CONVERSION_LABEL;
+  if (typeof window.gtag !== "function") return;
+  if (!conversionId || !phoneLabel) return;
+  window.gtag("event", "conversion", {
+    send_to: `${conversionId}/${phoneLabel}`,
+  });
+}
+
 export function getUtmParams(): Record<string, string> {
   const params = new URLSearchParams(window.location.search);
   const result: Record<string, string> = {};

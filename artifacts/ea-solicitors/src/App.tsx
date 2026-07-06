@@ -18,8 +18,29 @@ import PersonalInjuryLanding from "@/pages/PersonalInjuryLanding";
 import PersonalInjuryQuiz from "@/pages/PersonalInjuryQuiz";
 import PersonalInjuryThankYou from "@/pages/PersonalInjuryThankYou";
 import PrivacyPolicy from "@/pages/PrivacyPolicy";
+import { firePhoneClickEvent } from "@/lib/tracking";
 
 const queryClient = new QueryClient();
+
+// Track every click on a tel: link anywhere in the app. A single document-level
+// listener covers all 20+ phone links (header, landing pages, footers) and any
+// added later, without wiring up each one individually.
+function PhoneClickTracker() {
+  useEffect(() => {
+    const onClick = (e: MouseEvent) => {
+      const anchor = (e.target as HTMLElement | null)?.closest?.('a[href^="tel:"]');
+      if (!anchor) return;
+      try {
+        firePhoneClickEvent(window.location.pathname);
+      } catch {
+        /* tracking must never break the call */
+      }
+    };
+    document.addEventListener("click", onClick, true);
+    return () => document.removeEventListener("click", onClick, true);
+  }, []);
+  return null;
+}
 
 // Reset scroll to the top on every route change. Without this, navigating
 // between pages (e.g. a service card -> /uk-spouse-visa) keeps the previous
@@ -63,6 +84,7 @@ function App() {
       <TooltipProvider>
         <WouterRouter base={import.meta.env.BASE_URL.replace(/\/$/, "")}>
           <ScrollToTop />
+          <PhoneClickTracker />
           <Router />
         </WouterRouter>
         <Toaster />
