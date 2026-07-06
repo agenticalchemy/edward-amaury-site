@@ -18,7 +18,7 @@ import PersonalInjuryLanding from "@/pages/PersonalInjuryLanding";
 import PersonalInjuryQuiz from "@/pages/PersonalInjuryQuiz";
 import PersonalInjuryThankYou from "@/pages/PersonalInjuryThankYou";
 import PrivacyPolicy from "@/pages/PrivacyPolicy";
-import { firePhoneClickEvent } from "@/lib/tracking";
+import { activatePhoneCallTracking, firePhoneClickEvent } from "@/lib/tracking";
 
 const queryClient = new QueryClient();
 
@@ -26,6 +26,14 @@ const queryClient = new QueryClient();
 // listener covers all 20+ phone links (header, landing pages, footers) and any
 // added later, without wiring up each one individually.
 function PhoneClickTracker() {
+  const [location] = useLocation();
+
+  // Re-run Google's number swap after every route render so forwarding
+  // numbers appear on phone links the SPA has just put in the DOM.
+  useEffect(() => {
+    activatePhoneCallTracking();
+  }, [location]);
+
   useEffect(() => {
     const onClick = (e: MouseEvent) => {
       const anchor = (e.target as HTMLElement | null)?.closest?.('a[href^="tel:"]');
