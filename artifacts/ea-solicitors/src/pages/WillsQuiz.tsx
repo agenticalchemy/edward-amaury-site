@@ -3,7 +3,7 @@ import { useLocation } from "wouter";
 import SiteHeader from "@/components/SiteHeader";
 import SiteFooter from "@/components/SiteFooter";
 import { useSubmitWillsLead } from "@workspace/api-client-react";
-import { getUtmParams } from "@/lib/tracking";
+import { getUtmParams, setEnhancedConversionData } from "@/lib/tracking";
 import { useAdHeadline } from "@/hooks/useAdHeadline";
 import { useRecaptcha } from "@/hooks/useRecaptcha";
 import { useSeoMeta } from "@/hooks/useSeoMeta";
@@ -201,6 +201,7 @@ export default function WillsQuiz() {
 
     // Fire the lead event + show the recommendation straight away. The result is
     // already worked out on the visitor's device — nothing should wait on the server.
+    setEnhancedConversionData(email, phone);
     try { window.dataLayer?.push({ event: "funnel_leads_all", lead_type: "wills_probate" }); } catch { /* ignore */ }
     sessionStorage.setItem("ea_lead_firstname", firstName);
     setLocation("/wills-and-probate/thank-you", {

@@ -3,7 +3,7 @@ import { useLocation } from "wouter";
 import SiteHeader from "@/components/SiteHeader";
 import SiteFooter from "@/components/SiteFooter";
 import { useSubmitVisaLead } from "@workspace/api-client-react";
-import { getUtmParams } from "@/lib/tracking";
+import { getUtmParams, setEnhancedConversionData } from "@/lib/tracking";
 import { useAdHeadline } from "@/hooks/useAdHeadline";
 import { useRecaptcha } from "@/hooks/useRecaptcha";
 import { useSeoMeta } from "@/hooks/useSeoMeta";
@@ -169,6 +169,7 @@ export default function VisaQuiz() {
 
     // Fire the lead event + show the result straight away — it's already worked
     // out on the visitor's own device and needs nothing from the server.
+    setEnhancedConversionData(email, phone);
     try { window.dataLayer?.push({ event: "funnel_leads_all", lead_type: "spouse_visa" }); } catch { /* ignore */ }
     sessionStorage.setItem("ea_lead_firstname", firstName);
     setLocation("/uk-spouse-visa/thank-you", {

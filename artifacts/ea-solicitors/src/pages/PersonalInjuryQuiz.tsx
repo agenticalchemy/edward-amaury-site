@@ -3,7 +3,7 @@ import { useLocation } from "wouter";
 import SiteHeader from "@/components/SiteHeader";
 import SiteFooter from "@/components/SiteFooter";
 import { useSubmitPersonalInjuryLead } from "@workspace/api-client-react";
-import { getUtmParams } from "@/lib/tracking";
+import { getUtmParams, setEnhancedConversionData } from "@/lib/tracking";
 import { useAdHeadline } from "@/hooks/useAdHeadline";
 import { useRecaptcha } from "@/hooks/useRecaptcha";
 import { useSeoMeta } from "@/hooks/useSeoMeta";
@@ -290,6 +290,7 @@ export default function PersonalInjuryQuiz() {
 
     // Show the result straight away — it's already worked out on the visitor's
     // device. The save runs in the background and never blocks them.
+    setEnhancedConversionData(email, phone);
     try { window.dataLayer?.push({ event: "funnel_leads_all", lead_type: "personal_injury" }); } catch { /* ignore */ }
     sessionStorage.setItem("ea_lead_firstname", firstName);
     setLocation("/personal-injury/thank-you", {

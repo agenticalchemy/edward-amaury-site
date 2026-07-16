@@ -5,6 +5,32 @@ declare global {
   }
 }
 
+// Google normalises and hashes user_data in the tag before it leaves the
+// browser — raw values never reach Google's servers. Phone must be E.164.
+function toE164(phone: string): string | undefined {
+  const digits = phone.replace(/[^\d+]/g, "");
+  if (!digits) return undefined;
+  if (digits.startsWith("+")) return digits;
+  if (digits.startsWith("07")) return `+44${digits.slice(1)}`;
+  if (digits.startsWith("44")) return `+${digits}`;
+  if (digits.startsWith("0")) return `+44${digits.slice(1)}`;
+  return digits;
+}
+
+// Enhanced conversions: attach the lead's contact details to the Google tag at
+// form submit. Applies to every gtag destination on the page (GA4 + Google Ads)
+// and persists across SPA navigation, so the thank-you page events carry it.
+export function setEnhancedConversionData(email: string, phone: string): void {
+  if (typeof window.gtag !== "function") return;
+  const userData: Record<string, string> = {};
+  const cleanEmail = email.trim().toLowerCase();
+  if (cleanEmail) userData.email = cleanEmail;
+  const e164 = toE164(phone);
+  if (e164) userData.phone_number = e164;
+  if (Object.keys(userData).length === 0) return;
+  window.gtag("set", "user_data", userData);
+}
+
 function fireGoogleAdsConversion(): void {
   const conversionId = import.meta.env.VITE_GOOGLE_ADS_CONVERSION_ID;
   const conversionLabel = import.meta.env.VITE_GOOGLE_ADS_CONVERSION_LABEL;
