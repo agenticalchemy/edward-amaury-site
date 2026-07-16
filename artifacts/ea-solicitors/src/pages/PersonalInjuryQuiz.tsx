@@ -1,9 +1,9 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useLocation } from "wouter";
 import SiteHeader from "@/components/SiteHeader";
 import SiteFooter from "@/components/SiteFooter";
 import { useSubmitPersonalInjuryLead } from "@workspace/api-client-react";
-import { getUtmParams, setEnhancedConversionData } from "@/lib/tracking";
+import { fireFunnelEvent, getUtmParams, setEnhancedConversionData } from "@/lib/tracking";
 import { useAdHeadline } from "@/hooks/useAdHeadline";
 import { useRecaptcha } from "@/hooks/useRecaptcha";
 import { useSeoMeta } from "@/hooks/useSeoMeta";
@@ -239,6 +239,10 @@ export default function PersonalInjuryQuiz() {
   const submitMutation = useSubmitPersonalInjuryLead();
   const { getToken } = useRecaptcha();
 
+  useEffect(() => {
+    fireFunnelEvent("personal_injury_quiz_started");
+  }, []);
+
   const totalSteps = questions.length;
   const progress = Math.round((step / totalSteps) * 100);
   const currentQuestion = questions[step];
@@ -257,6 +261,7 @@ export default function PersonalInjuryQuiz() {
     setScores(newScores);
     setAnswers(newAnswers);
     setQuizState(newQuizState);
+    fireFunnelEvent(`personal_injury_quiz_step_${step + 1}`, { question_id: question.id });
 
     if (step < totalSteps - 1) {
       setTimeout(() => { setStep(step + 1); setAnimating(false); }, 200);
@@ -376,7 +381,7 @@ export default function PersonalInjuryQuiz() {
               </p>
               <button
                 data-testid="result-cta-pi-form"
-                onClick={() => setPhase("form")}
+                onClick={() => { fireFunnelEvent("personal_injury_form_viewed"); setPhase("form"); }}
                 className="w-full bg-orange-500 hover:bg-orange-600 active:bg-orange-700 text-white font-bold py-4 rounded-lg text-base transition-colors shadow-md"
               >
                 Request a Free Consultation →

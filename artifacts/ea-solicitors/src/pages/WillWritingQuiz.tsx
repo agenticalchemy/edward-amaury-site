@@ -1,9 +1,9 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useLocation } from "wouter";
 import SiteHeader from "@/components/SiteHeader";
 import SiteFooter from "@/components/SiteFooter";
 import { useSubmitWillWritingLead } from "@workspace/api-client-react";
-import { getUtmParams, setEnhancedConversionData } from "@/lib/tracking";
+import { fireFunnelEvent, getUtmParams, setEnhancedConversionData } from "@/lib/tracking";
 import { useAdHeadline } from "@/hooks/useAdHeadline";
 import { useRecaptcha } from "@/hooks/useRecaptcha";
 import { useSeoMeta } from "@/hooks/useSeoMeta";
@@ -78,6 +78,10 @@ export default function WillWritingQuiz() {
 
   const submitMutation = useSubmitWillWritingLead();
   const { getToken } = useRecaptcha();
+
+  useEffect(() => {
+    fireFunnelEvent("will_writing_quiz_started");
+  }, []);
   const adHeadline = useAdHeadline("");
 
   const totalSteps = 4;
@@ -100,18 +104,21 @@ export default function WillWritingQuiz() {
     if (animating) return;
     setAnimating(true);
     setQ1Answer(answer);
+    fireFunnelEvent("will_writing_quiz_step_1");
     setTimeout(() => { setStep(1); setAnimating(false); }, 200);
   }
 
   function handleQ2Continue() {
     if (q2Selections.length === 0) return;
     setAnimating(true);
+    fireFunnelEvent("will_writing_quiz_step_2");
     setTimeout(() => { setStep(2); setAnimating(false); }, 200);
   }
 
   function handleQ3Continue() {
     if (q3Selections.length === 0) return;
     setAnimating(true);
+    fireFunnelEvent("will_writing_quiz_step_3");
     setTimeout(() => { setStep(3); setAnimating(false); }, 200);
   }
 
@@ -119,6 +126,7 @@ export default function WillWritingQuiz() {
     if (animating) return;
     setAnimating(true);
     setQ4Answer(answer);
+    fireFunnelEvent("will_writing_quiz_step_4");
     setTimeout(() => {
       setPhase("result");
       setAnimating(false);
@@ -207,7 +215,7 @@ export default function WillWritingQuiz() {
               </p>
               <button
                 data-testid="result-cta-will-writing-form"
-                onClick={() => { setPhase("form"); window.scrollTo(0, 0); }}
+                onClick={() => { fireFunnelEvent("will_writing_form_viewed"); setPhase("form"); window.scrollTo(0, 0); }}
                 className="w-full bg-orange-500 hover:bg-orange-600 active:bg-orange-700 text-white font-bold py-4 rounded-lg text-base transition-colors shadow-md"
               >
                 Request My Free Call →

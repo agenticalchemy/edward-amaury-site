@@ -46,6 +46,17 @@ function fireGa4Event(eventName: string, params: Record<string, unknown> = {}): 
   window.gtag("event", eventName, { event_category: "lead", ...params });
 }
 
+// Funnel drop-off tracking: quiz start, each question answered, details form
+// shown. Event names carry the funnel + step so they're readable straight off
+// the GA4 Events report with no custom dimensions needed.
+export function fireFunnelEvent(eventName: string, params: Record<string, unknown> = {}): void {
+  try {
+    fireGa4Event(eventName, params);
+  } catch {
+    /* tracking must never break the quiz */
+  }
+}
+
 export function fireWillsEvent(): void {
   fireGa4Event("funnel_leads_all", { lead_type: "wills_probate" });
   fireGoogleAdsConversion();

@@ -1,9 +1,9 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useLocation } from "wouter";
 import SiteHeader from "@/components/SiteHeader";
 import SiteFooter from "@/components/SiteFooter";
 import { useSubmitWillsLead } from "@workspace/api-client-react";
-import { getUtmParams, setEnhancedConversionData } from "@/lib/tracking";
+import { fireFunnelEvent, getUtmParams, setEnhancedConversionData } from "@/lib/tracking";
 import { useAdHeadline } from "@/hooks/useAdHeadline";
 import { useRecaptcha } from "@/hooks/useRecaptcha";
 import { useSeoMeta } from "@/hooks/useSeoMeta";
@@ -164,6 +164,10 @@ export default function WillsQuiz() {
   const submitMutation = useSubmitWillsLead();
   const { getToken } = useRecaptcha();
 
+  useEffect(() => {
+    fireFunnelEvent("wills_quiz_started");
+  }, []);
+
   const allQuestions = [q1, ...questions];
   const totalSteps = allQuestions.length;
   const progress = Math.round(((step) / (totalSteps)) * 100);
@@ -174,6 +178,7 @@ export default function WillsQuiz() {
 
     const newAnswers = { ...answers, [question.id]: answer };
     setAnswers(newAnswers);
+    fireFunnelEvent(`wills_quiz_step_${step + 1}`, { question_id: question.id });
 
     if (step === 0) {
       const r = getRouteFromQ1(answer);
@@ -272,7 +277,7 @@ export default function WillsQuiz() {
               </p>
               <button
                 data-testid="result-cta-wills-form"
-                onClick={() => { setPhase("form"); window.scrollTo(0, 0); }}
+                onClick={() => { fireFunnelEvent("wills_form_viewed"); setPhase("form"); window.scrollTo(0, 0); }}
                 className="w-full bg-orange-500 hover:bg-orange-600 active:bg-orange-700 text-white font-bold py-4 rounded-lg text-base transition-colors shadow-md"
               >
                 Request My Free Call →

@@ -1,9 +1,9 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useLocation } from "wouter";
 import SiteHeader from "@/components/SiteHeader";
 import SiteFooter from "@/components/SiteFooter";
 import { useSubmitVisaLead } from "@workspace/api-client-react";
-import { getUtmParams, setEnhancedConversionData } from "@/lib/tracking";
+import { fireFunnelEvent, getUtmParams, setEnhancedConversionData } from "@/lib/tracking";
 import { useAdHeadline } from "@/hooks/useAdHeadline";
 import { useRecaptcha } from "@/hooks/useRecaptcha";
 import { useSeoMeta } from "@/hooks/useSeoMeta";
@@ -135,6 +135,10 @@ export default function VisaQuiz() {
   const progress = Math.round((step / totalSteps) * 100);
   const currentQuestion = visaQuestions[step];
 
+  useEffect(() => {
+    fireFunnelEvent("visa_quiz_started");
+  }, []);
+
   const handleAnswer = (question: VisaQuestion, option: QuizOption) => {
     if (animating) return;
     setAnimating(true);
@@ -143,6 +147,7 @@ export default function VisaQuiz() {
     const newAnswers = { ...answers, [question.id]: option.text };
     setScores(newScores);
     setAnswers(newAnswers);
+    fireFunnelEvent(`visa_quiz_step_${step + 1}`, { question_id: question.id });
 
     if (step < totalSteps - 1) {
       setTimeout(() => { setStep(step + 1); setAnimating(false); }, 200);
@@ -248,7 +253,7 @@ export default function VisaQuiz() {
               </p>
               <button
                 data-testid="result-cta-visa-form"
-                onClick={() => { setPhase("form"); window.scrollTo(0, 0); }}
+                onClick={() => { fireFunnelEvent("visa_form_viewed"); setPhase("form"); window.scrollTo(0, 0); }}
                 className="w-full bg-orange-500 hover:bg-orange-600 active:bg-orange-700 text-white font-bold py-4 rounded-lg text-base transition-colors shadow-md"
               >
                 Request My Free Call →
