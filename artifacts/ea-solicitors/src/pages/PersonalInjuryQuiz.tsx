@@ -285,8 +285,7 @@ export default function PersonalInjuryQuiz() {
 
     const result = getResultBand(quizState, totalScore);
     const utmParams = getUtmParams();
-    const params = new URLSearchParams(window.location.search);
-    const gclid = params.get("gclid") ?? undefined;
+    const gclid = utmParams["gclid"];
 
     // Show the result straight away — it's already worked out on the visitor's
     // device. The save runs in the background and never blocks them.

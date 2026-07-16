@@ -164,8 +164,7 @@ export default function VisaQuiz() {
 
     const result = getResultBand(totalScore);
     const utmParams = getUtmParams();
-    const params = new URLSearchParams(window.location.search);
-    const gclid = params.get("gclid") ?? undefined;
+    const gclid = utmParams["gclid"];
 
     // Fire the lead event + show the result straight away — it's already worked
     // out on the visitor's own device and needs nothing from the server.

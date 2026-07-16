@@ -18,9 +18,13 @@ import PersonalInjuryLanding from "@/pages/PersonalInjuryLanding";
 import PersonalInjuryQuiz from "@/pages/PersonalInjuryQuiz";
 import PersonalInjuryThankYou from "@/pages/PersonalInjuryThankYou";
 import PrivacyPolicy from "@/pages/PrivacyPolicy";
-import { activatePhoneCallTracking, firePhoneClickEvent } from "@/lib/tracking";
+import { activatePhoneCallTracking, captureAdParams, firePhoneClickEvent } from "@/lib/tracking";
 
 const queryClient = new QueryClient();
+
+// Runs before the first render — ad params must be stashed before any
+// navigation wipes them from the URL.
+captureAdParams();
 
 // Track every click on a tel: link anywhere in the app. A single document-level
 // listener covers all 20+ phone links (header, landing pages, footers) and any

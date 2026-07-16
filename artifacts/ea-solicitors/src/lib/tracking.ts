@@ -87,12 +87,31 @@ export function activatePhoneCallTracking(): void {
   });
 }
 
+const AD_PARAM_KEYS = ["gclid", "wbraid", "gbraid", "utm_source", "utm_campaign", "utm_medium", "utm_term", "utm_content"];
+
+// SPA navigation (wouter setLocation) drops the query string, so ad params only
+// exist in the URL on the very first page. Stash them the moment the app loads;
+// getUtmParams falls back to the stash for the rest of the visit.
+export function captureAdParams(): void {
+  try {
+    const params = new URLSearchParams(window.location.search);
+    for (const key of AD_PARAM_KEYS) {
+      const val = params.get(key);
+      if (val) sessionStorage.setItem(`ea_ad_${key}`, val);
+    }
+  } catch {
+    /* tracking must never break the page */
+  }
+}
+
 export function getUtmParams(): Record<string, string> {
   const params = new URLSearchParams(window.location.search);
   const result: Record<string, string> = {};
-  const keys = ["gclid", "utm_source", "utm_campaign", "utm_medium", "utm_term", "utm_content"];
-  for (const key of keys) {
-    const val = params.get(key);
+  for (const key of AD_PARAM_KEYS) {
+    let val = params.get(key);
+    if (!val) {
+      try { val = sessionStorage.getItem(`ea_ad_${key}`); } catch { /* ignore */ }
+    }
     if (val) result[key] = val;
   }
   return result;

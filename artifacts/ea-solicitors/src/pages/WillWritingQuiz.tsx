@@ -143,8 +143,7 @@ export default function WillWritingQuiz() {
     };
 
     const utmParams = getUtmParams();
-    const params = new URLSearchParams(window.location.search);
-    const gclid = params.get("gclid") ?? undefined;
+    const gclid = utmParams["gclid"];
 
     // Fire the lead event + show results straight away — nothing waits on the server.
     setEnhancedConversionData(email, phone);

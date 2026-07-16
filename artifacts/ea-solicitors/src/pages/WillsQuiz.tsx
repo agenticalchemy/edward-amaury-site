@@ -196,8 +196,7 @@ export default function WillsQuiz() {
     e.preventDefault();
 
     const utmParams = getUtmParams();
-    const params = new URLSearchParams(window.location.search);
-    const gclid = params.get("gclid") ?? undefined;
+    const gclid = utmParams["gclid"];
 
     // Fire the lead event + show the recommendation straight away. The result is
     // already worked out on the visitor's device — nothing should wait on the server.
