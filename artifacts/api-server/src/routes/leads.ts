@@ -2,9 +2,13 @@ import { Router } from "express";
 import { appendToSheet } from "../lib/sheets";
 import { sendEmail, sendNotification } from "../lib/mailer";
 import { verifyRecaptcha } from "../lib/recaptcha";
-import { SubmitWillsLeadBody, SubmitVisaLeadBody, SubmitWillWritingLeadBody, SubmitPersonalInjuryLeadBody } from "@workspace/api-zod";
+import { SubmitWillsLeadBody, SubmitVisaLeadBody, SubmitVisaChatLeadBody, SubmitWillWritingLeadBody, SubmitPersonalInjuryLeadBody } from "@workspace/api-zod";
 
 const router = Router();
+
+function escapeHtml(s: string): string {
+  return s.replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[c]!);
+}
 
 router.post("/leads/wills", async (req, res) => {
   const parsed = SubmitWillsLeadBody.safeParse(req.body);
@@ -137,6 +141,69 @@ router.post("/leads/visa", async (req, res) => {
     html: `
     <p>Dear ${firstName},</p>
     <p>Thank you for completing our UK Spouse Visa assessment with Edward &amp; Amaury Solicitors. A member of our specialist immigration team will contact you within 24 hours to discuss your results and next steps.</p>
+    <p>If you need to speak to us sooner, please call us on <strong>01228 272395</strong>.</p>
+    <p>Kind regards,<br>Edward &amp; Amaury Solicitors<br>Specialist Immigration Team, Carlisle</p>
+    `,
+  });
+
+  res.json({ success: true, message: "Lead submitted successfully" });
+});
+
+router.post("/leads/visa-chat", async (req, res) => {
+  const parsed = SubmitVisaChatLeadBody.safeParse(req.body);
+  if (!parsed.success) {
+    res.status(400).json({ error: "Invalid request body" });
+    return;
+  }
+
+  const data = parsed.data;
+
+  await verifyRecaptcha(data.recaptchaToken);
+
+  const timestamp = new Date().toISOString();
+  const answersFlat = data.answers.map((a) => `${a.label}: ${a.value}`).join(" | ");
+
+  await appendToSheet("Visa-Leads", [
+    timestamp,
+    data.fullName,
+    data.email,
+    data.phone,
+    data.countryOfOrigin ?? "",
+    "",
+    "chat",
+    answersFlat,
+    data.gclid ?? "",
+    data.utmSource ?? "",
+    data.utmCampaign ?? "",
+    data.utmMedium ?? "",
+    data.utmTerm ?? "",
+    data.utmContent ?? "",
+    data.referrer ?? "",
+  ]);
+
+  const firstName = data.fullName.split(" ")[0];
+  const name = escapeHtml(data.fullName);
+
+  await sendNotification(
+    `New Spouse Visa Chat Lead — ${data.fullName}`,
+    `
+    <h2>New Spouse Visa Lead (chat): ${name}</h2>
+    <p><strong>Phone:</strong> ${escapeHtml(data.phone)}</p>
+    <p><strong>Email:</strong> ${escapeHtml(data.email)}</p>
+    ${data.answers.map((a) => `<p><strong>${escapeHtml(a.label)}</strong><br>${escapeHtml(a.value).replace(/\n/g, "<br>")}</p>`).join("\n    ")}
+    <p><strong>UTM Source:</strong> ${escapeHtml(data.utmSource ?? "direct")}</p>
+    <p><strong>UTM Campaign:</strong> ${escapeHtml(data.utmCampaign ?? "—")}</p>
+    <p><strong>Referrer:</strong> ${escapeHtml(data.referrer ?? "—")}</p>
+    <p><strong>GCLID:</strong> ${escapeHtml(data.gclid ?? "—")}</p>
+    `
+  );
+
+  await sendEmail({
+    to: data.email,
+    subject: "We've received your visa enquiry — Edward & Amaury Solicitors",
+    html: `
+    <p>Dear ${escapeHtml(firstName)},</p>
+    <p>Thank you for sending us your details about your UK Spouse Visa enquiry. A member of our specialist immigration team will contact you within 24 hours to discuss your situation and next steps.</p>
     <p>If you need to speak to us sooner, please call us on <strong>01228 272395</strong>.</p>
     <p>Kind regards,<br>Edward &amp; Amaury Solicitors<br>Specialist Immigration Team, Carlisle</p>
     `,

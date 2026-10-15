@@ -9,6 +9,7 @@ interface ThankYouState {
   firstName?: string;
   result?: ResultBand;
   score?: number;
+  source?: "chat";
 }
 
 export function getVisaResultContent(state: ThankYouState) {
@@ -35,14 +36,20 @@ export function getVisaResultContent(state: ThankYouState) {
 }
 
 export default function VisaThankYou() {
-  const state = (window.history.state?.state ?? {}) as ThankYouState;
+  const state = (window.history.state?.state ?? window.history.state ?? {}) as ThankYouState;
   const firstName = state.firstName || sessionStorage.getItem("ea_lead_firstname") || "there";
 
   useEffect(() => {
     fireVisaEvent();
   }, []);
 
-  const content = getVisaResultContent(state);
+  const fromChat = state.source === "chat";
+  const content = fromChat
+    ? {
+        heading: "We've got your details",
+        body: "Our immigration team will read through your answers before they call you, so you won't have to repeat yourself.",
+      }
+    : getVisaResultContent(state);
 
   const resultColour =
     state.result === "strong"
@@ -77,11 +84,13 @@ export default function VisaThankYou() {
             </div>
 
             {/* Result badge */}
-            <div className="flex justify-center mb-3">
-              <span className={`inline-block border rounded-full px-3 py-1 text-xs font-semibold ${resultBadge.bg} ${resultBadge.text}`}>
-                Your Assessment: {resultBadge.label}
-              </span>
-            </div>
+            {!fromChat && (
+              <div className="flex justify-center mb-3">
+                <span className={`inline-block border rounded-full px-3 py-1 text-xs font-semibold ${resultBadge.bg} ${resultBadge.text}`}>
+                  Your Assessment: {resultBadge.label}
+                </span>
+              </div>
+            )}
 
             {/* Heading */}
             <h1 className="text-xl sm:text-2xl font-bold text-[#1a3a4a] text-center mb-2 leading-tight">
@@ -97,7 +106,7 @@ export default function VisaThankYou() {
             {/* Confirmation pill */}
             <div className="bg-[#0e7490]/8 rounded-xl px-4 py-3 text-center">
               <p className="text-[#0e7490] text-sm font-semibold">
-                ✓ Your assessment has been received
+                ✓ {fromChat ? "Your details have been received" : "Your assessment has been received"}
               </p>
               <p className="text-gray-500 text-xs mt-0.5">Our immigration team will call you within 24 hours</p>
             </div>
@@ -119,7 +128,7 @@ export default function VisaThankYou() {
             <h2 className="font-bold text-[#1a3a4a] text-base mb-4">What Happens Next</h2>
             <div className="space-y-4">
               {[
-                { n: "1", t: "We review your assessment", b: "Our immigration team looks at your answers in detail." },
+                { n: "1", t: fromChat ? "We review your answers" : "We review your assessment", b: "Our immigration team looks at your answers in detail." },
                 { n: "2", t: "We call you within 24 hours", b: "A specialist solicitor will call to discuss your results and the best path forward." },
                 { n: "3", t: "We give you an honest assessment", b: "No jargon, no pressure — a clear picture of your position and your options before you commit to anything." },
               ].map((item) => (

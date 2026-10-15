@@ -8,7 +8,7 @@ import WillsLanding from "@/pages/WillsLanding";
 import WillsQuiz from "@/pages/WillsQuiz";
 import WillsThankYou from "@/pages/WillsThankYou";
 import VisaLanding from "@/pages/VisaLanding";
-import VisaQuiz from "@/pages/VisaQuiz";
+import VisaChat from "@/pages/VisaChat";
 import VisaThankYou from "@/pages/VisaThankYou";
 import WillWritingLanding from "@/pages/WillWritingLanding";
 import WillWritingQuiz from "@/pages/WillWritingQuiz";
@@ -75,7 +75,7 @@ function Router() {
       <Route path="/wills-and-probate/quiz" component={WillsQuiz} />
       <Route path="/wills-and-probate/thank-you" component={WillsThankYou} />
       <Route path="/uk-spouse-visa" component={VisaLanding} />
-      <Route path="/uk-spouse-visa/quiz" component={VisaQuiz} />
+      <Route path="/uk-spouse-visa/quiz" component={VisaChat} />
       <Route path="/uk-spouse-visa/thank-you" component={VisaThankYou} />
       <Route path="/will-writing" component={WillWritingLanding} />
       <Route path="/will-writing/quiz" component={WillWritingQuiz} />
