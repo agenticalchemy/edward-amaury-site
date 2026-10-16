@@ -119,8 +119,7 @@ export default function VisaLanding() {
             Answer some very simple questions and our team will quickly review your enquiry.
           </p>
           <p className="text-gray-200 text-lg max-w-3xl mx-auto mb-8">
-            The UK spouse visa process is one of the most complex and often most rejected visa applications. That's why we have this free 2-minute assessment to ensure your current situation is eligible — before you spend a penny.
-          </p>
+            The UK spouse visa process is one of the most complex and often most rejected visa applications.          </p>
           <button
             data-testid="hero-cta-visa"
             onClick={() => setLocation("/uk-spouse-visa/quiz")}
@@ -216,20 +215,9 @@ export default function VisaLanding() {
       <section className="py-16 px-4 bg-white">
         <div className="max-w-4xl mx-auto">
           <h2 className="text-2xl sm:text-3xl font-bold text-[#1a3a4a] text-center mb-12">How It Works</h2>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            {[
-              { step: "1", title: "Take the Assessment", body: "Answer 7 questions about your situation. It takes under 2 minutes." },
-              { step: "2", title: "Get Your Results", body: "See instantly where you stand — what's working for you and what you need to address." },
-              { step: "3", title: "Speak to a Specialist", body: "Our immigration team aims to be back in touch within 1-2 working days to discuss your options and next steps." },
-            ].map((s) => (
-              <div key={s.step} className="text-center">
-                <div className="w-12 h-12 rounded-full bg-[#0e7490] text-white flex items-center justify-center text-xl font-bold mx-auto mb-4">
-                  {s.step}
-                </div>
-                <h3 className="font-bold text-[#1a3a4a] text-lg mb-2">{s.title}</h3>
-                <p className="text-gray-600">{s.body}</p>
-              </div>
-            ))}
+          <div className="max-w-md mx-auto text-center">
+            <h3 className="font-bold text-[#1a3a4a] text-lg mb-2">Speak to a Specialist</h3>
+            <p className="text-gray-600">Our immigration team aims to be back in touch within 1-2 working days to discuss your options and next steps.</p>
           </div>
         </div>
       </section>
