@@ -90,10 +90,10 @@ export default function VisaThankYou() {
             {fromChat ? (
               <>
                 <h1 className="text-xl sm:text-2xl font-bold text-[#1a3a4a] text-center mb-3 leading-tight">
-                  Thank you.
+                  Thank you for your enquiry.
                 </h1>
                 <p className="text-gray-600 text-sm sm:text-base text-center leading-relaxed">
-                  We've got your details and will be passed onto our immigration team. We aim to be back in touch within 1-2 working days.
+                  Your details have been passed on to our immigration team. We aim to be back in touch within 1-2 working days.
                 </p>
               </>
             ) : (
