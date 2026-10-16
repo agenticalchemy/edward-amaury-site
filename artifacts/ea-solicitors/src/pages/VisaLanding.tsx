@@ -125,7 +125,7 @@ export default function VisaLanding() {
             onClick={() => setLocation("/uk-spouse-visa/quiz")}
             className="bg-[#0e7490] hover:bg-[#0a5a70] text-white font-bold py-4 px-8 rounded-lg text-lg transition-colors shadow-lg"
           >
-            Check My Eligibility →
+            Start your enquiry →
           </button>
           <div className="mt-8 flex flex-wrap justify-center gap-4 text-sm text-gray-300">
             {["SRA Regulated", "Specialist Immigration Team", "Free Assessment", "Confidential", "Cumbria's Only Immigration Firm"].map((t) => (
@@ -232,7 +232,7 @@ export default function VisaLanding() {
             onClick={() => setLocation("/uk-spouse-visa/quiz")}
             className="bg-white text-[#0e7490] font-bold py-4 px-8 rounded-lg text-lg hover:bg-gray-100 transition-colors shadow-lg"
           >
-            Check My Eligibility →
+            Start your enquiry →
           </button>
         </div>
       </section>
@@ -285,7 +285,7 @@ export default function VisaLanding() {
             onClick={() => setLocation("/uk-spouse-visa/quiz")}
             className="bg-[#1a3a4a] hover:bg-[#0f2535] text-white font-bold py-4 px-8 rounded-lg text-lg transition-colors"
           >
-            Check My Eligibility →
+            Start your enquiry →
           </button>
         </div>
       </section>
