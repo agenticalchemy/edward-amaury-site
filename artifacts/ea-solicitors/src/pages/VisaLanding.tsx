@@ -116,7 +116,7 @@ export default function VisaLanding() {
             {adHeadline || "Could You Bring Your Spouse to the UK?"}
           </h1>
           <p className="text-xl text-[#5eead4] font-semibold mb-6">
-            Answer 7 quick questions to find out where you stand — and what your next steps should be.
+            Answer some very simple questions and our team will quickly review your enquiry.
           </p>
           <p className="text-gray-200 text-lg max-w-3xl mx-auto mb-8">
             The UK spouse visa process is one of the most complex and often most rejected visa applications. That's why we have this free 2-minute assessment to ensure your current situation is eligible — before you spend a penny.
@@ -220,7 +220,7 @@ export default function VisaLanding() {
             {[
               { step: "1", title: "Take the Assessment", body: "Answer 7 questions about your situation. It takes under 2 minutes." },
               { step: "2", title: "Get Your Results", body: "See instantly where you stand — what's working for you and what you need to address." },
-              { step: "3", title: "Speak to a Specialist", body: "Our immigration team will call you within 24 hours to discuss your options and next steps." },
+              { step: "3", title: "Speak to a Specialist", body: "Our immigration team aims to be back in touch within 1-2 working days to discuss your options and next steps." },
             ].map((s) => (
               <div key={s.step} className="text-center">
                 <div className="w-12 h-12 rounded-full bg-[#0e7490] text-white flex items-center justify-center text-xl font-bold mx-auto mb-4">

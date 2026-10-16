@@ -150,7 +150,7 @@ function Bubble({ from, children }: { from: "bot" | "me"; children: React.ReactN
 export default function VisaChat() {
   useSeoMeta(
     "UK Spouse Visa Enquiry — Edward & Amaury Solicitors",
-    "Tell us about your UK spouse visa enquiry and our immigration team will call you within 24 hours. Immigration solicitors in Carlisle, Cumbria."
+    "Tell us about your UK spouse visa enquiry and our immigration team aims to be back in touch within 1-2 working days. Immigration solicitors in Carlisle, Cumbria."
   );
   const [, setLocation] = useLocation();
   const adHeadline = useAdHeadline("");
@@ -266,7 +266,7 @@ export default function VisaChat() {
             <div className="p-4 space-y-3">
               <Bubble from="bot">
                 Hello. I'm an online agent for Edward &amp; Amaury Solicitors, and I'm ready to help you with your enquiry.
-                {"\n\n"}I'll ask you a few short questions about your spouse visa enquiry. Our immigration team will then call you within 24 hours. It takes about 3 minutes.
+                {"\n\n"}I'll ask you a few short questions about your spouse visa enquiry. Our immigration team aims to be back in touch within 1-2 working days. It takes about 3 minutes.
               </Bubble>
 
               {!started ? (

@@ -44,12 +44,7 @@ export default function VisaThankYou() {
   }, []);
 
   const fromChat = state.source === "chat";
-  const content = fromChat
-    ? {
-        heading: "We've got your details",
-        body: "Our immigration team will read through your answers before they call you, so you won't have to repeat yourself.",
-      }
-    : getVisaResultContent(state);
+  const content = getVisaResultContent(state);
 
   const resultColour =
     state.result === "strong"
@@ -92,24 +87,35 @@ export default function VisaThankYou() {
               </div>
             )}
 
-            {/* Heading */}
-            <h1 className="text-xl sm:text-2xl font-bold text-[#1a3a4a] text-center mb-2 leading-tight">
-              Thank you, {firstName}
-            </h1>
-            <p className="text-base sm:text-lg font-semibold text-[#0e7490] text-center mb-3">
-              {content.heading}
-            </p>
-            <p className="text-gray-600 text-sm sm:text-base text-center leading-relaxed mb-4">
-              {content.body}
-            </p>
+            {fromChat ? (
+              <>
+                <h1 className="text-xl sm:text-2xl font-bold text-[#1a3a4a] text-center mb-3 leading-tight">
+                  Thank you.
+                </h1>
+                <p className="text-gray-600 text-sm sm:text-base text-center leading-relaxed">
+                  We've got your details and will be passed onto our immigration team. We aim to be back in touch within 1-2 working days.
+                </p>
+              </>
+            ) : (
+              <>
+                {/* Heading */}
+                <h1 className="text-xl sm:text-2xl font-bold text-[#1a3a4a] text-center mb-2 leading-tight">
+                  Thank you, {firstName}
+                </h1>
+                <p className="text-base sm:text-lg font-semibold text-[#0e7490] text-center mb-3">
+                  {content.heading}
+                </p>
+                <p className="text-gray-600 text-sm sm:text-base text-center leading-relaxed mb-4">
+                  {content.body}
+                </p>
 
-            {/* Confirmation pill */}
-            <div className="bg-[#0e7490]/8 rounded-xl px-4 py-3 text-center">
-              <p className="text-[#0e7490] text-sm font-semibold">
-                ✓ {fromChat ? "Your details have been received" : "Your assessment has been received"}
-              </p>
-              <p className="text-gray-500 text-xs mt-0.5">Our immigration team will call you within 24 hours</p>
-            </div>
+                {/* Confirmation pill */}
+                <div className="bg-[#0e7490]/8 rounded-xl px-4 py-3 text-center">
+                  <p className="text-[#0e7490] text-sm font-semibold">✓ Your assessment has been received</p>
+                  <p className="text-gray-500 text-xs mt-0.5">Our immigration team will call you within 24 hours</p>
+                </div>
+              </>
+            )}
           </div>
 
           {/* Phone CTA — most prominent on mobile */}
@@ -129,7 +135,9 @@ export default function VisaThankYou() {
             <div className="space-y-4">
               {[
                 { n: "1", t: fromChat ? "We review your answers" : "We review your assessment", b: "Our immigration team looks at your answers in detail." },
-                { n: "2", t: "We call you within 24 hours", b: "A specialist solicitor will call to discuss your results and the best path forward." },
+                fromChat
+                  ? { n: "2", t: "We aim to be back in touch within 1-2 working days", b: "A specialist solicitor will discuss your enquiry and the best path forward." }
+                  : { n: "2", t: "We call you within 24 hours", b: "A specialist solicitor will call to discuss your results and the best path forward." },
                 { n: "3", t: "We give you an honest assessment", b: "No jargon, no pressure — a clear picture of your position and your options before you commit to anything." },
               ].map((item) => (
                 <div key={item.n} className="flex gap-3">

@@ -203,7 +203,7 @@ router.post("/leads/visa-chat", async (req, res) => {
     subject: "We've received your visa enquiry — Edward & Amaury Solicitors",
     html: `
     <p>Dear ${escapeHtml(firstName)},</p>
-    <p>Thank you for sending us your details about your UK Spouse Visa enquiry. A member of our specialist immigration team will contact you within 24 hours to discuss your situation and next steps.</p>
+    <p>Thank you for sending us your details about your UK Spouse Visa enquiry. A member of our specialist immigration team aims to be back in touch within 1-2 working days to discuss your situation and next steps.</p>
     <p>If you need to speak to us sooner, please call us on <strong>01228 272395</strong>.</p>
     <p>Kind regards,<br>Edward &amp; Amaury Solicitors<br>Specialist Immigration Team, Carlisle</p>
     `,
