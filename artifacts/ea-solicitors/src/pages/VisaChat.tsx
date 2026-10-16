@@ -57,6 +57,7 @@ export const chatSteps: ChatStep[] = [
     prompt: "Which country are you originally from?",
     kind: "short",
     placeholder: "Country",
+    when: (a) => a.years_in_uk !== "All my life",
   },
   {
     key: "deadline",
@@ -257,19 +258,19 @@ export default function VisaChat() {
             <div className="bg-[#1a3a4a] text-white px-4 py-3 flex items-center gap-3">
               <div className="w-9 h-9 rounded-full bg-[#0e7490] flex items-center justify-center text-sm font-bold">E&A</div>
               <div>
-                <p className="font-semibold text-sm">Edward &amp; Amaury enquiry assistant</p>
-                <p className="text-xs text-gray-300">Automated assistant, not a person</p>
+                <p className="font-semibold text-sm">Edward &amp; Amaury Solicitors</p>
+                <p className="text-xs text-gray-300">Online agent</p>
               </div>
             </div>
 
             <div className="p-4 space-y-3">
               <Bubble from="bot">
-                Hello. I'm an automated assistant for Edward &amp; Amaury Solicitors. I'm not a person and I can't give legal advice.
+                Hello. I'm an online agent for Edward &amp; Amaury Solicitors, and I'm ready to help you with your enquiry.
                 {"\n\n"}I'll ask you a few short questions about your spouse visa enquiry. Our immigration team will then call you within 24 hours. It takes about 3 minutes.
               </Bubble>
 
               {!started ? (
-                <div className="space-y-2 pt-1">
+                <div className="pt-1">
                   <button
                     data-testid="visa-chat-start"
                     onClick={() => { setStarted(true); fireFunnelEvent("visa_chat_started"); }}
@@ -277,12 +278,6 @@ export default function VisaChat() {
                   >
                     Let's start
                   </button>
-                  <a
-                    href="tel:+441228272395"
-                    className="block w-full text-center bg-white border-2 border-[#0e7490] text-[#0e7490] font-bold py-3.5 rounded-xl text-base"
-                  >
-                    I'd rather call: 01228 272395
-                  </a>
                 </div>
               ) : (
                 <>
@@ -366,12 +361,7 @@ export default function VisaChat() {
             </div>
           </div>
 
-          <p className="text-center text-sm text-gray-500 mt-5">
-            Prefer to talk? Call us on{" "}
-            <a href="tel:+441228272395" className="text-[#0e7490] font-semibold">01228 272395</a>
-            <br />
-            <span className="text-xs text-gray-400">Mon to Fri, 9am to 5pm. Your details are confidential.</span>
-          </p>
+          <p className="text-center text-xs text-gray-400 mt-5">Your details are confidential.</p>
         </div>
       </div>
       <SiteFooter />
