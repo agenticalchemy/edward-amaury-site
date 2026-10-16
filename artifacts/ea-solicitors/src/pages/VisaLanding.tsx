@@ -225,7 +225,6 @@ export default function VisaLanding() {
       {/* Mid CTA */}
       <section className="py-14 px-4 bg-[#0e7490] text-white text-center">
         <div className="max-w-2xl mx-auto">
-          <h2 className="text-2xl sm:text-3xl font-bold mb-3">Check Your Eligibility Now</h2>
           <p className="text-teal-100 text-lg mb-6">Free, confidential, no obligation</p>
           <button
             data-testid="mid-cta-visa"
