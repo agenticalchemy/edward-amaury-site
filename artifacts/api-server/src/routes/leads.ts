@@ -2,6 +2,7 @@ import { Router } from "express";
 import { appendToSheet } from "../lib/sheets";
 import { sendEmail, sendNotification } from "../lib/mailer";
 import { verifyRecaptcha } from "../lib/recaptcha";
+import { gradeVisaLead } from "../lib/jev";
 import { SubmitWillsLeadBody, SubmitVisaLeadBody, SubmitVisaChatLeadBody, SubmitWillWritingLeadBody, SubmitPersonalInjuryLeadBody } from "@workspace/api-zod";
 
 const router = Router();
@@ -162,6 +163,8 @@ router.post("/leads/visa-chat", async (req, res) => {
 
   const timestamp = new Date().toISOString();
   const answersFlat = data.answers.map((a) => `${a.label}: ${a.value}`).join(" | ");
+  const graded = await gradeVisaLead(data.answers);
+  const gradeLabel = graded ? `${graded.grade}${graded.urgent ? " URGENT" : ""}` : "";
 
   await appendToSheet("Visa-Leads", [
     timestamp,
@@ -179,15 +182,18 @@ router.post("/leads/visa-chat", async (req, res) => {
     data.utmTerm ?? "",
     data.utmContent ?? "",
     data.referrer ?? "",
+    gradeLabel,
+    graded?.reason ?? "",
   ]);
 
   const firstName = data.fullName.split(" ")[0];
   const name = escapeHtml(data.fullName);
 
   await sendNotification(
-    `New Spouse Visa Chat Lead — ${data.fullName}`,
+    `${gradeLabel ? `${gradeLabel}: ` : ""}New Spouse Visa Chat Lead — ${data.fullName}`,
     `
     <h2>New Spouse Visa Lead (chat): ${name}</h2>
+    ${graded ? `<p><strong>Grade:</strong> ${escapeHtml(gradeLabel)} (${escapeHtml(graded.reason)})</p>` : ""}
     <p><strong>Phone:</strong> ${escapeHtml(data.phone)}</p>
     <p><strong>Email:</strong> ${escapeHtml(data.email)}</p>
     ${data.answers.map((a) => `<p><strong>${escapeHtml(a.label)}</strong><br>${escapeHtml(a.value).replace(/\n/g, "<br>")}</p>`).join("\n    ")}
