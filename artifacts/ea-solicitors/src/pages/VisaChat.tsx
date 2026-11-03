@@ -97,19 +97,6 @@ export const chatSteps: ChatStep[] = [
     when: (a) => a.dependents === "Yes",
   },
   {
-    key: "income",
-    label: "Annual income before tax",
-    prompt: "What is your current annual income (before tax)?",
-    kind: "buttons",
-    options: [
-      "£29,000 or more",
-      "Between £23,500 and £28,999",
-      "Below £23,500",
-      "I am self-employed",
-      "I am not currently working",
-    ],
-  },
-  {
     key: "legal_aid",
     label: "Requiring legal aid",
     prompt: "Will you be looking for legal aid to help pay for this?",
