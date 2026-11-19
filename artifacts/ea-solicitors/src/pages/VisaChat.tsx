@@ -164,6 +164,19 @@ export default function VisaChat() {
   const [error, setError] = useState<string | null>(null);
   const [submitting, setSubmitting] = useState(false);
   const endRef = useRef<HTMLDivElement>(null);
+  const [callToken] = useState(() => {
+    try { return new URLSearchParams(window.location.search).get("c"); } catch { return null; }
+  });
+
+  useEffect(() => {
+    if (!callToken) return;
+    fetch(`/api/team/link/${encodeURIComponent(callToken)}`)
+      .then((r) => (r.ok ? r.json() : null))
+      .then((j) => {
+        if (j?.phone) setAnswers((a) => ("phone" in a ? a : { ...a, phone: j.phone }));
+      })
+      .catch(() => { /* ask for the number as normal */ });
+  }, [callToken]);
 
   const steps = visibleSteps(answers);
   const current = steps.find((s) => !(s.key in answers));
@@ -182,8 +195,10 @@ export default function VisaChat() {
     const asked = visibleSteps(final).filter((s) => !["name", "phone", "email"].includes(s.key));
     const firstName = final.name.trim().split(" ")[0];
 
-    setEnhancedConversionData(final.email.trim(), final.phone.trim());
-    try { window.dataLayer?.push({ event: "funnel_leads_all", lead_type: "spouse_visa" }); } catch { /* ignore */ }
+    if (!callToken) {
+      setEnhancedConversionData(final.email.trim(), final.phone.trim());
+      try { window.dataLayer?.push({ event: "funnel_leads_all", lead_type: "spouse_visa" }); } catch { /* ignore */ }
+    }
     sessionStorage.setItem("ea_lead_firstname", firstName);
 
     let recaptchaToken: string | undefined;
@@ -200,17 +215,17 @@ export default function VisaChat() {
         countryOfOrigin: final.country,
         answers: asked.map((s) => ({ label: s.label, value: final[s.key] })),
         recaptchaToken,
-        gclid: utmParams["gclid"],
-        utmSource: utmParams["utm_source"],
-        utmCampaign: utmParams["utm_campaign"],
-        utmMedium: utmParams["utm_medium"],
-        utmTerm: utmParams["utm_term"],
-        utmContent: utmParams["utm_content"],
+        gclid: callToken ? undefined : utmParams["gclid"],
+        utmSource: callToken ? "phone_call" : utmParams["utm_source"],
+        utmCampaign: callToken ? "text_link" : utmParams["utm_campaign"],
+        utmMedium: callToken ? "sms" : utmParams["utm_medium"],
+        utmTerm: callToken ? undefined : utmParams["utm_term"],
+        utmContent: callToken ? undefined : utmParams["utm_content"],
         referrer: document.referrer || undefined,
       }),
     }).catch(() => { /* ignore */ });
 
-    setLocation("/uk-spouse-visa/thank-you", { state: { firstName, source: "chat" } });
+    setLocation("/uk-spouse-visa/thank-you", { state: { firstName, source: "chat", fromCall: !!callToken } });
   };
 
   const answer = (step: ChatStep, value: string) => {

@@ -18,6 +18,7 @@ import PersonalInjuryLanding from "@/pages/PersonalInjuryLanding";
 import PersonalInjuryQuiz from "@/pages/PersonalInjuryQuiz";
 import PersonalInjuryThankYou from "@/pages/PersonalInjuryThankYou";
 import PrivacyPolicy from "@/pages/PrivacyPolicy";
+import TeamSendLink from "@/pages/TeamSendLink";
 import { activatePhoneCallTracking, captureAdParams, firePhoneClickEvent } from "@/lib/tracking";
 
 const queryClient = new QueryClient();
@@ -85,6 +86,7 @@ function Router() {
       <Route path="/personal-injury/quiz" component={PersonalInjuryQuiz} />
       <Route path="/personal-injury/thank-you" component={PersonalInjuryThankYou} />
       <Route path="/privacy-policy" component={PrivacyPolicy} />
+      <Route path="/team/send-link" component={TeamSendLink} />
       <Route component={NotFound} />
     </Switch>
   );

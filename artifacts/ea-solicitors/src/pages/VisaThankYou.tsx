@@ -10,6 +10,7 @@ interface ThankYouState {
   result?: ResultBand;
   score?: number;
   source?: "chat";
+  fromCall?: boolean;
 }
 
 export function getVisaResultContent(state: ThankYouState) {
@@ -40,7 +41,7 @@ export default function VisaThankYou() {
   const firstName = state.firstName || sessionStorage.getItem("ea_lead_firstname") || "there";
 
   useEffect(() => {
-    fireVisaEvent();
+    if (!state.fromCall) fireVisaEvent();
   }, []);
 
   const fromChat = state.source === "chat";
